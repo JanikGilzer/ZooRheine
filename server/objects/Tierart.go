@@ -12,7 +12,7 @@ func (t *TierArt) GetTierArtFrom(id string) (string, []interface{}) {
 }
 
 func (t *TierArt) GetAllTierArt() (string, []interface{}) {
-	query := "SELECT * from tierart"
+	query := "SELECT * FROM tierart"
 	args := []interface{}{}
 	return query, args
 }

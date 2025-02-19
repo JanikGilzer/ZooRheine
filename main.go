@@ -53,6 +53,7 @@ func main() {
 	http.HandleFunc("/server/json/revier", jsonRevier)
 	http.HandleFunc("/server/json/gebaude", jsonGebaude)
 	http.HandleFunc("/server/json/tier", jsonTier)
+	http.HandleFunc("/server/json/tierart", jsonTierArt)
 	http.HandleFunc("/server/json/zeit", jsonZeit)
 	http.HandleFunc("/server/json/fuetterungszeiten", jsonfuetterungszeiten)
 	http.HandleFunc("/server/json/benoetigtesfutter", jsonBenoetigtesFutter)
@@ -238,6 +239,20 @@ func jsonTier(w http.ResponseWriter, req *http.Request) {
 
 	} else {
 		tier := server.GetTier(db2, tierId)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(tier)
+	}
+}
+
+func jsonTierArt(w http.ResponseWriter, req *http.Request) {
+	tierId := req.URL.Query().Get("id")
+	fmt.Println(tierId)
+	if tierId == "" {
+		tiere := server.GetAllTierArt(db2)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(tiere)
+	} else {
+		tier := server.GetTierArt(db2, tierId)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(tier)
 	}

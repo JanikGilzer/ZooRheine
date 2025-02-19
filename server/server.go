@@ -209,15 +209,15 @@ func GetAllTierArt(db core.DB_Handler) []objects.TierArt {
 	var tiArr []objects.TierArt
 	var tier objects.TierArt
 	query, args := tier.GetAllTierArt()
-	var tRow = db.QueryRow(query, args...)
-	err := tRow.Scan(
-		&tier.ID,
-		&tier.Name,
-	)
-	if err != nil {
-		fmt.Println(err)
+	var tRows = db.Query(query, args...)
+	for tRows.Next() {
+		var t objects.TierArt
+		tRows.Scan(
+			&t.ID,
+			&t.Name,
+		)
+		tiArr = append(tiArr, t)
 	}
-	tiArr = append(tiArr, tier)
 	return tiArr
 }
 
