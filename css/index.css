@@ -1,0 +1,71 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+#Header, #Footer {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 20px;
+    text-align: center;
+}
+
+#Header h1, #Footer p {
+    margin: 0;
+}
+
+#template-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.revier-card {
+    background-color: #ecf0f1;
+    padding: 20px;
+    margin-bottom: 30px; /* Increased margin for more spacing */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.revier-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.revier-card h2 {
+    color: #1abc9c;
+    margin-top: 0;
+}
+
+.revier-card ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.revier-card li {
+    background-color: #ffffff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #template-container {
+        padding: 10px;
+    }
+
+    .revier-card {
+        padding: 15px;
+    }
+}

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div class="pfleger-input">
+    <form id="create-pfleger-form" method="post">
+        <!-- Name -->
+        <label for="Name">Name:</label>
+        <input type="text" name="Name" id="Name" required>
+
+        <!-- Telefonnummer -->
+        <label for="Telefonnummer">Telefonnummer:</label>
+        <input type="text" name="Telefonnummer" id="Telefonnummer"  required>
+
+        <!-- Adresse -->
+        <label for="Adresse">Adresse:</label>
+        <input type="text" name="Adresse" id="Adresse" required>
+
+        <!-- Revier-->
+        <label for="Revier">Revier:</label>
+        <select name="Revier" id="Revier" required></select>
+
+        <!--Ort-->
+        <label for="Ort">Ort:</label>
+        <select name="Ort" id="Ort" required></select>
+
+        <!-- Submit Button -->
+        <button type="submit">Pfleger erstellen</button>
+    </form>
+</div>
+</body>
+</html>
+
+<script type="module">
+    import {setup_create_pfleger_form} from "../../../script/template/create/create-pfleger.js";
+    import {create_and_send_pfleger} from "../../../script/template/create/create-pfleger.js";
+
+    await setup_create_pfleger_form()
+
+    document.getElementById('create-pfleger-form').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        await create_and_send_pfleger(event.target)
+    });
+</script>

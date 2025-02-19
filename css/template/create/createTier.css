@@ -1,0 +1,88 @@
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+
+        .information-input {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .information-input h2 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 2rem;
+        }
+
+        .information-input label {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .information-input input[type="text"],
+        .information-input input[type="date"],
+        .information-input select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .information-input input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .information-input button {
+            background-color: #1abc9c;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .information-input button:hover {
+            background-color: #16a085;
+        }
+
+        .futter-options {
+            margin-bottom: 20px;
+        }
+
+        .futter-options label {
+            display: block;
+            margin-bottom: -10px;
+
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .information-input {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .information-input h2 {
+                font-size: 1.5rem;
+            }
+        }

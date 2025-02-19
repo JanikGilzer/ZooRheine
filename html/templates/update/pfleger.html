@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Pfleger</title>
+</head>
+<body>
+<p id="pfleger_id">ID: {{.ID}}</p>
+<p id="pfleger_name">Name: {{.Name}}</p>
+<p id="pfleger_telefonnummer">Telefonnummer: {{.Telefonnummer}}</p>
+<p id="pfleger_adresse">Adresse: {{.Adresse}}</p>
+<p id="pfleger_ort">Ort: {{.Ort}}</p>
+<p id="pfleger_revier">Revier: {{.Revier}}</p>
+
+<h2>Update Pfleger</h2>
+<form id="updatePflegerForm">
+  <input type="hidden" id="updateId" name="id">
+  <label for="updateName">Name:</label>
+  <input type="text" id="updateName" name="name"><br>
+  <label for="updateTelefonnummer">Telefonnummer:</label>
+  <input type="text" id="updateTelefonnummer" name="telefonnummer"><br>
+  <label for="updateAdresse">Adresse:</label>
+  <input type="text" id="updateAdresse" name="adresse"> <br>
+  <label for="updateOrt">Ort:</label>
+  <select id="updateOrt" name="ort"></select> <br>
+  <label for="updateRevier">Revier:</label>
+  <select id="updateRevier" name="revier"></select> <br>
+
+  <button type="submit">Update Pfleger</button>
+</form>
+
+<h2>Delete Tier</h2>
+<form id="deleteTierForm" action="/server/delete/tier" method="post">
+  <input type="hidden" id="deleteId" name="id">
+  <button type="submit">Delete Tier</button>
+</form>
+<br>
+<a href="/">Back to Homepage</a>
+</body>
+</html>
+
+<script type="module">
+  import {setup_update_pfleger, update_and_send_pfleger} from "../../../script/template/update/pfleger.js";
+
+  const pfleger = {
+    id: parseInt(document.getElementById("pfleger_id").innerText.split(': ')[1]),
+    name: document.getElementById("pfleger_name").innerText.split(': ')[1],
+    telefonnummer: document.getElementById("pfleger_telefonnummer").innerText.split(': ')[1],
+    adresse: document.getElementById("pfleger_adresse").innerText.split(': ')[1],
+    ort: document.getElementById('pfleger_ort').innerText.split(': ')[1],
+    revier: document.getElementById('pfleger_revier').innerText.split(': ')[1],
+  }
+  await setup_update_pfleger(pfleger)
+
+  document.getElementById('updatePflegerForm').addEventListener('submit', async function(event){
+    event.preventDefault();
+    await update_and_send_pfleger(pfleger, event.target)
+  })
+
+</script>

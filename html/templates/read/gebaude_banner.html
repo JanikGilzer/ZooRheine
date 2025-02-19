@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./../../../css/template/read/gebaude-banner.css">
+    <title>{{.ID}}</title>
+
+</head>
+<body>
+    <div id="gebaude-container" class="container">
+        <!-- Gebäude Name at the Top -->
+        <h1 id="gehege-name">{{.Name}}</h1>
+
+        <!-- Tiere and Fütterungszeiten Side by Side -->
+        <div class="content-container">
+            <div>
+                <h2>Tiere</h2>
+                <ul id="tier-list">
+                    <!-- Tier list items will be dynamically added here -->
+                </ul>
+            </div>
+            <div>
+                <h2>Fütterungszeiten</h2>
+                <ul id="fuetterungszeit-list">
+                    <!-- Fütterungszeiten list items will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { getElements, getElement } from './../../../script/read.js';
+        import { setup_gebaude_banner } from './../../../script/template/gebaude.js';
+
+        // Fetch data
+        const gehege_id = document.title;
+        const tiere = await getElements("tier");
+        const fuetterungszeit = await getElements("fuetterungszeiten");
+
+        // Setup the banner and lists
+        setup_gebaude_banner(gehege_id, tiere, fuetterungszeit);
+    </script>
+</body>
+</html>

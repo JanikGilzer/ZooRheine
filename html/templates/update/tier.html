@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../../css/template/update/tier.css">  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Tier</title>
+</head>
+<body>
+    <p id="tierId">ID: {{.ID}}</p>
+    <p id="tierName">Name: {{.Name}}</p>
+    <p id="tierGeburtsdatum">Geburtstag: {{.Geburtsdatum}}</p>
+    <p id="tierGehege">Gehege: {{.Gebaude}}</p>
+
+    <h2>Update Tier</h2>
+    <form id="updateTierForm" action="/server/update/tier" method="post">
+        <input type="hidden" id="updateId" name="id">
+        <label for="updateName">Name:</label>
+        <input type="text" id="updateName" name="name"><br>
+        <label for="updateGeburtsdatum">Geburtstag:</label>
+        <input type="date" id="updateGeburtsdatum" name="geburtsdatum"><br>
+        <label for="updateGebaude">Gebaude:</label>
+        <select id="updateGebaude" name="gebaude"> </select>
+        <br>
+        <button type="submit">Update Tier</button>
+    </form>
+
+    <h2>Delete Tier</h2>
+    <form id="deleteTierForm" action="/server/delete/tier" method="post">
+        <input type="hidden" id="deleteId" name="id">
+        <button type="submit">Delete Tier</button>
+    </form>
+    <br>
+    <a href="/">Back to Homepage</a>
+</body>
+</html>
+
+<script type="module">
+    import { updateValue } from '../../../script/update.js';
+    import { deleteValue } from '../../../script/delete.js';
+    import { getElements, getElement } from '../../../script/read.js';
+
+    window.onload = function() {
+        updateTierForm();
+        document.getElementById('deleteTierForm').addEventListener('submit', function(event){
+            event.preventDefault();
+            deleteTier();
+        });
+        document.getElementById('updateTierForm').addEventListener('submit', function(event){
+            event.preventDefault();
+            updateTier();
+        });
+    }
+    
+    const tier = {
+        id: parseInt(document.getElementById('tierId').innerText.split(': ')[1]),
+        name: document.getElementById('tierName').innerText.split(': ')[1],
+        geburtsdatum: document.getElementById('tierGeburtsdatum').innerText.split(': ')[1],
+        gebaude_id: document.getElementById('tierGehege').innerText.split(': ')[1]
+    }
+    async function updateTierForm() {
+        document.getElementById('updateId').value = tier.id;
+        document.getElementById('updateName').value = tier.name;
+        document.getElementById('updateGeburtsdatum').value = tier.geburtsdatum;
+        var gebaude = await getElements('gebaude');
+        for (let geb in gebaude) {
+            var option = document.createElement('option');
+            option.value = gebaude[geb].ID;
+            option.text = gebaude[geb].Name;
+            document.getElementById('updateGebaude').appendChild(option);
+        }
+    }
+
+    async function updateTier() {
+        const form = document.getElementById('updateTierForm');
+        const formData = new FormData(form);
+        const newTier = {
+            id: parseInt(formData.get('id')),
+            name: formData.get('name'),
+            geburtsdatum: formData.get('geburtsdatum'),
+            gebaude: await getElement(parseInt(formData.get('gebaude')), 'gebaude')
+        }
+        await updateValue(tier, newTier, "tier");
+        window.location.reload();
+    }
+
+    async function deleteTier() {
+        const form = document.getElementById('deleteTierForm');
+        const formData = new FormData(form);
+        // await delete tier
+        window.location.href = '/';
+    }
+</script>

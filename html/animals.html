@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../bilder/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/animals.css">
+    <title>Alle Tiere - Zoo School Project</title>
+</head>
+<body>
+    <!-- Header -->
+    <header id="Header">
+        <h1>Alle Tiere</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="animals-grid">
+            <!-- Animal Cards will be dynamically inserted here -->
+            <div class="animal-card">
+                <img src="https://example.com/lion.jpg" alt="Löwe">
+                <h3>Löwe</h3>
+                <p>Der König der Tiere, bekannt für seine majestätische Mähne.</p>
+            </div>
+            <div class="animal-card">
+                <img src="https://example.com/tiger.jpg" alt="Tiger">
+                <h3>Tiger</h3>
+                <p>Ein beeindruckender Jäger mit charakteristischen Streifen.</p>
+            </div>
+            <div class="animal-card">
+                <img src="https://example.com/elephant.jpg" alt="Elefant">
+                <h3>Elefant</h3>
+                <p>Das größte Landtier der Welt, bekannt für seinen Rüssel.</p>
+            </div>
+            <!-- Add more animal cards as needed -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="Footer">
+        <p>&copy; 2024 Zoo School Project. Alle Rechte vorbehalten.</p>
+    </footer>
+
+    <script type="module">
+        import { getHeader, getFooter, getElements } from './../script/read.js';
+
+        // Fetch and render header and footer
+        getHeader();
+        getFooter();
+
+        // Fetch animals data
+        async function loadAnimals() {
+            const animals = await getElements("tier"); // Replace "tier" with your actual data source
+            const animalsGrid = document.querySelector('.animals-grid');
+            animalsGrid.innerHTML = ''; // Clear existing content
+
+            animals.forEach(animal => {
+                const animalCard = document.createElement('div');
+                animalCard.className = 'animal-card';
+                animalCard.innerHTML = `
+                    <img src="${animal.ImageURL}" alt="${animal.Name}">
+                    <h3>${animal.Name}</h3>
+                    <p>${animal.Description}</p>
+                `;
+                animalCard.addEventListener('click', () => {
+                    window.location.href = `animal.html?id=${animal.ID}`; // Link to detailed animal page
+                });
+                animalsGrid.appendChild(animalCard);
+            });
+        }
+
+        loadAnimals();
+    </script>
+</body>
+</html>

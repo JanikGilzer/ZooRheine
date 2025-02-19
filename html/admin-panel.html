@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../bilder/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/admin-panel.css">
+    <title>Admin Panel - Zoo School Project</title>
+
+</head>
+<body>
+    <!-- Header -->
+    <header id="Header">
+        <h1>Admin Panel</h1>
+    </header>
+
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Navigation</h2>
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#animals">Tiere verwalten</a></li>
+                <li><a href="#enclosures">Gehege verwalten</a></li>
+                <li><a href="#feeding">Fütterungszeiten</a></li>
+                <li><a href="#visitors">Besucherinformationen</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard -->
+            <section id="dashboard" class="dashboard">
+                <div class="dashboard-card" id="tier">
+                    <h3>Tiere</h3>
+                    <p>50</p>
+                </div>
+                <div class="dashboard-card" id="gehege">
+                    <h3>Gehege</h3>
+                    <p>10</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Besucher heute</h3>
+                    <p>120</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Fütterungen</h3>
+                    <p>15</p>
+                </div>
+            </section>
+
+            <!-- Add Animal Form -->
+            <section id="animals" class="form-container">
+                <h2>Neues Tier hinzufügen</h2>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="Footer">
+        <p>&copy; 2024 Zoo School Project. Alle Rechte vorbehalten.</p>
+    </footer>
+
+    <script type="module">
+        import { getHeader, getFooter, countElement } from './../script/read.js';
+        import { setup_create_tier_form, create_and_send_tier } from './../script/template/create/create-tier.js';
+
+        var count_tier = await countElement("tiere");
+        var count_gehege = await countElement("gebaude");
+        console.log(count_tier);
+        document.getElementById("tier").querySelector("p").innerText = count_tier;
+        document.getElementById("gehege").querySelector("p").innerText = count_gehege;
+
+        var response = await fetch("server/template/create/tier")
+        .then(response => response.text())
+        .then(data => {
+            document.querySelector('.form-container').innerHTML += data;
+        });
+        await setup_create_tier_form();
+        await create_and_send_tier();
+
+
+
+        await getHeader();
+        await getFooter();
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../bilder/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/contact.css">
+    <title>Kontakt - Zoo School Project</title>
+</head>
+<body>
+    <!-- Header -->
+    <header id="Header">
+        <h1>Kontakt</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Contact Information -->
+        <section class="contact-info">
+            <div>
+                <h3>Adresse</h3>
+                <p>NaturZoo Rheine<br>Weihbischof D`Alhaus Straße<br>48432 Rheine</p>
+            </div>
+            <div>
+                <h3>Telefon</h3>
+                <p>+49 05971161480</p>
+            </div>
+            <div>
+                <h3>E-Mail</h3>
+                <p>Info(at)naturzoo.de</p>
+            </div>
+        </section>
+
+        <!-- Contact Form -->
+        <section class="contact-form">
+            <h2>Kontaktformular</h2>
+            <form action="#" method="post">
+                <input type="text" name="name" placeholder="Ihr Name" required>
+                <input type="email" name="email" placeholder="Ihre E-Mail" required>
+                <input type="text" name="subject" placeholder="Betreff" required>
+                <textarea name="message" placeholder="Ihre Nachricht" required></textarea>
+                <button type="submit">Nachricht senden</button>
+            </form>
+        </section>
+
+        <!-- Map -->
+        <section class="map-container">
+            <h2>So finden Sie uns</h2>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2440.0277904379914!2d7.419401677113629!3d52.29735005268949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8329dd50900b1%3A0xc3f07016d53b17a0!2sNaturZoo%20Rheine!5e0!3m2!1sde!2sde!4v1739482432574!5m2!1sde!2sde"
+                    loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="Footer">
+        <p>&copy; 2024 Zoo School Project. Alle Rechte vorbehalten.</p>
+    </footer>
+
+    <script type="module">
+        import { getHeader, getFooter } from './../script/read.js';
+        getHeader();
+        getFooter();
+    </script>
+</body>
+</html>
