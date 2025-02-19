@@ -5,13 +5,13 @@ type TierArt struct {
 	Name string
 }
 
-func (t *TierArt) GetTierArtFrom(id string) (string, interface{}) {
+func (t *TierArt) GetTierArtFrom(id string) (string, []interface{}) {
 	query := "SELECT * from tierart where id=?"
 	args := []interface{}{id}
 	return query, args
 }
 
-func (t *TierArt) GetAllTierArt() (string, interface{}) {
+func (t *TierArt) GetAllTierArt() (string, []interface{}) {
 	query := "SELECT * from tierart"
 	args := []interface{}{}
 	return query, args

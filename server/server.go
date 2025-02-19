@@ -189,6 +189,40 @@ func GetAllFutterZeiten(db core.DB_Handler) []objects.FuetterungsZeiten {
 
 // #endregion
 
+// #region Tier Art
+
+func GetTierArt(db core.DB_Handler, id string) objects.TierArt {
+	var t objects.TierArt
+	query, args := t.GetTierArtFrom(id)
+	var tRow = db.QueryRow(query, args...)
+	err := tRow.Scan(
+		&t.ID,
+		&t.Name,
+	)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return t
+}
+
+func GetAllTierArt(db core.DB_Handler) []objects.TierArt {
+	var tiArr []objects.TierArt
+	var tier objects.TierArt
+	query, args := tier.GetAllTierArt()
+	var tRow = db.QueryRow(query, args...)
+	err := tRow.Scan(
+		&tier.ID,
+		&tier.Name,
+	)
+	if err != nil {
+		fmt.Println(err)
+	}
+	tiArr = append(tiArr, tier)
+	return tiArr
+}
+
+// #endregion
+
 // #region BenoetigtesFutter
 
 func GetBenoetigtesFutter(db core.DB_Handler, id string) objects.BenoetigtesFutter {
