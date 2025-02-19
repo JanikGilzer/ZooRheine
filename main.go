@@ -43,6 +43,7 @@ func main() {
 	// Templates
 	http.HandleFunc("/server/template/read/revier", serveRevierTemplate)
 	http.HandleFunc("/server/template/read/gebaude-banner", serveGebaudeBanner)
+	http.HandleFunc("/server/template/read/tierart-banner", serveTierartBanner)
 
 	// Header/Footer
 	http.HandleFunc("/server/template/header", serveHeader)
@@ -110,6 +111,16 @@ func serveContact(w http.ResponseWriter, req *http.Request) {
 
 func serveAnimals(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "./html/animals.html")
+}
+
+func serveTierartBanner(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		return
+	}
+	tierart := server.GetTier(db2, id)
+	tmpl, _ := template.ParseFiles("./html/templates/read/tierart_banner.html")
+	tmpl.Execute(w, tierart)
 }
 
 func serveAdminPanel(w http.ResponseWriter, req *http.Request) {
