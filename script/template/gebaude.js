@@ -18,6 +18,7 @@ export async function setup_gebaude_banner(gebaude_id, tiere, fuetterungszeiten)
 async function setup_zeiten(gebaude_id, fuetterungszeiten) {
     document.getElementById("fuetterungszeit-list").id = "fuetterungszeit-list" + gebaude_id;
     for (var f in fuetterungszeiten) {
+        console.log(fuetterungszeiten[f])
         if (fuetterungszeiten[f].Gebaude.ID == gebaude_id) {
             const zeitenList = document.querySelector('#fuetterungszeit-list' + gebaude_id);
             const listItem = document.createElement('li');

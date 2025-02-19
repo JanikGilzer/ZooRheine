@@ -162,8 +162,6 @@ func GetFutterZeit(db core.DB_Handler, id string) objects.FuetterungsZeiten {
 		&fz.Gebaude.ID,
 		&fz.Gebaude.Name,
 		&fz.Gebaude.Revier.ID,
-		&fz.Gebaude.Revier.Name,
-		&fz.Gebaude.Revier.Beschreibung,
 	)
 	return fz
 }
@@ -183,8 +181,6 @@ func GetAllFutterZeiten(db core.DB_Handler) []objects.FuetterungsZeiten {
 			&fz.Gebaude.ID,
 			&fz.Gebaude.Name,
 			&fz.Gebaude.Revier.ID,
-			&fz.Gebaude.Revier.Name,
-			&fz.Gebaude.Revier.Beschreibung,
 		)
 		fzArr = append(fzArr, fz)
 	}

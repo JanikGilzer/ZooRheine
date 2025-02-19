@@ -8,7 +8,13 @@ type FuetterungsZeiten struct {
 
 func (f *FuetterungsZeiten) GetFutterZeitFrom(id string) (string, []interface{}) {
 	query := `
-		SELECT *
+		SELECT 
+		    fuetterungszeit.id,
+		    fuetterungszeit.zeit_id,
+		    zeit.uhr_zeit,
+		    fuetterungszeit.gebaude_id,
+		    gebaude.name,
+		    gebaude.revier_id
 		FROM
 		    fuetterungszeit
 		JOIN zeit ON fuetterungszeit.zeit_id = zeit.id
@@ -22,7 +28,13 @@ func (f *FuetterungsZeiten) GetFutterZeitFrom(id string) (string, []interface{})
 
 func (f *FuetterungsZeiten) AllFromFuetterungsZeiten() (string, []interface{}) {
 	query := `
-		SELECT *
+		SELECT 
+			fuetterungszeit.id,
+		    fuetterungszeit.zeit_id,
+		    zeit.uhr_zeit,
+		    fuetterungszeit.gebaude_id,
+		    gebaude.name,
+		    gebaude.revier_id
 		FROM
 		    fuetterungszeit
 		JOIN zeit ON fuetterungszeit.zeit_id = zeit.id
