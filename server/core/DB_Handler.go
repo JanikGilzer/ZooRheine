@@ -17,7 +17,7 @@ func (db *DB_Handler) Init() {
 
 	db.config = mysql.NewConfig()
 	db.config.User = "root"
-	db.config.Passwd = "3418"
+	db.config.Passwd = ""
 	db.config.DBName = "ZooDaba"
 	db.config.Net = "tcp"
 	db.config.Addr = "localhost:3306"

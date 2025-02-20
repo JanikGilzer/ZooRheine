@@ -4,36 +4,19 @@
     <meta charset="UTF-8">
     <title>{{.ID}}</title>
 </head>
+<link rel="stylesheet" href="../../../css/template/read/tierart-banner.css">
 <body>
-<div class="animals-grid">
+<div class="animal-grid">
 
 </div>
+
 </body>
 </html>
 
 <script type="module">
-    import {getElement} from "../../../script/read.js";
-
-    // Fetch animals data
-    async function loadAnimals() {
-        const id = document.title
-        const animal = await getElement(id, "tier"); // Replace "tier" with your actual data source
-        const animalsGrid = document.querySelector('.animals-grid');
-        animalsGrid.innerHTML = ''; // Clear existing content
-
-        const animalCard = document.createElement('div');
-        animalCard.className = 'animal-card';
-        animalCard.innerHTML = `
-                <img src="${animal.ImageURL}" alt="${animal.Name}">
-                <h3>${animal.Tierart.Name}</h3>
-                <p>${animal.Description}</p>
-            `;
-        animalCard.addEventListener('click', () => {
-            window.location.href = `animal.html?id=${animal.ID}`; // Link to detailed animal page
-        });
-        animalsGrid.appendChild(animalCard);
-
-    }
-
-    loadAnimals();
+    import {loadAnimals} from "../../../script/template/read/tierart-banner.js";
+    const id = document.head.querySelector('title').textContent;
+    console.log(id);
+    await loadAnimals(id);
 </script>
+

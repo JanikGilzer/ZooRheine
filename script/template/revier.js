@@ -9,7 +9,7 @@ export async function setup_revier_banner(rev_id, gebaude_id, tiere, fuetterungs
             throw new Error('Network response was not ok');
         }
         const template = await response.text();
-        // Select the gebaude-container within the specific revier container
+
         const revierContainer = document.querySelector(`#revier-container-${rev_id} .gebaude-container`);
         if (revierContainer) {
             revierContainer.innerHTML += template;
