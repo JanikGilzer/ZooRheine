@@ -29,10 +29,19 @@ func (f *Futter) GetFutterFrom(id string) (string, []interface{}) {
 
 func (f *Futter) GetAllFutter() (string, []interface{}) {
 	query := `
-		SELECT *
+		SELECT 
+		    futter.id,
+		    futter.name,
+		    futter.lieferant_id,
+		    lieferant.name,
+		    lieferant.adresse,
+		    lieferant.ort_id,
+			ort.stadt,
+			ort.plz
 		FROM 
 		    futter
 		JOIN lieferant on futter.lieferant_id = lieferant.id
+		Join ort on lieferant.ort_id = ort.id
 		`
 	args := []interface{}{}
 	return query, args
@@ -52,6 +61,7 @@ func (f *Futter) GetFutterFromName(name string) (string, []interface{}) {
 		FROM 
 		    futter
 		JOIN lieferant on futter.lieferant_id = lieferant.id
+		Join ort on lieferant.ort_id = ort.id
 	  	WHERE futter.name = ?
 	  	`
 	args := []interface{}{name}

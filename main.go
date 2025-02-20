@@ -393,6 +393,7 @@ func countGebeude(w http.ResponseWriter, req *http.Request) {
 
 // #endregion
 
+// #region create
 func createTier(w http.ResponseWriter, req *http.Request) {
 	type newTier struct {
 		Tier   objects.Tier
@@ -400,7 +401,6 @@ func createTier(w http.ResponseWriter, req *http.Request) {
 	}
 	tier := newTier{}
 	json.NewDecoder(req.Body).Decode(&tier)
-	println(tier.Tier.Geburtsdatum)
 	fmt.Println(tier)
 	tFutter := []objects.Futter{}
 	for _, futter := range tier.Futter {
@@ -420,6 +420,8 @@ func createPfleger(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(np)
 	server.CreatePfleger(db2, np.Pfleger)
 }
+
+// #endregion
 
 // #region update
 func updateTier(w http.ResponseWriter, req *http.Request) {

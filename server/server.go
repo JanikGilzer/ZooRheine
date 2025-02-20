@@ -22,15 +22,12 @@ func GetTier(db core.DB_Handler, id string) objects.Tier {
 		&t.Name,                        // tier_name
 		&t.Geburtsdatum,                // tier_geburtstag
 		&t.Gebaude.ID,                  // tier_gebaude_id
-		&t.Tierart.ID,                  // tier_tierart_id
-		&t.Tierart.ID,                  // tierart_id
-		&t.Tierart.Name,                // tierart_name
-		&t.Gebaude.ID,                  // gebaude_id
 		&t.Gebaude.Name,                // gebaude_name
 		&t.Gebaude.Revier.ID,           // gebaude_revier_id
-		&t.Gebaude.Revier.ID,           // revier_id
 		&t.Gebaude.Revier.Name,         // revier_name
 		&t.Gebaude.Revier.Beschreibung, // revier_beschreibung
+		&t.Tierart.ID,
+		&t.Tierart.Name,
 	)
 	if err := tRow.Err(); err != nil {
 		log.Fatal(err)
@@ -52,15 +49,12 @@ func GetAllTiere(db core.DB_Handler) []objects.Tier {
 			&t.Name,                        // tier_name
 			&t.Geburtsdatum,                // tier_geburtstag
 			&t.Gebaude.ID,                  // tier_gebaude_id
-			&t.Tierart.ID,                  // tier_tierart_id
-			&t.Tierart.ID,                  // tierart_id
-			&t.Tierart.Name,                // tierart_name
-			&t.Gebaude.ID,                  // gebaude_id
 			&t.Gebaude.Name,                // gebaude_name
 			&t.Gebaude.Revier.ID,           // gebaude_revier_id
-			&t.Gebaude.Revier.ID,           // revier_id
 			&t.Gebaude.Revier.Name,         // revier_name
 			&t.Gebaude.Revier.Beschreibung, // revier_beschreibung
+			&t.Tierart.ID,
+			&t.Tierart.Name,
 		)
 		if err != nil {
 			log.Fatal("Error scanning row:", err)
@@ -85,7 +79,9 @@ func CreateTier(db core.DB_Handler, tier objects.Tier, futter []objects.Futter) 
 	for _, f := range futter {
 		fmt.Println(f.ID)
 		fmt.Println(t.ID)
-		query, args := bFutter.InsertBenoetigtesFutter(f.ID, t.ID)
+		query, args := bFutter.InsertBenoetigtesFutter(t.ID, f.ID)
+		fmt.Println(query)
+		fmt.Println(args)
 		db.Exec(query, args...)
 	}
 }
@@ -405,6 +401,8 @@ func GetAllFutter(db core.DB_Handler) []objects.Futter {
 			&futter.Lieferant.Name,
 			&futter.Lieferant.Adresse,
 			&futter.Lieferant.Ort.ID,
+			&futter.Lieferant.Ort.Stadt,
+			&futter.Lieferant.Ort.Plz,
 		)
 		futterArr = append(futterArr, futter)
 	}

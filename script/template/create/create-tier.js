@@ -19,7 +19,7 @@ export async function setup_create_tier_form() {
         const option = document.createElement('option')
         option.value = tierart.ID
         option.text = tierart.Name
-        option.setAttribute('data-gebaude', JSON.stringify(tierart));
+        option.setAttribute('data-tierart', JSON.stringify(tierart));
         taSelect.appendChild(option);
     })
 
@@ -53,10 +53,15 @@ export async function create_and_send_tier() {
                     'Tier': {
                         'Name': formData.get('Name'),
                         'Geburtsdatum': formData.get('Geburtsdatum'),
+                        'Tierart': {},
                         'Gebaude': {}
                     },
                     'Futter': []
                 };
+
+                const tierartSelect = document.getElementById('Tierart');
+                const selectedTierart = tierartSelect.options[tierartSelect.selectedIndex];
+                jsonData['Tier']['Tierart'] = JSON.parse(selectedTierart.getAttribute('data-tierart'));
     
                 // Add the selected Gebaude object to the jsonData
                 const gebaudeSelect = document.getElementById('Gebaude');

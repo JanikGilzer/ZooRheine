@@ -10,7 +10,17 @@ type Tier struct {
 
 func (t *Tier) GetTierFrom(id string) (string, []interface{}) {
 	query := `
-		SELECT *
+		SELECT 
+		    tier.id,
+		    tier.name,
+		    tier.geburtstag,
+		    tier.gebaude_id,
+			gebaude.name,
+			gebaude.revier_id,
+			revier.name,
+			revier.beschreibung,
+			tier.tierart_ID,
+			tierart.name
 		FROM 
 			tier
 		JOIN tierart ON tier.tierart_id = tierart.id
@@ -24,7 +34,17 @@ func (t *Tier) GetTierFrom(id string) (string, []interface{}) {
 
 func (t *Tier) GetAllTiere() (string, []interface{}) {
 	query := `
-		SELECT *
+		SELECT 
+			tier.id,
+		    tier.name,
+		    tier.geburtstag,
+		    tier.gebaude_id,
+			gebaude.name,
+			gebaude.revier_id,
+			revier.name,
+			revier.beschreibung,
+			tier.tierart_ID,
+			tierart.name
 		FROM 
 			tier
 		JOIN tierart ON tier.tierart_id = tierart.id
@@ -42,8 +62,8 @@ func (t *Tier) CountTiere() (string, []interface{}) {
 }
 
 func (t *Tier) InsertTier(name string, geburtstag string, tierart_id int, gebaude int) (string, []interface{}) {
-	query := "INSERT INTO tier (name, geburtstag, tierart_id, gebaude_id) VALUES (?,?,?,?)"
-	args := []interface{}{name, geburtstag, tierart_id, gebaude}
+	query := "INSERT INTO tier (name, geburtstag, gebaude_id, tierart_ID) VALUES (?,?,?,?)"
+	args := []interface{}{name, geburtstag, gebaude, tierart_id}
 	return query, args
 }
 
