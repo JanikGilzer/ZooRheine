@@ -33,6 +33,7 @@ func main() {
 	http.HandleFunc("/animals", serveAnimals)
 	http.HandleFunc("/contact", serveContact)
 	http.HandleFunc("/admin-panel", serveAdminPanel)
+	http.HandleFunc("/futterplan", serveFutterplan)
 
 	// internal
 	http.HandleFunc("/server/template/create/tier", serveCreateTier)
@@ -128,6 +129,10 @@ func serveTierartBanner(w http.ResponseWriter, req *http.Request) {
 
 func serveAdminPanel(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "./html/admin-panel.html")
+}
+
+func serveFutterplan(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./html/futterplan.html")
 }
 
 func serveHeader(w http.ResponseWriter, req *http.Request) {

@@ -87,7 +87,7 @@ func CreateTier(db core.DB_Handler, tier objects.Tier, futter []objects.Futter) 
 }
 
 func UpdateTier(db core.DB_Handler, tier objects.Tier) {
-	query, args := tier.UpdateTier(tier.ID, tier.Name, tier.Geburtsdatum, tier.Tierart.ID, tier.Gebaude.ID)
+	query, args := tier.UpdateTier(tier.ID, tier.Name, tier.Geburtsdatum, tier.Gebaude.ID)
 	db.Exec(query, args...)
 }
 

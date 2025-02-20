@@ -67,8 +67,8 @@ func (t *Tier) InsertTier(name string, geburtstag string, tierart_id int, gebaud
 	return query, args
 }
 
-func (t *Tier) UpdateTier(id int, name string, geburtstag string, tierart_id int, gebaude int) (string, []interface{}) {
-	query := "UPDATE tier SET name = ?, geburtstag = ?, tierart_id = ?, gebaude_id = ? WHERE id = ?"
-	args := []interface{}{name, geburtstag, tierart_id, gebaude, id}
+func (t *Tier) UpdateTier(id int, name string, geburtstag string, gebaude int) (string, []interface{}) {
+	query := "UPDATE tier SET name = ?, geburtstag = ?, gebaude_id = ? WHERE id = ?"
+	args := []interface{}{name, geburtstag, gebaude, id}
 	return query, args
 }

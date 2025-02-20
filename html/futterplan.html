@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Futterplan</title>
+</head>
+<body>
+<table>
+    <caption>
+        Fütterungsplan - 02.2025
+    </caption>
+    <thead>
+    <tr>
+        <th scope="col">Gebaude</th>
+        <th scope="col">Revier</th>
+        <th scope="col">Futter</th>
+        <th scope="col">Zeit</th>
+    </tr>
+    </thead>
+    <tbody id="fuetterungs-list">
+
+    </tbody>
+</table>
+</body>
+</html>
+
+<script type="module">
+    import {getElements} from "../script/read.js";
+
+    async function loadData() {
+        try {
+            const gebaude = await getElements("gebaude");
+            const benoetigtesfutter = await getElements("benoetigtesfutter");
+            const fuetterungszeit = await getElements("fuetterungszeiten")
+
+
+            const list = document.getElementById("fuetterungs-list");
+
+            gebaude.forEach(g => {
+                let listRow = document.createElement("tr");
+                listRow.id = "row" + g.ID;
+
+                let maincol = document.createElement("th");
+                maincol.scope = "row";
+                maincol.innerText = g.Name;
+
+                let revierCol = document.createElement("td");
+                revierCol.innerText = g.Revier.Name || "Unbekannt"; // Fallback-Wert
+
+
+                let futterCol = document.createElement("td");
+                benoetigtesfutter.forEach(f => {
+                    if (f.Tier.Gebaude.ID === g.ID)
+                    {
+                        futterCol.innerHTML += f.Futter.Name + "<br>"
+                    }
+                })
+
+
+                let zeitCol = document.createElement("td");
+                fuetterungszeit.forEach(f =>{
+                    if (f.Gebaude.ID === g.ID)
+                    {
+                        zeitCol.innerHTML += f.Zeit.Uhrzeit + "<br>"
+                    }
+                })
+
+                listRow.appendChild(maincol);
+                listRow.appendChild(revierCol);
+                listRow.appendChild(futterCol);
+                listRow.appendChild(zeitCol);
+
+                list.appendChild(listRow);
+            });
+        } catch (error) {
+            console.error("Fehler beim Laden der Daten:", error);
+        }
+    }
+
+    loadData();
+</script>
+
+
+
+
+
+
+<style>
+    table {
+        border-collapse: collapse;
+        border: 2px solid rgb(140 140 140);
+        font-family: sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    caption {
+        caption-side: bottom;
+        padding: 10px;
+        font-weight: bold;
+    }
+
+    thead,
+    tfoot {
+        background-color: rgb(228 240 245);
+    }
+
+    th,
+    td {
+        border: 1px solid rgb(160 160 160);
+        padding: 8px 10px;
+    }
+
+    td:last-of-type {
+        text-align: center;
+    }
+
+    tbody > tr:nth-of-type(even) {
+        background-color: rgb(237 238 242);
+    }
+
+    tfoot th {
+        text-align: right;
+    }
+
+    tfoot td {
+        font-weight: bold;
+    }
+
+</style>
