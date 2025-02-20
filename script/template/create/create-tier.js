@@ -12,6 +12,17 @@ export async function setup_create_tier_form() {
         gSelect.appendChild(option);
     });
 
+    // tierarten data
+    var taDaten = await getElements('tierart')
+    const taSelect = document.getElementById('Tierart')
+    taSelect.forEach(tierart => {
+        const option = document.createElement('option')
+        option.value = tierart.ID
+        option.text = tierart.Name
+        option.setAttribute('data-gebaude', JSON.stringify(tierart));
+        taSelect.appendChild(option);
+    })
+
     // Fetch Futter data
     var fData = await getElements('futter');
     const fSelect = document.getElementById('Futter');
