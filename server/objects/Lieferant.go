@@ -3,8 +3,8 @@ package objects
 type Lieferant struct {
 	ID      int
 	Name    string
-	Ort     Ort
 	Adresse string
+	Ort     Ort
 }
 
 func (l *Lieferant) GetLieferantFrom(id int) (string, interface{}) {

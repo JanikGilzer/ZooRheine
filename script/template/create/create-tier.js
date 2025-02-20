@@ -15,7 +15,7 @@ export async function setup_create_tier_form() {
     // tierarten data
     var taDaten = await getElements('tierart')
     const taSelect = document.getElementById('Tierart')
-    taSelect.forEach(tierart => {
+    taDaten.forEach(tierart => {
         const option = document.createElement('option')
         option.value = tierart.ID
         option.text = tierart.Name
@@ -27,6 +27,7 @@ export async function setup_create_tier_form() {
     var fData = await getElements('futter');
     const fSelect = document.getElementById('Futter');
     fData.forEach(futter => {
+        console.log(futter);
         const label = document.createElement('label');
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -79,7 +80,7 @@ export async function create_and_send_tier() {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(jsonData)  // Convert the object to JSON
+                    body: JSON.stringify(jsonData)
                 });
     
                 if (response.ok) {

@@ -359,6 +359,8 @@ func GetFutter(db core.DB_Handler, id string) objects.Futter {
 		&futter.Lieferant.Name,
 		&futter.Lieferant.Adresse,
 		&futter.Lieferant.Ort.ID,
+		&futter.Lieferant.Ort.Stadt,
+		&futter.Lieferant.Ort.Plz,
 	)
 	return futter
 }
@@ -374,6 +376,8 @@ func GetFutterFromName(db core.DB_Handler, name string) objects.Futter {
 		&futter.Lieferant.Name,
 		&futter.Lieferant.Adresse,
 		&futter.Lieferant.Ort.ID,
+		&futter.Lieferant.Ort.Stadt,
+		&futter.Lieferant.Ort.Plz,
 	)
 	return futter
 }

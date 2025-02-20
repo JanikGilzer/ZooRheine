@@ -14,11 +14,14 @@ func (f *Futter) GetFutterFrom(id string) (string, []interface{}) {
 		    futter.lieferant_id,
 		    lieferant.name,
 		    lieferant.adresse,
-		    lieferant.ort_id
+		    lieferant.ort_id,
+			ort.stadt,
+			ort.plz
 		FROM 
 		    futter
 		JOIN lieferant on futter.lieferant_id = lieferant.id
-	  	WHERE futter.id = + ?
+		Join ort on lieferant.ort_id = ort.id
+	  	WHERE futter.id = ?
 	  	`
 	args := []interface{}{id}
 	return query, args
@@ -43,11 +46,13 @@ func (f *Futter) GetFutterFromName(name string) (string, []interface{}) {
 		    futter.lieferant_id,
 		    lieferant.name,
 		    lieferant.adresse,
-		    lieferant.ort_id
+		    lieferant.ort_id,
+			ort.stadt,
+			ort.plz
 		FROM 
 		    futter
 		JOIN lieferant on futter.lieferant_id = lieferant.id
-	  	WHERE futter.name = + ?
+	  	WHERE futter.name = ?
 	  	`
 	args := []interface{}{name}
 	return query, args
