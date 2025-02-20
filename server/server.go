@@ -498,3 +498,11 @@ func UpdatePfleger(db core.DB_Handler, pfleger objects.Pfleger) {
 }
 
 // #endregion
+
+// #region Contact
+// #TODO: contact schreiben
+func CreateContact(db core.DB_Handler, contact objects.Contact) {
+	fmt.Println(contact)
+}
+
+// #endregion

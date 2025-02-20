@@ -34,7 +34,7 @@
         <!-- Contact Form -->
         <section class="contact-form">
             <h2>Kontaktformular</h2>
-            <form action="#" method="post">
+            <form>
                 <input type="text" name="name" placeholder="Ihr Name" required>
                 <input type="email" name="email" placeholder="Ihre E-Mail" required>
                 <input type="text" name="subject" placeholder="Betreff" required>
@@ -61,6 +61,29 @@
         import { getHeader, getFooter } from './../script/read.js';
         getHeader();
         getFooter();
+        const form = document.querySelector('.contact-form form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            try {
+                const response = await fetch('/server/send/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    alert('Nachricht erfolgreich gesendet!');
+                    form.reset();
+                } else {
+                    alert('Fehler beim Senden der Nachricht.');
+                }
+            } catch (error) {
+                alert('Ein unerwarteter Fehler ist aufgetreten.');
+            }
+        });
     </script>
 </body>
 </html>

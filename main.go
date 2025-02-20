@@ -77,6 +77,8 @@ func main() {
 	http.HandleFunc("/server/update/tier", updateTier)
 	http.HandleFunc("/server/update/pfleger", updatePfleger)
 
+	http.HandleFunc("/server/send/contact", sendContact)
+
 	http.Handle("/bilder/", http.StripPrefix("/bilder/", http.FileServer(http.Dir("./html/bilder"))))
 
 	// Serve static HTML files
@@ -211,6 +213,16 @@ func serveGebaudeBanner(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 		return
 	}
+}
+
+// #endregion
+
+// #region send
+
+func sendContact(w http.ResponseWriter, req *http.Request) {
+	var contact objects.Contact
+	json.NewDecoder(req.Body).Decode(&contact)
+	server.CreateContact(db2, contact)
 }
 
 // #endregion
