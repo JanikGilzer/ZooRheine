@@ -1,4 +1,3 @@
-Drop DATABASE ZooDaba;
 CREATE DATABASE ZooDaba;
 
 USE ZooDaba;

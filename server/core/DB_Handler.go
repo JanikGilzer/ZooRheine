@@ -20,7 +20,7 @@ func (db *DB_Handler) Init() {
 	db.config.Passwd = "3418"
 	db.config.DBName = "ZooDaba"
 	db.config.Net = "tcp"
-	db.config.Addr = "localhost:3306"
+	db.config.Addr = "mysql:3306"
 	db.config.Params = map[string]string{
 		"allowNativePasswords": "true",
 	}

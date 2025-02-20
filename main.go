@@ -4,23 +4,20 @@ import (
 	"ZooDaBa/server"
 	"ZooDaBa/server/core"
 	"ZooDaBa/server/objects"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"log"
+	"log/slog"
+	_ "log/slog"
 	"mime"
 	"net/http"
-	"os"
-
-	"github.com/go-sql-driver/mysql"
 )
 
 var db2 core.DB_Handler
 
 // #region Server
 func main() {
-
+	slog.Info("Server starting on port 8090...")
 	db2.Init()
 
 	mime.AddExtensionType(".js", "application/javascript")
@@ -91,11 +88,11 @@ func main() {
 	// Serve static JavaScript files
 	http.Handle("/script/", http.StripPrefix("/script/", http.FileServer(http.Dir("./script"))))
 
-	fmt.Println("Listening on :8090...")
 	err := http.ListenAndServe(":8090", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
+	slog.Info("Server successfully started on port 8090")
 }
 
 // #endregion
@@ -124,7 +121,10 @@ func serveTierartBanner(w http.ResponseWriter, req *http.Request) {
 	}
 	tierart := server.GetTier(db2, id)
 	tmpl, _ := template.ParseFiles("./html/templates/read/tierart_banner.html")
-	tmpl.Execute(w, tierart)
+	err := tmpl.Execute(w, tierart)
+	if err != nil {
+
+	}
 }
 
 func serveAdminPanel(w http.ResponseWriter, req *http.Request) {
@@ -446,54 +446,3 @@ func updatePfleger(w http.ResponseWriter, req *http.Request) {
 }
 
 // #endregion
-
-func clicked(w http.ResponseWriter, req *http.Request) {
-	var tier_list []objects.Tier
-
-	fmt.Println("clicked")
-	db := Connect_Database()
-	defer db.Close()
-	rows, _ := db.Query("SELECT * FROM tier")
-
-	for rows.Next() {
-		var tier objects.Tier
-		rows.Scan(&tier.ID, &tier.Name, &tier.Geburtsdatum, &tier.Gebaude.ID)
-		tier_list = append(tier_list, tier)
-	}
-	fmt.Print(tier_list)
-	json.NewEncoder(w).Encode(tier_list)
-}
-
-// ------------------------------------------------------------------------ //
-
-func Connect_Database() *sql.DB {
-	// Read database configuration from environment variables
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_NAME")
-
-	// Set up MySQL configuration
-	database_conf := mysql.NewConfig()
-	database_conf.User = dbUser
-	database_conf.Passwd = dbPassword
-	database_conf.Net = "tcp"
-	database_conf.Addr = fmt.Sprintf("%s:%s", dbHost, dbPort) // Use DB_HOST and DB_PORT
-	database_conf.DBName = dbName
-
-	// Open the database connection
-	db, err := sql.Open("mysql", database_conf.FormatDSN())
-	if err != nil {
-		log.Fatalf("Failed to open database connection: %v", err)
-	}
-
-	// Ping the database to verify the connection
-	err = db.Ping()
-	if err != nil {
-		log.Fatalf("Failed to ping database: %v", err)
-	}
-
-	log.Println("Successfully connected to the database!")
-	return db
-}

@@ -1,34 +1,46 @@
+
 services:
-  go-server:
-    build: .
+  app:
+    container_name: Zoo-Website
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "8090:8090"
-    depends_on:
-      - mysql
+      - 8090:8090
     volumes:
+      - ./css:/app/css
       - ./html:/app/html
       - ./script:/app/script
-      - ./css:/app/css
-    networks:
-      - ZooServer
-
-  # MySQL Database
-  mysql:
-    image: mysql:8.0
-    ports:
-      - "3306:3306"
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
-      MYSQL_ROOT_PASSWORD:
-      MYSQL_DATABASE: ZooDaba
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_PASSWORD=3418
+      - DB_NAME=ZooRheine
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - go-network
+
+  mysql:
+    container_name: go-mysql
+    image: mysql:9.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=3418
     volumes:
       - ./database/script.sql:/docker-entrypoint-initdb.d/init.sql
       - ./database/data:/var/lib/mysql
     networks:
-      - ZooServer
+      - go-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 volumes:
-  mysql-data:
+  dbdata:
 
 networks:
-  ZooServer:
+  go-network:
+    driver: bridge
