@@ -3,6 +3,7 @@ package core
 import (
 	"database/sql"
 	"log"
+	"os"
 	"time"
 
 	"github.com/go-sql-driver/mysql"
@@ -15,12 +16,11 @@ type DB_Handler struct {
 
 func (db *DB_Handler) Init() {
 
-	db.config = mysql.NewConfig()
-	db.config.User = "root"
-	db.config.Passwd = "3418"
-	db.config.DBName = "ZooDaba"
-	db.config.Net = "tcp"
-	db.config.Addr = "mysql:3306"
+	db.config.User = os.Getenv("DB_USER")
+	db.config.Passwd = os.Getenv("DB_PASSWORD")
+	db.config.DBName = os.Getenv("DB_NAME")
+	db.config.Net = os.Getenv("DB_NET")
+	db.config.Addr = os.Getenv("DB_ADDR")
 	db.config.Params = map[string]string{
 		"allowNativePasswords": "true",
 	}

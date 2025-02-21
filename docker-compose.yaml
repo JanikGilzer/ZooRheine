@@ -14,8 +14,8 @@ services:
     environment:
       - DB_HOST=mysql
       - DB_PORT=3306
-      - DB_PASSWORD=3418
-      - DB_NAME=ZooRheine
+      - DB_PASSWORD=1234
+      - DB_NAME=ZooDaba
     depends_on:
       mysql:
         condition: service_healthy
@@ -26,7 +26,7 @@ services:
     container_name: go-mysql
     image: mysql:9.0
     environment:
-      - MYSQL_ROOT_PASSWORD=3418
+      - MYSQL_ROOT_PASSWORD=1234
     volumes:
       - ./database/script.sql:/docker-entrypoint-initdb.d/init.sql
       - ./database/data:/var/lib/mysql
