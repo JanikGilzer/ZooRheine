@@ -4,18 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="83638d48-ce71-4ba5-95d1-a679c269042a" name="Changes" comment="gitignore">
-      <change afterPath="$PROJECT_DIR$/.idea/ZooRheine.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/14368c58-f3f7-40cd-a9a1-8e062d6ca2ab.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/14368c58-f3f7-40cd-a9a1-8e062d6ca2ab/storage_v2/_src_/schema/ZooDaba.VlSXXA.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/14368c58-f3f7-40cd-a9a1-8e062d6ca2ab/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/14368c58-f3f7-40cd-a9a1-8e062d6ca2ab/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/14368c58-f3f7-40cd-a9a1-8e062d6ca2ab/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/data/test.txt" afterDir="false" />
+    <list default="true" id="83638d48-ce71-4ba5-95d1-a679c269042a" name="Changes" comment="test">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,7 +149,8 @@
     <MESSAGE value="Education mit fütterungsplan im header ausgetauscht" />
     <MESSAGE value="docker-compose.yaml funktioniert. muss aber noch bearbeitet werden" />
     <MESSAGE value="gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="gitignore" />
+    <MESSAGE value="test" />
+    <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
