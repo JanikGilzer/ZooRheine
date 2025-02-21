@@ -15,15 +15,25 @@ type DB_Handler struct {
 }
 
 func (db *DB_Handler) Init() {
+	db.config = &mysql.Config{}
 
-	db.config.User = os.Getenv("DB_USER")
-	db.config.Passwd = os.Getenv("DB_PASSWORD")
-	db.config.DBName = os.Getenv("DB_NAME")
-	db.config.Net = os.Getenv("DB_NET")
-	db.config.Addr = os.Getenv("DB_ADDR")
-	db.config.Params = map[string]string{
+	user := os.Getenv("DB_USER")
+	passwd := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+	net := os.Getenv("DB_NET")
+	addr := os.Getenv("DB_ADDR")
+	param := map[string]string{
 		"allowNativePasswords": "true",
 	}
+
+	log.Println(user, passwd, dbName, net, addr, param)
+
+	db.config.User = user
+	db.config.Passwd = passwd
+	db.config.DBName = dbName
+	db.config.Net = net
+	db.config.Addr = addr
+	db.config.Params = param
 
 	var err error
 	// Retry connecting to MySQL (up to 10 attempts)
