@@ -103,7 +103,7 @@ CREATE TABLE benoetigtesfutter (
 INSERT INTO gruppe (name) VALUES ('Admin'), ('Verwaltung'), ('Pfleger');
 
 -- Insert example data into User
-INSERT INTO mitarbeiter (name, password, gruppen_id) VALUES ('admin', '1234', 1), ('verwaltung', '1234', 2), ('pfleger', '1234', 3);
+INSERT INTO mitarbeiter (name, password, gruppen_id) VALUES ('admin', '$2a$14$692xvxXH6onXCNoJnJInBO2esb/Ki9xDOFA6yMMRxdx21lv/zR/8C', 1), ('verwaltung', '$2a$14$bAYK588LBSy0CVNJkA0Kn.5.JF/.EEQsjKRv.HQgz7S7YYAk8Kywu', 2), ('pfleger', '1234', 3);
 
 -- Insert example data into Zeit
 INSERT INTO zeit (uhr_zeit) VALUES ('08:00'), ('12:00'), ('16:00');

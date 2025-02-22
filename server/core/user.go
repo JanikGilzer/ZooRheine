@@ -7,7 +7,7 @@ type User struct {
 	Role   Role
 }
 
-func (u *User) Verify(name string, password string) (string, []interface{}) {
+func (u *User) Verify(name string) (string, []interface{}) {
 	query := `
 	SELECT
 		mitarbeiter.id,
@@ -19,8 +19,20 @@ func (u *User) Verify(name string, password string) (string, []interface{}) {
 	JOIN gruppe ON mitarbeiter.gruppen_id = gruppe.id
 	WHERE
 		mitarbeiter.name = ? 
-		AND mitarbeiter.password = ?;
 	`
-	args := []interface{}{name, password}
+	args := []interface{}{name}
+	return query, args
+}
+
+func (u *User) GetHashFrom(name string) (string, []interface{}) {
+	query := `
+	SELECT
+    	mitarbeiter.password
+	FROM
+	    mitarbeiter
+	where 
+	    mitarbeiter.name = ?
+	`
+	args := []interface{}{name}
 	return query, args
 }

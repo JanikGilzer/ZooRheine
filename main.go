@@ -116,7 +116,7 @@ func serveLogin(w http.ResponseWriter, r *http.Request) {
 
 		if err == nil && token.Valid {
 			// Redirect to appropriate page based on role
-			if claims.Role == "admin" {
+			if claims.Role == "Admin" {
 				http.Redirect(w, r, "/", http.StatusFound)
 			} else {
 				http.Redirect(w, r, "/", http.StatusFound)

@@ -5,17 +5,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
-	"hash/fnv"
+	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"os"
 	"time"
 )
 
-var JwtSecret = []byte("jwt-key")
+var JwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
-func hash(s string) uint32 {
-	h := fnv.New32a()
-	h.Write([]byte(s))
-	return h.Sum32()
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 type Claims struct {
@@ -26,15 +31,29 @@ type Claims struct {
 
 func Login(username string, password string, db DB_Handler) (User, error) {
 	u := User{}
+	var passwdFromDb string
 
-	query, args := u.Verify(username, password)
+	query, args := u.GetHashFrom(username)
 	row := db.QueryRow(query, args...)
-	err := row.Scan(&u.ID, &u.Name, &u.Role.ID, &u.Role.Name)
+	err := row.Scan(&passwdFromDb)
 	if err != nil {
-		Logger.Error(err.Error())
 		return User{}, fmt.Errorf("database error: %v", err)
 	}
-	return u, nil
+	Logger.Info(passwdFromDb)
+	Logger.Info(username)
+	Logger.Info(password)
+
+	if CheckPasswordHash(password, passwdFromDb) {
+		query, args := u.Verify(username)
+		row := db.QueryRow(query, args...)
+		err = row.Scan(&u.ID, &u.Name, &u.Role.ID, &u.Role.Name)
+		if err != nil {
+			Logger.Error(err.Error())
+			return User{}, fmt.Errorf("database error: %v", err)
+		}
+		return u, nil
+	}
+	return User{}, fmt.Errorf("database error: %v", err)
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request, db DB_Handler) {
@@ -74,7 +93,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, db DB_Handler) {
 		Name:     "token",
 		Value:    tokenString,
 		Expires:  expirationTime,
-		HttpOnly: true,
+		HttpOnly: false,
 		Path:     "/",
 		SameSite: http.SameSiteStrictMode,
 	})
@@ -144,7 +163,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		Value:    "",
 		Path:     "/",
 		Expires:  time.Unix(0, 0), // Expire immediately
-		HttpOnly: true,
+		HttpOnly: false,
 	})
-	http.Redirect(w, r, "/login", http.StatusFound)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
