@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"html/template"
+	"log"
 	"log/slog"
 	"mime"
 	"net/http"
@@ -181,9 +182,13 @@ func serveUpdateTier(w http.ResponseWriter, req *http.Request) {
 	tier := server.GetTier(db2, id)
 
 	tmpl, err := template.ParseFiles("./html/templates/update/tier.html")
-	core.TemplateError(err, "serveUpdateTier", "./html/templates/update/tier.html")
+	if err != nil {
+		log.Println(err)
+	}
 	err = tmpl.Execute(w, tier)
-	core.TemplateError(err, "serveUpdateTier", "./html/templates/update/tier.html")
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func serveUpdatePfleger(w http.ResponseWriter, req *http.Request) {
