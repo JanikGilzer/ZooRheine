@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="zeit-input">
+    <form id="create-zeit-form" method="post">
+        <!-- Name -->
+        <label for="Uhrzeit">Uhrzeit:</label>
+        <input type="time" name="Uhrzeit" id="Uhrzeit" required>
+
+        <!-- Submit Button -->
+        <button type="submit">Uhrzeit erstellen</button>
+    </form>
+</div>
+</body>
+</html>
+
+<script>
+    document.getElementById('create-zeit-form').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        const formData = new FormData(event.target);
+        const jsonData = {
+            Uhrzeit: formData.get("Uhrzeit")
+        }
+        console.log(jsonData)
+        const response = await fetch('/server/create/zeit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData) // Convert the object to JSON
+        });
+    });
+</script>

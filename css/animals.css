@@ -58,10 +58,13 @@ h2 {
 }
 
 .animal-card img {
-    max-width: 100%;
+    width: 100%; /* Ensures images take up the full width of their container */
+    height: 200px; /* Set a fixed height for uniformity */
+    object-fit: cover; /* Ensures the images maintain aspect ratio while filling the box */
     border-radius: 8px;
     margin-bottom: 15px;
 }
+
 
 .animal-card h3 {
     color: #2c3e50;

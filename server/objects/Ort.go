@@ -17,3 +17,9 @@ func (o *Ort) GetAllOrte() (string, []interface{}) {
 	args := []interface{}{}
 	return query, args
 }
+
+func (o *Ort) InsertOrt() (string, []interface{}) {
+	query := "INSERT INTO ort (stadt, plz) VALUES (?, ?)"
+	args := []interface{}{o.Stadt, o.Plz}
+	return query, args
+}

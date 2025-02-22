@@ -19,6 +19,6 @@ func (z *Zeit) GetAllZeiten() (string, []interface{}) {
 
 func (z *Zeit) InsertZeit() (string, []interface{}) {
 	query := "Insert into zeit (uhr_zeit) values (?)"
-	args := []interface{}{z.ID}
+	args := []interface{}{z.Uhrzeit}
 	return query, args
 }

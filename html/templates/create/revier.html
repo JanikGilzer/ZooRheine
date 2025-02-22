@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="revier-input">
+  <form id="create-revier-form" method="post">
+    <!-- Name -->
+    <label for="Name">Name:</label>
+    <input type="text" name="Name" id="Name" required>
+
+    <label for="Beschreibung">Beschreibung:</label>
+    <input type="text" name="Beschreibung" id="Beschreibung" required>
+
+    <!-- Submit Button -->
+    <button type="submit">Tierart erstellen</button>
+  </form>
+</div>
+</body>
+</html>
+
+<script>
+  document.getElementById('create-revier-form').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    const formData = new FormData(event.target);
+    const jsonData = {
+      Name: formData.get("Name"),
+      Beschreibung: formData.get("Beschreibung")
+    }
+    console.log(jsonData)
+    const response = await fetch('/server/create/revier', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonData) // Convert the object to JSON
+    });
+  });
+</script>

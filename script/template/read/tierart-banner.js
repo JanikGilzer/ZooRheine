@@ -10,7 +10,7 @@ export async function loadAnimals(id) {
     // Return the HTML string instead of appending directly
     return `
         <div class="animal-card">
-            <img src="${tierart.ImageURL}" alt="${tierart.ID}">
+            <img src="../../../html/bilder/tierart/${tierart.ID}.jpg" alt="${tierart.ID}">
             <h3>${tierart.Name}</h3>
         </div>
     `;

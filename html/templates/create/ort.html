@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="ort-input">
+  <form id="create-ort-form" method="post">
+    <!-- Name -->
+    <label for="Stadt">Stadt:</label>
+    <input type="text" name="Stadt" id="Stadt" required>
+
+    <label for="Plz">Plz:</label>
+    <input type="text" name="Plz" id="Plz" required>
+
+    <!-- Submit Button -->
+    <button type="submit">Ort erstellen</button>
+  </form>
+</div>
+</body>
+</html>
+
+<script>
+  document.getElementById('create-ort-form').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    const formData = new FormData(event.target);
+    const jsonData = {
+      Stadt: formData.get("Stadt"),
+      Plz: formData.get("Plz")
+    }
+    console.log(jsonData)
+    const response = await fetch('/server/create/ort', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonData) // Convert the object to JSON
+    });
+  });
+</script>

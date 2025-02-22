@@ -123,7 +123,11 @@ INSERT INTO pfleger (name, telefonnummer, adresse, ort_id, revier_id) VALUES ('K
 -- Insert example data into Gebaude
 INSERT INTO gebaude (name, revier_id) VALUES ('Building 1', 1), ('Building 2', 2);
 
-Insert Into tierart (id, name) VALUES (1, 'Löwe'), (2, 'Elephant');
+Insert Into tierart (id, name) VALUES (1, 'Löwe'), (2, 'Elephant'), (3, 'Ratte'), (4, 'Faultier'), (5, 'Wal');
+Insert Into tierart (id, name) VALUES (6, 'Dino'), (7, 'Delphin'), (8, 'Dornteufel'), (9, 'Schnabel tier'), (10, 'Giraffe');
+Insert Into tierart (id, name) VALUES (11, 'Mantis Shrimp'), (12, 'Kalmar'), (13, 'Nahwal'), (14, 'Quokka'), (15, 'Schildkröte');
+Insert Into tierart (id, name) VALUES (16, 'Waschbär'), (17, 'Wolf');
+
 
 -- Insert example data into Tier
 INSERT INTO tier (name, geburtstag, gebaude_id, tierart_ID) VALUES ('Leo', '2015-05-01', 1, 1), ('Elefanten', '2010-08-15', 2, 2);

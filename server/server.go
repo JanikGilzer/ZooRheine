@@ -160,6 +160,11 @@ func CountReviere(db core.DB_Handler) int {
 	return count
 }
 
+func CreateRevier(db core.DB_Handler, revier objects.Revier) {
+	query, args := revier.InsertRevier(revier.Name, revier.Beschreibung)
+	db.Exec(query, args...)
+}
+
 // #endregion
 
 // #region FutterrungsZeit
@@ -233,6 +238,11 @@ func GetAllTierArt(db core.DB_Handler) []objects.TierArt {
 		tiArr = append(tiArr, t)
 	}
 	return tiArr
+}
+
+func CreateTiertArt(db core.DB_Handler, t objects.TierArt) {
+	query, args := t.InsertTierArt()
+	db.Exec(query, args...)
 }
 
 // #endregion
@@ -319,6 +329,11 @@ func GetAllZeiten(db core.DB_Handler) []objects.Zeit {
 		zeitenArr = append(zeitenArr, z)
 	}
 	return zeitenArr
+}
+
+func CreateZeit(db core.DB_Handler, z objects.Zeit) {
+	query, args := z.InsertZeit()
+	db.Exec(query, args...)
 }
 
 // #endregion
@@ -458,6 +473,11 @@ func GettAllOrte(db core.DB_Handler) []objects.Ort {
 		ortArr = append(ortArr, ort)
 	}
 	return ortArr
+}
+
+func CreateOrt(db core.DB_Handler, ort objects.Ort) {
+	query, args := ort.InsertOrt()
+	db.Exec(query, args...)
 }
 
 // #endregion

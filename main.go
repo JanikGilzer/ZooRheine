@@ -47,6 +47,10 @@ func main() {
 	http.HandleFunc("/server/template/update/tier", core.RequireAuth(core.RequireRole("Verwaltung", serveUpdateTier)))
 	http.HandleFunc("/server/template/create/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", serveCreatePfleger)))
 	http.HandleFunc("/server/template/update/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", serveUpdatePfleger)))
+	http.HandleFunc("/server/template/create/zeit", core.RequireAuth(serveCreateZeit))
+	http.HandleFunc("/server/template/create/tierart", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateTierArt)))
+	http.HandleFunc("/server/template/create/revier", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateRevier)))
+	http.HandleFunc("/server/template/create/ort", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateOrt)))
 
 	// Templates
 	http.HandleFunc("/server/template/read/revier", serveRevierTemplate)
@@ -78,6 +82,10 @@ func main() {
 	// create new Object in database
 	http.HandleFunc("/server/create/tier", core.RequireAuth(core.RequireRole("Verwaltung", createTier)))
 	http.HandleFunc("/server/create/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", createPfleger)))
+	http.HandleFunc("/server/create/zeit", core.RequireAuth(createZeit))
+	http.HandleFunc("/server/create/tierart", core.RequireAuth(core.RequireRole("Verwaltung", createTierArt)))
+	http.HandleFunc("/server/create/revier", core.RequireAuth(core.RequireRole("Verwaltung", createRevier)))
+	http.HandleFunc("/server/create/ort", core.RequireAuth(core.RequireRole("Verwaltung", createOrt)))
 
 	// update
 	http.HandleFunc("/server/update/tier", core.RequireAuth(core.RequireRole("Verwaltung", updateTier)))
@@ -226,6 +234,22 @@ func serveCreateTier(w http.ResponseWriter, req *http.Request) {
 
 func serveCreatePfleger(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "./html/templates/create/pfleger.html")
+}
+
+func serveCreateZeit(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./html/templates/create/zeit.html")
+}
+
+func serveCreateTierArt(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./html/templates/create/tierart.html")
+}
+
+func serveCreateRevier(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./html/templates/create/revier.html")
+}
+
+func serveCreateOrt(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./html/templates/create/ort.html")
 }
 
 func serveRevierTemplate(w http.ResponseWriter, req *http.Request) {
@@ -468,6 +492,34 @@ func createPfleger(w http.ResponseWriter, req *http.Request) {
 	json.NewDecoder(req.Body).Decode(&np)
 	fmt.Println(np)
 	server.CreatePfleger(db2, np.Pfleger)
+}
+
+func createZeit(w http.ResponseWriter, req *http.Request) {
+	z := objects.Zeit{}
+	json.NewDecoder(req.Body).Decode(&z)
+	fmt.Println(z)
+	server.CreateZeit(db2, z)
+}
+
+func createTierArt(w http.ResponseWriter, req *http.Request) {
+	t := objects.TierArt{}
+	json.NewDecoder(req.Body).Decode(&t)
+	fmt.Println(t)
+	server.CreateTiertArt(db2, t)
+}
+
+func createRevier(w http.ResponseWriter, req *http.Request) {
+	r := objects.Revier{}
+	json.NewDecoder(req.Body).Decode(&r)
+	fmt.Println(r)
+	server.CreateRevier(db2, r)
+}
+
+func createOrt(w http.ResponseWriter, req *http.Request) {
+	o := objects.Ort{}
+	json.NewDecoder(req.Body).Decode(&o)
+	fmt.Println(o)
+	server.CreateOrt(db2, o)
 }
 
 // #endregion

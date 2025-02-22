@@ -16,3 +16,9 @@ func (t *TierArt) GetAllTierArt() (string, []interface{}) {
 	args := []interface{}{}
 	return query, args
 }
+
+func (t *TierArt) InsertTierArt() (string, []interface{}) {
+	query := "Insert INTO tierart (name) values (?)"
+	args := []interface{}{t.Name}
+	return query, args
+}

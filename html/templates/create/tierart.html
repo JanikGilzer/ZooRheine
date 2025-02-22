@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="tierart-input">
+    <form id="create-tierart-form" method="post">
+        <!-- Name -->
+        <label for="Name">Tierart:</label>
+        <input type="text" name="Name" id="Name" required>
+
+        <!-- Submit Button -->
+        <button type="submit">Tierart erstellen</button>
+    </form>
+</div>
+</body>
+</html>
+
+<script>
+    document.getElementById('create-tierart-form').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        const formData = new FormData(event.target);
+        const jsonData = {
+            Name: formData.get("Name")
+        }
+        console.log(jsonData)
+        const response = await fetch('/server/create/tierart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData) // Convert the object to JSON
+        });
+    });
+</script>
