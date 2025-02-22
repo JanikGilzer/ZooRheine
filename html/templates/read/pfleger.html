@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Pfleger</title>
+</head>
+<body>
+<table>
+  <caption>
+    Pfleger Liste
+  </caption>
+  <thead>
+  <tr>
+    <th scope="col">ID</th>
+    <th scope="col">Name</th>
+    <th scope="col">Telefonnummer</th>
+    <th scope="col">Adresse</th>
+    <th scope="col">Stadt</th>
+    <th scope="col">PLZ</th>
+    <th scope="col">Revier</th>
+  </tr>
+  </thead>
+  <tbody id="pfleger-list">
+
+  </tbody>
+</table>
+</body>
+</html>
+
+<script type="module">
+  import {getElements} from "../../../script/read.js";
+
+  async function loadData() {
+    try {
+      const pfleger = await getElements("pfleger")
+
+      const list = document.getElementById("pfleger-list");
+
+      pfleger.forEach(p => {
+        let listRow = document.createElement("tr");
+        listRow.id = "row" + p.ID;
+
+        let maincol = document.createElement("th");
+        maincol.scope = "row";
+        maincol.innerText = p.ID;
+
+        let namCol = document.createElement("td");
+        namCol.innerText = p.Name || "Unbekannt";
+
+        let telCol = document.createElement("td");
+        telCol.innerText = p.Telefonnummer || "Unbekannt";
+
+        let adrCol = document.createElement("td");
+        adrCol.innerText = p.Adresse || "Unbekannt";
+
+        let stadtCol = document.createElement("td");
+        stadtCol.innerText = p.Ort.Stadt || "Unbekannt";
+
+        let plzCol = document.createElement("td");
+        plzCol.innerText = p.Ort.Plz || "Unbekannt";
+
+        let revierNameCol = document.createElement("td");
+        revierNameCol.innerText = p.Revier.Name || "Unbekannt";
+
+
+
+
+        listRow.appendChild(maincol);
+        listRow.appendChild(namCol);
+        listRow.appendChild(telCol);
+        listRow.appendChild(adrCol);
+        listRow.appendChild(stadtCol);
+        listRow.appendChild(plzCol);
+        listRow.appendChild(revierNameCol);
+
+
+        list.appendChild(listRow);
+      });
+    } catch (error) {
+      console.error("Fehler beim Laden der Daten:", error);
+    }
+  }
+
+  loadData();
+</script>
+
+
+
+
+<style>
+  table {
+    border-collapse: collapse;
+    border: 2px solid rgb(140 140 140);
+    font-family: sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+
+  caption {
+    caption-side: bottom;
+    padding: 10px;
+    font-weight: bold;
+  }
+
+  thead,
+  tfoot {
+    background-color: rgb(228 240 245);
+  }
+
+  th,
+  td {
+    border: 1px solid rgb(160 160 160);
+    padding: 8px 10px;
+  }
+
+  td:last-of-type {
+    text-align: center;
+  }
+
+  tbody > tr:nth-of-type(even) {
+    background-color: rgb(237 238 242);
+  }
+
+  tfoot th {
+    text-align: right;
+  }
+
+  tfoot td {
+    font-weight: bold;
+  }
+
+</style>

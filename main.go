@@ -51,6 +51,7 @@ func main() {
 	http.HandleFunc("/server/template/read/revier", serveRevierTemplate)
 	http.HandleFunc("/server/template/read/gebaude-banner", serveGebaudeBanner)
 	http.HandleFunc("/server/template/read/tierart-banner", serveTierartBanner)
+	http.HandleFunc("/server/template/read/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", servePflegerTemplate)))
 
 	// Header/Footer
 	http.HandleFunc("/server/template/header", serveHeader)
@@ -208,6 +209,10 @@ func serveRevier(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 		return
 	}
+}
+
+func servePflegerTemplate(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./html/templates/read/pfleger.html")
 }
 
 func serveCreateTier(w http.ResponseWriter, req *http.Request) {
