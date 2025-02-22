@@ -100,10 +100,10 @@ CREATE TABLE benoetigtesfutter (
 
 
 -- Insert example data into Gruppe
-INSERT INTO gruppe (name) VALUES ('Admin'), ('User');
+INSERT INTO gruppe (name) VALUES ('Admin'), ('Verwaltung'), ('Pfleger');
 
 -- Insert example data into User
-INSERT INTO mitarbeiter (name, password, gruppen_id) VALUES ('John Doe', 'password123', 1), ('Jane Smith', 'password456', 2);
+INSERT INTO mitarbeiter (name, password, gruppen_id) VALUES ('admin', '1234', 1), ('verwaltung', '1234', 2), ('pfleger', '1234', 3);
 
 -- Insert example data into Zeit
 INSERT INTO zeit (uhr_zeit) VALUES ('08:00'), ('12:00'), ('16:00');

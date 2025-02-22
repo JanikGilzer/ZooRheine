@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        /* Your existing CSS remains the same */
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2 style="text-align: center; margin-bottom: 1.5rem;">Login</h2>
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    <div id="message"></div>
+
+    <div class="protected-actions">
+        <button onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<script>
+    async function handleLogin(event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+                credentials: 'include' // Include cookies in the request
+            });
+
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
+
+            const data = await response.json();
+            showMessage('Login successful!', 'success');
+
+            // Redirect based on role (optional)
+            if (data.role === 'admin') {
+                window.location.href = '/';
+            } else {
+                window.location.href = '/';
+            }
+
+        } catch (error) {
+            showMessage('Invalid credentials', 'error');
+        }
+    }
+
+
+    async function logout() {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                credentials: 'include' // Include cookies in the request
+            });
+
+            if (response.ok) {
+                showMessage('Logged out', 'success');
+                window.location.href = '/login'; // Redirect to login page
+            } else {
+                throw new Error('Logout failed');
+            }
+        } catch (error) {
+            showMessage('Logout failed', 'error');
+        }
+    }
+
+    function showMessage(text, type) {
+        const messageEl = document.getElementById('message');
+        messageEl.textContent = text;
+        messageEl.style.color = type === 'error' ? '#dc3545' : '#28a745';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+</script>
+</body>
+</html>

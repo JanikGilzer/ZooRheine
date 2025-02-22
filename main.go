@@ -6,9 +6,9 @@ import (
 	"ZooDaBa/server/objects"
 	"encoding/json"
 	"fmt"
+	"github.com/golang-jwt/jwt/v5"
 	"html/template"
 	"log/slog"
-	_ "log/slog"
 	"mime"
 	"net/http"
 )
@@ -17,7 +17,7 @@ var db2 core.DB_Handler
 
 // #region Server
 func main() {
-	slog.Info("Server starting on port 8090...")
+	core.Logger_init()
 	db2.Init()
 
 	mime.AddExtensionType(".js", "application/javascript")
@@ -25,18 +25,27 @@ func main() {
 
 	// Websites
 	http.HandleFunc("/", serveIndex)
+	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			core.LoginHandler(w, r, db2)
+		} else {
+			serveLogin(w, r)
+		}
+	})
+	http.HandleFunc("/logout", core.LogoutHandler)
+
 	http.HandleFunc("/revier", serveRevier)
 	http.HandleFunc("/about", serveAbout)
 	http.HandleFunc("/animals", serveAnimals)
 	http.HandleFunc("/contact", serveContact)
-	http.HandleFunc("/admin-panel", serveAdminPanel)
+	http.HandleFunc("/admin-panel", core.RequireAuth(serveAdminPanel))
 	http.HandleFunc("/futterplan", serveFutterplan)
 
 	// internal
-	http.HandleFunc("/server/template/create/tier", serveCreateTier)
-	http.HandleFunc("/server/template/update/tier", serveUpdateTier)
-	http.HandleFunc("/server/template/create/pfleger", serveCreatePfleger)
-	http.HandleFunc("/server/template/update/pfleger", serveUpdatePfleger)
+	http.HandleFunc("/server/template/create/tier", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateTier)))
+	http.HandleFunc("/server/template/update/tier", core.RequireAuth(core.RequireRole("Verwaltung", serveUpdateTier)))
+	http.HandleFunc("/server/template/create/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", serveCreatePfleger)))
+	http.HandleFunc("/server/template/update/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", serveUpdatePfleger)))
 
 	// Templates
 	http.HandleFunc("/server/template/read/revier", serveRevierTemplate)
@@ -56,11 +65,8 @@ func main() {
 	http.HandleFunc("/server/json/fuetterungszeiten", jsonfuetterungszeiten)
 	http.HandleFunc("/server/json/benoetigtesfutter", jsonBenoetigtesFutter)
 	http.HandleFunc("/server/json/futter", jsonFutter)
-	http.HandleFunc("/server/json/pfleger", jsonPfleger)
+	http.HandleFunc("/server/json/pfleger", core.RequireAuth(jsonPfleger))
 	http.HandleFunc("/server/json/ort", jsonOrt)
-
-	// test
-	//http.HandleFunc("/server/clicked", jsonConstructedTier)
 
 	// how many of these are in the database?
 	http.HandleFunc("/server/count/reviere", countReviere)
@@ -68,12 +74,12 @@ func main() {
 	http.HandleFunc("/server/count/tiere", countTiere)
 
 	// create new Object in database
-	http.HandleFunc("/server/create/tier", createTier)
-	http.HandleFunc("/server/create/pfleger", createPfleger)
+	http.HandleFunc("/server/create/tier", core.RequireAuth(core.RequireRole("Verwaltung", createTier)))
+	http.HandleFunc("/server/create/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", createPfleger)))
 
 	// update
-	http.HandleFunc("/server/update/tier", updateTier)
-	http.HandleFunc("/server/update/pfleger", updatePfleger)
+	http.HandleFunc("/server/update/tier", core.RequireAuth(core.RequireRole("Verwaltung", updateTier)))
+	http.HandleFunc("/server/update/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", updatePfleger)))
 
 	http.HandleFunc("/server/send/contact", sendContact)
 
@@ -98,6 +104,32 @@ func main() {
 // #endregion
 
 // #region serve
+
+func serveLogin(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("token")
+	if err == nil {
+		// Validate token
+		claims := &core.Claims{}
+		token, err := jwt.ParseWithClaims(cookie.Value, claims, func(token *jwt.Token) (interface{}, error) {
+			return core.JwtSecret, nil
+		})
+
+		if err == nil && token.Valid {
+			// Redirect to appropriate page based on role
+			if claims.Role == "admin" {
+				http.Redirect(w, r, "/", http.StatusFound)
+			} else {
+				http.Redirect(w, r, "/", http.StatusFound)
+			}
+			return
+		}
+	}
+
+	// Serve login page
+	tmpl := template.Must(template.ParseFiles("./html/login.html"))
+	tmpl.Execute(w, nil)
+}
+
 func serveIndex(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "./html/index.html")
 }
@@ -147,8 +179,10 @@ func serveUpdateTier(w http.ResponseWriter, req *http.Request) {
 	id := req.URL.Query().Get("id")
 	tier := server.GetTier(db2, id)
 
-	tmpl, _ := template.ParseFiles("./html/templates/update/tier.html")
-	tmpl.Execute(w, tier)
+	tmpl, err := template.ParseFiles("./html/templates/update/tier.html")
+	core.TemplateError(err, "serveUpdateTier", "./html/templates/update/tier.html")
+	err = tmpl.Execute(w, tier)
+	core.TemplateError(err, "serveUpdateTier", "./html/templates/update/tier.html")
 }
 
 func serveUpdatePfleger(w http.ResponseWriter, req *http.Request) {

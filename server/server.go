@@ -17,7 +17,7 @@ func GetTier(db core.DB_Handler, id string) objects.Tier {
 	fmt.Println(query)
 	var tRow = db.QueryRow(query, args...)
 
-	tRow.Scan(
+	err := tRow.Scan(
 		&t.ID,                          // tier_id
 		&t.Name,                        // tier_name
 		&t.Geburtsdatum,                // tier_geburtstag
@@ -29,8 +29,11 @@ func GetTier(db core.DB_Handler, id string) objects.Tier {
 		&t.Tierart.ID,
 		&t.Tierart.Name,
 	)
+	if err != nil {
+		core.Logger.Error("Error getting tier from DB", "tier id:", &t.ID, "err", err)
+	}
 	if err := tRow.Err(); err != nil {
-		log.Fatal(err)
+		core.Logger.Error("Error encountered during test iterating", "tier id:", id, "err", err)
 	}
 	return t
 }
@@ -57,13 +60,13 @@ func GetAllTiere(db core.DB_Handler) []objects.Tier {
 			&t.Tierart.Name,
 		)
 		if err != nil {
-			log.Fatal("Error scanning row:", err)
+			core.Logger.Error("Error getting all tiere from DB", "tier id:", &t.ID, "err", err)
 		}
 		tiereArr = append(tiereArr, t)
 	}
 
 	if err := tRows.Err(); err != nil {
-		log.Fatal("Error iterating rows:", err)
+		core.Logger.Error("Error encountered during test iterating", "Object", "Tier", "err", err)
 	}
 	return tiereArr
 }
@@ -95,8 +98,11 @@ func CountTiere(db core.DB_Handler) int {
 	var tier objects.Tier
 	query, args := tier.CountTiere()
 	var tRow = db.QueryRow(query, args...)
-	var count int
-	tRow.Scan(&count)
+	count := 0
+	err := tRow.Scan(&count)
+	if err != nil {
+		core.Logger.Error("Error getting tier count", "err", err)
+	}
 	return count
 }
 
@@ -108,11 +114,17 @@ func GetRevier(db core.DB_Handler, id string) objects.Revier {
 	var revier objects.Revier
 	query, args := revier.GetRevierFrom(id)
 	var rRow = db.QueryRow(query, args...)
-	rRow.Scan(
+	err := rRow.Scan(
 		&revier.ID,
 		&revier.Name,
 		&revier.Beschreibung,
 	)
+	if err != nil {
+		core.Logger.Error("Error getting revier from DB", "revier id:", id, "err", err)
+	}
+	if err := rRow.Err(); err != nil {
+		core.Logger.Error("Error encountered during test iterating", "revier id:", id, "err", err)
+	}
 	return revier
 }
 
@@ -123,12 +135,18 @@ func GetAllReviere(db core.DB_Handler) []objects.Revier {
 	var rRows = db.Query(query, args...)
 	for rRows.Next() {
 		var r objects.Revier
-		rRows.Scan(
+		err := rRows.Scan(
 			&r.ID,
 			&r.Name,
 			&r.Beschreibung,
 		)
+		if err != nil {
+			core.Logger.Error("Error getting revier from DB", "revier id:", r, "err", err)
+		}
 		reviereArr = append(reviereArr, r)
+	}
+	if err := rRows.Err(); err != nil {
+		core.Logger.Error("Error encountered during test iterating", "Object", "Revier", "err", err)
 	}
 	return reviereArr
 }

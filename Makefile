@@ -1,5 +1,5 @@
 APP_NAME=go_build_ZooDaBa
-DOCKER_IMAGE=zoorheine:latest
+DOCKER_IMAGE=zoorheine
 
 # Default target that runs the full pipeline
 all: docker-down clean build docker-build docker-up
@@ -11,7 +11,7 @@ docker-down:
 # Clean up binary and Docker images
 clean:
 	rm -rf build/$(APP_NAME)
-	docker rmi $(DOCKER_IMAGE) || true
+	docker rmi $(DOCKER_IMAGE) $(DOCKER_IMAGE)-app  || true
 
 # Build the Go binary
 build:
@@ -24,7 +24,7 @@ docker-build: build
 
 # Run Docker Compose
 docker-up: docker-build
-	docker compose up -d
+	docker compose up 
 
 # Restart the server
 restart: docker-down docker-up

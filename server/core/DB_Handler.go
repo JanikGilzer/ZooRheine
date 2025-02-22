@@ -15,6 +15,8 @@ type DB_Handler struct {
 }
 
 func (db *DB_Handler) Init() {
+	Logger.Info("Initializing DB Connection...")
+
 	db.config = &mysql.Config{}
 
 	user := os.Getenv("DB_USER")
@@ -25,8 +27,6 @@ func (db *DB_Handler) Init() {
 	param := map[string]string{
 		"allowNativePasswords": "true",
 	}
-
-	log.Println(user, passwd, dbName, net, addr, param)
 
 	db.config.User = user
 	db.config.Passwd = passwd
@@ -40,7 +40,7 @@ func (db *DB_Handler) Init() {
 	for i := 0; i < 10; i++ {
 		db.sql, err = sql.Open("mysql", db.config.FormatDSN())
 		if err != nil {
-			log.Printf("Failed to open database connection (attempt %d): %v", i+1, err)
+			Logger.Error("Failed to open database connection (attempt %d): %v", i+1, err)
 			time.Sleep(5 * time.Second)
 			continue
 		}
@@ -48,10 +48,10 @@ func (db *DB_Handler) Init() {
 		// Verify the connection with a Ping
 		err = db.sql.Ping()
 		if err == nil {
-			log.Println("Successfully connected to the database!")
+			Logger.Info("Successfully connected to the database!")
 			return
 		}
-		log.Printf("Failed to ping database (attempt %d): %v", i+1, err)
+		Logger.Error("Failed to ping database (attempt %d): %v", i+1, err)
 		time.Sleep(5 * time.Second)
 	}
 
@@ -59,13 +59,15 @@ func (db *DB_Handler) Init() {
 }
 
 func (db *DB_Handler) Close() {
+	Logger.Info("Closing DB Connection...")
 	db.sql.Close()
+	Logger.Info("Successfully closed DB Connection!")
 }
 
 func (db *DB_Handler) Query(query string, args ...interface{}) *sql.Rows {
 	rows, err := db.sql.Query(query, args...)
 	if err != nil {
-		log.Fatal(err)
+		Logger.Error("Could not query to table", "Query", query, "Args", args, "SQL Error", err.Error())
 	}
 	return rows
 }
@@ -78,14 +80,6 @@ func (db *DB_Handler) QueryRow(query string, args ...interface{}) *sql.Row {
 func (db *DB_Handler) Exec(query string, args ...interface{}) {
 	_, err := db.sql.Exec(query, args...)
 	if err != nil {
-		log.Fatal(err)
+		Logger.Error("Could not execute to table", "Query", query, "Args", args, "SQL Error", err.Error())
 	}
-}
-
-func (db *DB_Handler) Prepare(query string) *sql.Stmt {
-	stmt, err := db.sql.Prepare(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return stmt
 }

@@ -10,16 +10,16 @@ type User struct {
 func (u *User) Verify(name string, password string) (string, []interface{}) {
 	query := `
 	SELECT
-		user.id,
-		user.name,
-		user.password,
-		user.gruppen_id
+		mitarbeiter.id,
+		mitarbeiter.name,
+		mitarbeiter.gruppen_id,
+		gruppe.name
 	FROM
-		user
-	JOIN gruppe ON user.gruppen_id = gruppe.id
+		mitarbeiter
+	JOIN gruppe ON mitarbeiter.gruppen_id = gruppe.id
 	WHERE
-		user.name = ? 
-		AND user.password = ?;
+		mitarbeiter.name = ? 
+		AND mitarbeiter.password = ?;
 	`
 	args := []interface{}{name, password}
 	return query, args
