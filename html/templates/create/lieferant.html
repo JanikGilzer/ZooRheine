@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="lieferant-input">
+  <form id="create-lieferant-form" method="post">
+    <!-- Name -->
+    <label for="Name">Name:</label>
+    <input type="text" name="Name" id="Name" required>
+
+    <label for="Adresse">Adresse:</label>
+    <input type="text" name="Adresse" id="Adresse" required>
+
+    <label for="Ort">Ort:</label>
+    <select name="Ort" id="Ort" required></select>
+
+    <!-- Submit Button -->
+    <button type="submit">Tierart erstellen</button>
+  </form>
+</div>
+</body>
+</html>
+
+<script type="module">
+  import {getElements} from "../../../script/read.js";
+
+
+  async function setup_create_liefrant_form()
+  {
+    const oData = await getElements("ort")
+    const oSelect = document.getElementById("Ort")
+    oData.forEach(ort => {
+      const option = document.createElement('option');
+      option.value = ort.ID
+      option.text = ort.Stadt
+      option.setAttribute('data-ort', JSON.stringify(ort));
+      oSelect.appendChild(option);
+    })
+  }
+  await setup_create_liefrant_form()
+
+
+
+  document.getElementById('create-lieferant-form').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    const formData = new FormData(event.target);
+    const jsonData = {
+      Name: formData.get("Name"),
+      Adresse: formData.get("Adresse"),
+      Ort: {}
+    }
+
+    const ortSelect = document.getElementById('Ort');
+    const selectedOrt = ortSelect.options[ortSelect.selectedIndex];
+    jsonData['Ort'] = JSON.parse(selectedOrt.getAttribute('data-ort'));
+
+    console.log(jsonData)
+
+    const response = await fetch('/server/create/lieferant', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonData) // Convert the object to JSON
+    });
+  });
+
+</script>

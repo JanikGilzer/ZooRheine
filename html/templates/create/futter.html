@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="futter-input">
+  <form id="create-futter-form" method="post">
+    <!-- Name -->
+    <label for="Name">Name:</label>
+    <input type="text" name="Name" id="Name" required>
+
+    <label for="Lieferant">Lieferant:</label>
+    <select name="Lieferant" id="Lieferant" required></select>
+
+    <!-- Submit Button -->
+    <button type="submit">Futter erstellen</button>
+  </form>
+</div>
+</body>
+</html>
+
+<script type="module">
+  import {getElements} from "../../../script/read.js";
+
+
+  async function setup_create_futter_form()
+  {
+    const lData = await getElements("lieferant")
+    const lSelect = document.getElementById("Lieferant")
+    lData.forEach(lieferant => {
+      const option = document.createElement('option');
+      option.value = lieferant.ID
+      option.text = lieferant.Name
+      option.setAttribute('data-lieferant', JSON.stringify(lieferant));
+      lSelect.appendChild(option);
+    })
+  }
+  await setup_create_futter_form()
+
+
+
+  document.getElementById('create-futter-form').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    const formData = new FormData(event.target);
+    const jsonData = {
+      Name: formData.get("Name"),
+      Lieferant: {}
+    }
+
+    const lieferantSelect = document.getElementById('Lieferant');
+    const selectedLieferant = lieferantSelect.options[lieferantSelect.selectedIndex];
+    jsonData['Lieferant'] = JSON.parse(selectedLieferant.getAttribute('data-lieferant'));
+
+    console.log(jsonData)
+
+    const response = await fetch('/server/create/futter', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonData) // Convert the object to JSON
+    });
+  });
+
+</script>

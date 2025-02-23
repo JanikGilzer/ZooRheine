@@ -43,3 +43,15 @@ func (f *FuetterungsZeiten) AllFromFuetterungsZeiten() (string, []interface{}) {
 	args := []interface{}{}
 	return query, args
 }
+
+func (f *FuetterungsZeiten) CountFuetterungsZeiten() (string, []interface{}) {
+	query := `SELECT COUNT(*) FROM fuetterungszeit`
+	args := []interface{}{}
+	return query, args
+}
+
+func (f *FuetterungsZeiten) InsertFuetterungsZeiten(zeit_id int, gebaude_id int) (string, []interface{}) {
+	query := `INSERT INTO fuetterungszeit (zeit_id, gebaude_id) VALUES (?, ?)`
+	args := []interface{}{zeit_id, gebaude_id}
+	return query, args
+}

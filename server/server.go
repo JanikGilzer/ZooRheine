@@ -206,6 +206,11 @@ func GetAllFutterZeiten(db core.DB_Handler) []objects.FuetterungsZeiten {
 	return fzArr
 }
 
+func CreateFutterZeiten(db core.DB_Handler, fz objects.FuetterungsZeiten) {
+	query, args := fz.InsertFuetterungsZeiten(fz.Zeit.ID, fz.Gebaude.ID)
+	db.Exec(query, args...)
+}
+
 // #endregion
 
 // #region Tier Art
@@ -331,9 +336,35 @@ func GetAllZeiten(db core.DB_Handler) []objects.Zeit {
 	return zeitenArr
 }
 
+func GetZeitFromUhrzeit(db core.DB_Handler, uhrzeit string) objects.Zeit {
+	z := objects.Zeit{}
+	query, args := z.GetZeitFromUhrzeit(uhrzeit)
+	log.Println(query)
+	log.Println(args)
+	row := db.QueryRow(query, args...)
+	err := row.Scan(
+		&z.ID,
+		&z.Uhrzeit,
+	)
+	if err != nil {
+		log.Fatal("Error scanning row:", err)
+	}
+	fmt.Println(z)
+	return z
+}
+
 func CreateZeit(db core.DB_Handler, z objects.Zeit) {
 	query, args := z.InsertZeit()
 	db.Exec(query, args...)
+}
+
+func CountZeit(db core.DB_Handler) int {
+	var zeit objects.Zeit
+	query, args := zeit.CountZeit()
+	zRow := db.QueryRow(query, args...)
+	count := 0
+	zRow.Scan(&count)
+	return count
 }
 
 // #endregion
@@ -371,6 +402,20 @@ func GetAllGebaude(db core.DB_Handler) []objects.Gebaude {
 		gebaudeArr = append(gebaudeArr, g)
 	}
 	return gebaudeArr
+}
+
+func CreateGebaude(db core.DB_Handler, g objects.Gebaude, zeiten []objects.Zeit) {
+
+	query, args := g.InsertGebaeude(g.Name, g.Revier.ID)
+	db.Exec(query, args...)
+	count := CountGebaude(db)
+	gebaude := GetGebaeude(db, strconv.Itoa(count))
+	fmt.Println(gebaude)
+	for _, z := range zeiten {
+		fmt.Println(z)
+		fmt.Println(gebaude)
+		CreateFutterZeiten(db, objects.FuetterungsZeiten{Zeit: z, Gebaude: gebaude})
+	}
 }
 
 // #endregion
@@ -440,6 +485,11 @@ func GetAllFutter(db core.DB_Handler) []objects.Futter {
 		futterArr = append(futterArr, futter)
 	}
 	return futterArr
+}
+
+func CreateFutter(db core.DB_Handler, f objects.Futter) {
+	query, args := f.InsertFutter(f.Name, f.Lieferant.ID)
+	db.Exec(query, args...)
 }
 
 // #endregion
@@ -543,6 +593,35 @@ func UpdatePfleger(db core.DB_Handler, pfleger objects.Pfleger) {
 // #TODO: contact schreiben
 func CreateContact(db core.DB_Handler, contact objects.Contact) {
 	fmt.Println(contact)
+}
+
+// #endregion
+
+// #region lieferant
+
+func GetAllLieferant(db core.DB_Handler) []objects.Lieferant {
+	var lieferantArr []objects.Lieferant
+	var lieferant objects.Lieferant
+	query, args := lieferant.GetAllLieferant()
+	rows := db.Query(query, args...)
+	for rows.Next() {
+		var l objects.Lieferant
+		rows.Scan(
+			&l.ID,
+			&l.Name,
+			&l.Adresse,
+			&l.Ort.ID,
+			&l.Ort.Stadt,
+			&l.Ort.Plz,
+		)
+		lieferantArr = append(lieferantArr, l)
+	}
+	return lieferantArr
+}
+
+func CreateLieferant(db core.DB_Handler, lieferant objects.Lieferant) {
+	query, args := lieferant.InsertLieferant()
+	db.Exec(query, args...)
 }
 
 // #endregion

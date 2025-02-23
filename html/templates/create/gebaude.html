@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="gebaude-input">
+  <form id="create-gebaude-form" method="post">
+    <!-- Name -->
+    <label for="Name">Name:</label>
+    <input type="text" name="Name" id="Name" required>
+
+    <label for="Revier">Revier:</label>
+    <select name="Revier" id="Revier" required></select>
+
+    <label>Fütterungszeit:</label>
+    <div id="Fuetterungszeit" class="futterungszeit-options"></div>
+
+    <!-- Submit Button -->
+    <button type="submit">Gebäude erstellen</button>
+  </form>
+</div>
+</body>
+</html>
+
+<script type="module">
+  import {getElements} from "../../../script/read.js";
+
+
+  async function setup_create_gebaude_form()
+  {
+    const rData = await getElements("revier")
+    const rSelect = document.getElementById("Revier")
+    rData.forEach(revier => {
+      const option = document.createElement('option');
+      option.value = revier.ID
+      option.text = revier.Name
+      option.setAttribute('data-revier', JSON.stringify(revier));
+      rSelect.appendChild(option);
+    })
+
+    const zData = await getElements("zeit")
+    const zSelect = document.getElementById('Fuetterungszeit');
+    zData.forEach(zeiten => {
+      console.log(zeiten);
+      const label = document.createElement('label');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = zeiten.Uhrzeit;
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(zeiten.Uhrzeit));
+      zSelect.appendChild(label);
+      zSelect.appendChild(document.createElement('br'));
+    });
+
+
+  }
+  await setup_create_gebaude_form()
+
+
+
+  document.getElementById('create-gebaude-form').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    const formData = new FormData(event.target);
+    const jsonData = {
+      'Gebaude': {
+        'Name': formData.get('Name'),
+        'Revier': {},
+      },
+      'Zeit': []
+    }
+
+    const revierSelect = document.getElementById('Revier');
+    const selectedOrt = revierSelect.options[revierSelect.selectedIndex];
+    jsonData['Gebaude']['Revier'] = JSON.parse(selectedOrt.getAttribute('data-revier'));
+
+    const zeitSelect = document.getElementById('Fuetterungszeit');
+    const checkboxes = zeitSelect.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      if (checkbox.checked) {
+        jsonData['Zeit'].push(checkbox.value);
+      }
+    });
+
+
+    console.log(jsonData)
+
+    const response = await fetch('/server/create/gebaude', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonData) // Convert the object to JSON
+    });
+  });
+
+</script>

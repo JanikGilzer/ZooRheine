@@ -22,3 +22,15 @@ func (z *Zeit) InsertZeit() (string, []interface{}) {
 	args := []interface{}{z.Uhrzeit}
 	return query, args
 }
+
+func (z *Zeit) GetZeitFromUhrzeit(uhrzeit string) (string, []interface{}) {
+	query := "Select * from zeit where uhr_zeit = ?"
+	args := []interface{}{uhrzeit}
+	return query, args
+}
+
+func (z *Zeit) CountZeit() (string, []interface{}) {
+	query := `SELECT COUNT(*) FROM zeit`
+	args := []interface{}{}
+	return query, args
+}

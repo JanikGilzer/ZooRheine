@@ -51,6 +51,9 @@ func main() {
 	http.HandleFunc("/server/template/create/tierart", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateTierArt)))
 	http.HandleFunc("/server/template/create/revier", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateRevier)))
 	http.HandleFunc("/server/template/create/ort", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateOrt)))
+	http.HandleFunc("/server/template/create/lieferant", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateLieferant)))
+	http.HandleFunc("/server/template/create/gebaude", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateGebaude)))
+	http.HandleFunc("/server/template/create/futter", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateFutter)))
 
 	// Templates
 	http.HandleFunc("/server/template/read/revier", serveRevierTemplate)
@@ -73,6 +76,7 @@ func main() {
 	http.HandleFunc("/server/json/futter", jsonFutter)
 	http.HandleFunc("/server/json/pfleger", core.RequireAuth(jsonPfleger))
 	http.HandleFunc("/server/json/ort", jsonOrt)
+	http.HandleFunc("/server/json/lieferant", core.RequireAuth(core.RequireRole("Verwaltung", jsonLieferant)))
 
 	// how many of these are in the database?
 	http.HandleFunc("/server/count/reviere", countReviere)
@@ -86,6 +90,9 @@ func main() {
 	http.HandleFunc("/server/create/tierart", core.RequireAuth(core.RequireRole("Verwaltung", createTierArt)))
 	http.HandleFunc("/server/create/revier", core.RequireAuth(core.RequireRole("Verwaltung", createRevier)))
 	http.HandleFunc("/server/create/ort", core.RequireAuth(core.RequireRole("Verwaltung", createOrt)))
+	http.HandleFunc("/server/create/lieferant", core.RequireAuth(core.RequireRole("Verwaltung", createLieferant)))
+	http.HandleFunc("/server/create/gebaude", core.RequireAuth(core.RequireRole("Verwaltung", createGebaude)))
+	http.HandleFunc("/server/create/futter", core.RequireAuth(core.RequireRole("Verwaltung", createFutter)))
 
 	// update
 	http.HandleFunc("/server/update/tier", core.RequireAuth(core.RequireRole("Verwaltung", updateTier)))
@@ -250,6 +257,18 @@ func serveCreateRevier(w http.ResponseWriter, req *http.Request) {
 
 func serveCreateOrt(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "./html/templates/create/ort.html")
+}
+
+func serveCreateLieferant(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./html/templates/create/lieferant.html")
+}
+
+func serveCreateGebaude(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./html/templates/create/gebaude.html")
+}
+
+func serveCreateFutter(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "./html/templates/create/futter.html")
 }
 
 func serveRevierTemplate(w http.ResponseWriter, req *http.Request) {
@@ -443,6 +462,15 @@ func jsonOrt(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func jsonLieferant(w http.ResponseWriter, req *http.Request) {
+	lieferantId := req.URL.Query().Get("id")
+	if lieferantId == "" {
+		lieferant := server.GetAllLieferant(db2)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(lieferant)
+	}
+}
+
 // #endregion
 
 // #region count
@@ -520,6 +548,40 @@ func createOrt(w http.ResponseWriter, req *http.Request) {
 	json.NewDecoder(req.Body).Decode(&o)
 	fmt.Println(o)
 	server.CreateOrt(db2, o)
+}
+
+func createLieferant(w http.ResponseWriter, req *http.Request) {
+	l := objects.Lieferant{}
+	json.NewDecoder(req.Body).Decode(&l)
+	fmt.Println(l)
+	server.CreateLieferant(db2, l)
+}
+
+func createGebaude(w http.ResponseWriter, req *http.Request) {
+	type newGebaude struct {
+		Gebaude objects.Gebaude
+		Zeit    []string
+	}
+	g := newGebaude{}
+	json.NewDecoder(req.Body).Decode(&g)
+	fmt.Println(g)
+	fmt.Println(g.Zeit)
+	fmt.Println(g.Gebaude)
+	gZeit := []objects.Zeit{}
+	for _, zeit := range g.Zeit {
+		fmt.Println(zeit)
+		z := server.GetZeitFromUhrzeit(db2, zeit)
+		gZeit = append(gZeit, z)
+	}
+	fmt.Println(gZeit)
+	server.CreateGebaude(db2, g.Gebaude, gZeit)
+}
+
+func createFutter(w http.ResponseWriter, req *http.Request) {
+	f := objects.Futter{}
+	json.NewDecoder(req.Body).Decode(&f)
+	fmt.Println(f)
+	server.CreateFutter(db2, f)
 }
 
 // #endregion
