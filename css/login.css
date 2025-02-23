@@ -1,0 +1,130 @@
+/* login.css */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto 50px; /* Account for header height */
+    padding: 2.5rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.login-container:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.login-container h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 1.75rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.75rem;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #ecf0f1;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background: #f9f9f9;
+}
+
+input:focus {
+    border-color: #1abc9c;
+    background: #ffffff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.15);
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: #1abc9c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+button[type="submit"]:hover {
+    background: #16a085;
+    transform: translateY(-2px);
+}
+
+.protected-actions {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.protected-actions button {
+    background: none;
+    border: none;
+    color: #2c3e50;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.protected-actions button:hover {
+    color: #1abc9c;
+    background: rgba(26, 188, 156, 0.1);
+}
+
+#message {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.9rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+}
+
+#message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        margin: 80px 20px 30px;
+        padding: 1.75rem;
+    }
+
+    input {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    button[type="submit"] {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+}

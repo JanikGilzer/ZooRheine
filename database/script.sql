@@ -106,22 +106,58 @@ INSERT INTO gruppe (name) VALUES ('Admin'), ('Verwaltung'), ('Pfleger');
 INSERT INTO mitarbeiter (name, password, gruppen_id) VALUES ('admin', '$2a$14$692xvxXH6onXCNoJnJInBO2esb/Ki9xDOFA6yMMRxdx21lv/zR/8C', 1), ('verwaltung', '$2a$14$bAYK588LBSy0CVNJkA0Kn.5.JF/.EEQsjKRv.HQgz7S7YYAk8Kywu', 2), ('pfleger', '1234', 3);
 
 -- Insert example data into Zeit
-INSERT INTO zeit (uhr_zeit) VALUES ('08:00'), ('12:00'), ('16:00');
+INSERT INTO zeit (uhr_zeit) VALUES
+                                ('06:00'), ('11:00'), ('13:00'), ('15:00'), ('18:00'), ('20:00');
 
 -- Insert example data into Ort
-INSERT INTO ort (stadt, plz) VALUES ('Berlin', '10115'), ('Munich', '80331');
+INSERT INTO ort (stadt, plz) VALUES ('Berlin', '10115'), ('Munich', '80331'), ('Dresden', '01067'),
+                                    ('Leipzig', '04109'),
+                                    ('Düsseldorf', '40213'),
+                                    ('Hannover', '30159'),
+                                    ('Nürnberg', '90403');
 
 -- Insert example data into Lieferant
-INSERT INTO lieferant (name, adresse, ort_id) VALUES ('Supplier A', 'Street 1', 1), ('Supplier B', 'Street 2', 2);
+INSERT INTO lieferant (name, adresse, ort_id) VALUES ('Fleischlieferung Müller', 'Fleischstraße 22', 3),
+                                                    ('Gemüsebau Schmidt', 'Gemüseweg 45', 4),
+                                                    ('Fischhandel Fischer', 'Fischkai 12', 5),
+                                                    ('Exotisches Futterland', 'Exotenweg 8', 6);
 
 -- Insert example data into Revier
-INSERT INTO revier (name, beschreibung) VALUES ('Revier 1', ' '), ('Revier 2', ' ' );
+INSERT INTO revier (name, beschreibung) VALUES ('Großtiere', ' '),
+                                               ('Tiefsee Monster', ' ' ),
+                                               ('Reptilien', ''),
+                                               ('Kleintiere', ''),
+                                               ('Schwartzwald', ''),
+                                               ('Amerika', '');
+
+UPDATE revier SET beschreibung =
+                      CASE
+                          WHEN name = 'Großtiere' THEN 'Afrikanische Savannentiere wie Löwen, Elefanten und Giraffen'
+                          WHEN name = 'Tiefsee Monster' THEN 'Tiefseebewohner wie Riesenkalmare und Anglerfische'
+                          WHEN name = 'Reptilien' THEN 'Schlangen, Echsen und Schildkröten aus aller Welt'
+                          WHEN name = 'Kleintiere' THEN 'Kleine Säugetiere wie Waschbären und Quokkas'
+                          WHEN name = 'Schwartzwald' THEN 'Tiere aus dem Schwarzwald wie Wölfe und Wildschweine'
+                          WHEN name = 'Amerika' THEN 'Tiere aus Nord- und Südamerika wie Bisons und Faultiere'
+                          ELSE beschreibung
+                          END;
+
 
 -- Insert example data into Pfleger
-INSERT INTO pfleger (name, telefonnummer, adresse, ort_id, revier_id) VALUES ('Keeper A', '123456789', 'Street 3', 1, 1), ('Keeper B', '987654321', 'Street 4', 2, 2);
+INSERT INTO pfleger (name, telefonnummer, adresse, ort_id, revier_id) VALUES
+                                                                          ('Lisa Großtier', '0151123457', 'Savannenweg 1', 3, 1),
+                                                                          ('Max Reptil', '0170987655', 'Schlangenpfad 2', 4, 3),
+                                                                          ('Sophie Meer', '0160123457', 'Fischkai 8', 5, 2),
+                                                                          ('Tom Kleintier', '0151123458', 'Waldweg 9', 6, 4),
+                                                                          ('Julia Wald', '0170987656', 'Schwarzwaldstraße 10', 7, 5);
 
 -- Insert example data into Gebaude
-INSERT INTO gebaude (name, revier_id) VALUES ('Building 1', 1), ('Building 2', 2);
+INSERT INTO gebaude (name, revier_id) VALUES
+                                          ('Savannen-Gehege', 1),
+                                          ('Tiefsee-Aquarium', 2),
+                                          ('Reptilienhaus', 3),
+                                          ('Kleintierhaus', 4),
+                                          ('Schwarzwald-Gehege', 5),
+                                          ('Amerika-Pavillon', 6);
 
 Insert Into tierart (id, name) VALUES (1, 'Löwe'), (2, 'Elephant'), (3, 'Ratte'), (4, 'Faultier'), (5, 'Wal');
 Insert Into tierart (id, name) VALUES (6, 'Dino'), (7, 'Delphin'), (8, 'Dornteufel'), (9, 'Schnabel tier'), (10, 'Giraffe');

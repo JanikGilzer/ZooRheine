@@ -12,6 +12,7 @@ header {
     color: #ecf0f1;
     padding: 20px;
     text-align: center;
+    margin-left: 250px; /* Match the width of the sidebar */
 }
 
 header h1 {
@@ -24,11 +25,15 @@ header h1 {
 }
 
 .sidebar {
+    position: fixed;
     width: 250px;
     background-color: #2c3e50;
     color: #ecf0f1;
     padding: 20px;
     min-height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure it stays above other content */
 }
 
 .sidebar h2 {
@@ -61,6 +66,7 @@ header h1 {
 .main-content {
     flex: 1;
     padding: 20px;
+    margin-left: 250px; /* Match the width of the sidebar */
 }
 
 .dashboard {
@@ -88,86 +94,82 @@ header h1 {
     color: #1abc9c;
     margin: 0;
 }
+/* Add to admin-panel.css - Preserves original sidebar/dashboard */
+/* Only modify other sections */
 
-.form-container {
+/* Form Containers (New Styles) */
+.form-container,
+#update-tier-section {
     background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e6eb;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
 }
 
-.form-container h2 {
+.form-container::before,
+#update-tier-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #1abc9c;
+    border-radius: 12px 0 0 12px;
+}
+
+.form-container h2,
+#update-tier-section h2 {
     color: #2c3e50;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e6eb;
 }
 
-.form-container label {
-    display: block;
-    font-size: 1.1rem;
-    margin-bottom: 5px;
-    color: #555;
+/* Form Elements (New Styles) */
+.form-container input,
+.form-container select,
+#update-tier-section input {
+    transition: border-color 0.3s ease;
+    border: 1px solid #dbe1e8;
 }
 
-.form-container input[type="text"],
-.form-container input[type="date"],
-.form-container select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
+.form-container input:focus,
+.form-container select:focus,
+#update-tier-section input:focus {
+    border-color: #1abc9c;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
 }
 
-.form-container .futter-options {
-    margin-bottom: 15px;
+/* Update Section Specific Styles */
+#update-tier-section {
+    background: #f8fafc;
+    border-color: #e0e6eb;
 }
 
-.form-container .futter-options label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+#update-tier-section button {
+    background: #1abc9c;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
 }
 
-.form-container .futter-options input[type="checkbox"] {
-    margin-right: 10px;
+/* Hover Effects (Only for Form Sections) */
+.form-container:hover,
+#update-tier-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.form-container button {
-    background-color: #1abc9c;
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.form-container button:hover {
-    background-color: #16a085;
-}
-
-footer {
-    background-color: #2c3e50;
-    color: #ecf0f1;
-    text-align: center;
-    padding: 20px;
-    margin-top: 40px;
-}
-
-/* Responsive Design */
+/* Responsive (Preserve original sidebar behavior) */
 @media (max-width: 768px) {
-    .admin-container {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        min-height: auto;
-    }
-
-    .main-content {
-        padding: 20px 10px;
+    /* Original mobile styles preserved */
+    .form-container,
+    #update-tier-section {
+        margin: 1rem;
+        padding: 1.5rem;
     }
 }

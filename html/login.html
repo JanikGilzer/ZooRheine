@@ -2,11 +2,13 @@
 <html>
 <head>
     <title>Login</title>
-    <style>
-        /* Your existing CSS remains the same */
-    </style>
+    <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
+<div id="Header">
+
+</div>
+
 <div class="login-container">
     <h2 style="text-align: center; margin-bottom: 1.5rem;">Login</h2>
     <form id="loginForm">
@@ -25,12 +27,16 @@
     <div class="protected-actions">
         <button onclick="logout()">Logout</button>
     </div>
-    <div>
-        <button onclick="window.location.href='/'"> Homepage</button>
-    </div>
 </div>
 
-<script>
+<div id="Footer">
+
+</div>
+
+<script type="module">
+    import {getFooter, getHeader} from "../script/read.js";
+    getFooter();
+    getHeader();
     async function handleLogin(event) {
         event.preventDefault();
         const username = document.getElementById('username').value;

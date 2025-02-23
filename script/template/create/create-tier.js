@@ -90,6 +90,7 @@ export async function create_and_send_tier() {
     
                 if (response.ok) {
                     alert('Tier erfolgreich erstellt!');
+                    document.location.reload()
                 } else {
                     alert('Fehler beim Erstellen des Tieres.');
                 }

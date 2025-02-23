@@ -21,9 +21,9 @@
             <h2>Navigation</h2>
             <ul>
                 <li><a href="#dashboard">Dashboard</a></li>
-                <li><a href="#animals">Tiere verwalten</a></li>
-                <li><a href="#enclosures">Gehege verwalten</a></li>
-                <li><a href="#feeding">Fütterungszeiten</a></li>
+                <li><a href="#tier-section">Tiere verwalten</a></li>
+                <li><a href="#gebaude-section">Gehege verwalten</a></li>
+                <li><a href="#pfleger-section">Pfleger</a></li>
                 <li><a href="#visitors">Besucherinformationen</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
@@ -37,7 +37,7 @@
                     <h3>Tiere</h3>
                     <p>50</p>
                 </div>
-                <div class="dashboard-card" id="gehege">
+                <div class="dashboard-card" id="gebaude">
                     <h3>Gehege</h3>
                     <p>10</p>
                 </div>
@@ -51,10 +51,42 @@
                 </div>
             </section>
 
-            <!-- Add Animal Form -->
-            <section id="animals" class="form-container">
-                <h2>Neues Tier hinzufügen</h2>
-            </section>
+            <div id="tier-section-div">
+                <!-- Add Animal Form -->
+                <section id="tier-section" class="form-container">
+                    <h2>Neues Tier hinzufügen</h2>
+                </section>
+
+                <div id="update-tier-section">
+                    <h2>Update Tier</h2>
+                    <input type="number" id="update-tier-id">
+                    <button type="button" id="update-tier-btn">Auswählen</button>
+                    <div id="update-tier-section-form">
+
+                    </div>
+                </div>
+            </div>
+
+             <div id="gebaude-section-div">
+                <section id="gebaude-section" class="form-container">
+                    <h2>Neues Gebaude hinzufügen</h2>
+                </section>
+             </div>
+
+            <div id="pfleger-section-div">
+                <section id="pfleger-section" class="form-container">
+                    <h2>Neuen Pfleger hinzufügen</h2>
+
+
+                    <div id="update-pfleger-section">
+                        <h2>Update Pfleger</h2>
+                        <input type="number" id="update-pfleger-id">
+                        <button type="button" id="update-pfleger-btn">Auswählen</button>
+                        <div id="update-pfleger-section-form">
+                        </div>
+                </section>
+            </div>
+
         </div>
     </div>
 
@@ -67,11 +99,15 @@
 <script type="module">
     import { getHeader, getFooter, countElement } from './../script/read.js';
     import { setup_create_tier_form, create_and_send_tier } from './../script/template/create/create-tier.js';
+    import {setup_create_gebaude_form, create_and_send_gebaude} from "../script/template/create/gebaude.js";
+    import {setup_update_tier, update_and_send_tier} from "../script/template/update/tier.js";
+
+
     var count_tier = await countElement("tiere");
     var count_gehege = await countElement("gebaude");
     console.log(count_tier);
     document.getElementById("tier").querySelector("p").innerText = count_tier;
-    document.getElementById("gehege").querySelector("p").innerText = count_gehege;
+    document.getElementById("gebaude").querySelector("p").innerText = count_gehege;
 
     var response = await fetch("server/template/create/tier")
         .then(response => response.text())
@@ -83,7 +119,7 @@
                 console.error("Response contains forbidden content.");
                 return; // Exit the function if forbidden content is found
             } else {
-                document.querySelector('.form-container').innerHTML += data;
+                document.getElementById("tier-section").innerHTML += data;
                 await setup_create_tier_form();
                 await create_and_send_tier();
             }
@@ -91,6 +127,59 @@
         .catch(error => {
             console.error("Error fetching data:", error);
         });
+
+
+    document.getElementById("update-tier-btn").addEventListener('click', async function (event) {
+        event.preventDefault();
+        var tierID = document.getElementById("update-tier-id").value
+        console.log(tierID)
+        var response = await fetch("/server/template/update/tier?id=" + tierID)
+            .then(response => response.text())
+            .then(async data => {
+                console.log(data)
+                // Check if the response contains the word "Forbidden"
+                const containsForbidden = data.includes("Forbidden");
+
+                if (containsForbidden) {
+                    console.error("Response contains forbidden content.");
+                    return; // Exit the function if forbidden content is found
+                } else {
+                    document.getElementById("update-tier-section-form").innerHTML = data;
+                    await setup_update_tier();
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    })
+
+
+    var response = await fetch("server/template/create/gebaude")
+        .then(response => response.text())
+        .then(async data => {
+            // Check if the response contains the word "Forbidden"
+            const containsForbidden = data.includes("Forbidden");
+
+            if (containsForbidden) {
+                console.error("Response contains forbidden content.");
+                return; // Exit the function if forbidden content is found
+            } else {
+                document.getElementById("gebaude-section").innerHTML += data;
+                await setup_create_gebaude_form()
+                await create_and_send_gebaude()
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+
+
+
+
+
+
+
+
 
     await getHeader();
     await getFooter();

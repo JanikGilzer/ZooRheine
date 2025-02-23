@@ -36,53 +36,11 @@
 </html>
 
 <script type="module">
-    import { updateValue } from '../../../script/update.js';
-    import { deleteValue } from '../../../script/delete.js';
+    import {setup_update_tier, update_and_send_tier} from "../../../script/template/update/tier.js";
     import { getElements, getElement } from '../../../script/read.js';
 
-    window.onload = function() {
-        updateTierForm();
-        document.getElementById('deleteTierForm').addEventListener('submit', function(event){
-            event.preventDefault();
-            deleteTier();
-        });
-        document.getElementById('updateTierForm').addEventListener('submit', function(event){
-            event.preventDefault();
-            updateTier();
-        });
-    }
-    
-    const tier = {
-        id: parseInt(document.getElementById('tierId').innerText.split(': ')[1]),
-        name: document.getElementById('tierName').innerText.split(': ')[1],
-        geburtsdatum: document.getElementById('tierGeburtsdatum').innerText.split(': ')[1],
-        gebaude_id: document.getElementById('tierGehege').innerText.split(': ')[1]
-    }
-    async function updateTierForm() {
-        document.getElementById('updateId').value = tier.id;
-        document.getElementById('updateName').value = tier.name;
-        document.getElementById('updateGeburtsdatum').value = tier.geburtsdatum;
-        var gebaude = await getElements('gebaude');
-        for (let geb in gebaude) {
-            var option = document.createElement('option');
-            option.value = gebaude[geb].ID;
-            option.text = gebaude[geb].Name;
-            document.getElementById('updateGebaude').appendChild(option);
-        }
-    }
-
-    async function updateTier() {
-        const form = document.getElementById('updateTierForm');
-        const formData = new FormData(form);
-        const newTier = {
-            id: parseInt(formData.get('id')),
-            name: formData.get('name'),
-            geburtsdatum: formData.get('geburtsdatum'),
-            gebaude: await getElement(parseInt(formData.get('gebaude')), 'gebaude')
-        }
-        await updateValue(tier, newTier, "tier");
-        window.location.reload();
-    }
+    setup_update_tier()
+    update_and_send_tier()
 
     async function deleteTier() {
         const form = document.getElementById('deleteTierForm');
