@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Gebaude</title>
+</head>
+<body>
+<p id="gebaude_id">ID: {{.ID}}</p>
+<p id="gebaude_name">Name: {{.Name}}</p>
+<p id="gebaude_revier">Revier: {{.Revier}}</p>
+
+<h2>Update Gebaude</h2>
+<form id="updateGebaudeForm">
+    <input type="hidden" id="updateId" name="id">
+    <label for="updateName">Name:</label>
+    <input type="text" id="updateName" name="name"><br>
+    <label for="updateRevier">Revier:</label>
+    <select id="updateRevier" name="revier"></select> <br>
+
+    <button type="submit">Update Gebaude</button>
+</form>
+
+<h2>Delete Gebaude</h2>
+<form id="deleteTierForm" action="/server/delete/tier" method="post">
+    <input type="hidden" id="deleteId" name="id">
+    <button type="submit">Delete Gebaude</button>
+</form>
+
+</body>
+</html>
+
+<script type="module">
+    import {setup_update_gebaude} from "../../../script/template/update/gebaude.js";
+    import {update_and_send_gebaude} from "../../../script/template/update/gebaude.js";
+
+
+    await setup_update_gebaude()
+
+    document.getElementById('updateGebaudeForm').addEventListener('submit', async function(event){
+        event.preventDefault();
+        await update_and_send_gebaude(event.target)
+    })
+
+</script>

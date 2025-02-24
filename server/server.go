@@ -418,6 +418,11 @@ func CreateGebaude(db core.DB_Handler, g objects.Gebaude, zeiten []objects.Zeit)
 	}
 }
 
+func UpdateGebaude(db core.DB_Handler, g objects.Gebaude) {
+	query, args := g.UpdateGebaude(strconv.Itoa(g.ID))
+	db.Exec(query, args...)
+}
+
 // #endregion
 
 // #region Futter

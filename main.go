@@ -53,6 +53,7 @@ func main() {
 	http.HandleFunc("/server/template/create/ort", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateOrt)))
 	http.HandleFunc("/server/template/create/lieferant", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateLieferant)))
 	http.HandleFunc("/server/template/create/gebaude", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateGebaude)))
+	http.HandleFunc("/server/template/update/gebaude", core.RequireAuth(core.RequireRole("Verwaltung", serveUpdateGebaude)))
 	http.HandleFunc("/server/template/create/futter", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateFutter)))
 
 	// Templates
@@ -97,6 +98,7 @@ func main() {
 	// update
 	http.HandleFunc("/server/update/tier", core.RequireAuth(core.RequireRole("Verwaltung", updateTier)))
 	http.HandleFunc("/server/update/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", updatePfleger)))
+	http.HandleFunc("/server/update/gebaude", core.RequireAuth(core.RequireRole("Verwaltung", updateGebaude)))
 
 	http.HandleFunc("/server/send/contact", sendContact)
 
@@ -211,6 +213,13 @@ func serveUpdatePfleger(w http.ResponseWriter, req *http.Request) {
 	pfleger := server.GetPfleger(db2, id)
 	tmpl, _ := template.ParseFiles("./html/templates/update/pfleger.html")
 	tmpl.Execute(w, pfleger)
+}
+
+func serveUpdateGebaude(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	gebaude := server.GetGebaeude(db2, id)
+	tmpl, _ := template.ParseFiles("./html/templates/update/gebaude.html")
+	tmpl.Execute(w, gebaude)
 }
 
 func serveRevier(w http.ResponseWriter, req *http.Request) {
@@ -601,6 +610,12 @@ func updatePfleger(w http.ResponseWriter, req *http.Request) {
 	json.NewDecoder(req.Body).Decode(&pfleger)
 	fmt.Println(pfleger)
 	server.UpdatePfleger(db2, pfleger)
+}
+
+func updateGebaude(w http.ResponseWriter, req *http.Request) {
+	var g objects.Gebaude
+	json.NewDecoder(req.Body).Decode(&g)
+	server.UpdateGebaude(db2, g)
 }
 
 // #endregion

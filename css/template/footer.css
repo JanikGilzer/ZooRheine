@@ -6,44 +6,44 @@
         text-align: center;
         font-family: Arial, sans-serif;
       }
-      
+
       .footer-content {
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 20px;
       }
-      
+
       .footer-text {
         margin: 5px 0;
         font-size: 14px;
       }
-      
+
       .footer-links {
         margin: 10px 0;
       }
-      
+
       .footer-link {
         color: #ecf0f1;
         text-decoration: none;
         margin: 0 10px;
         font-size: 14px;
       }
-      
+
       .footer-link:hover {
         text-decoration: underline;
       }
-      
+
       .social-media {
         margin-top: 10px;
       }
-      
+
       .social-link {
         color: #ecf0f1;
         text-decoration: none;
         margin: 0 10px;
         font-size: 14px;
       }
-      
+
       .social-link:hover {
         text-decoration: underline;
       }

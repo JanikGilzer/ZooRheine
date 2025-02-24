@@ -3,6 +3,7 @@ export async function updateValue(oldValues, newValues, element)  {
         oldValues[key] = newValues[key];
     }
     try {
+        console.log(oldValues)
         const url = '/server/update/' + element;
         console.log(url)
         console.log(oldValues)

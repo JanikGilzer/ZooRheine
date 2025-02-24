@@ -1,0 +1,153 @@
+table {
+    border-collapse: collapse;
+    border: 2px solid rgb(140 140 140);
+    font-family: sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+caption {
+    caption-side: bottom;
+    padding: 10px;
+    font-weight: bold;
+}
+
+thead,
+tfoot {
+    background-color: rgb(228 240 245);
+}
+
+th,
+td {
+    border: 1px solid rgb(160 160 160);
+    padding: 8px 10px;
+}
+
+td:last-of-type {
+    text-align: center;
+}
+
+tbody > tr:nth-of-type(even) {
+    background-color: rgb(237 238 242);
+}
+
+tfoot th {
+    text-align: right;
+}
+
+tfoot td {
+    font-weight: bold;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#Header {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+#Footer {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 1rem;
+    text-align: center;
+    margin-top: auto;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #e0e6eb;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    margin: 2rem auto;
+    width: 95%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+caption {
+    caption-side: top;
+    padding: 1rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2c3e50;
+    background: #f8fafc;
+    border-bottom: 2px solid #1abc9c;
+}
+
+thead {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #e0e6eb;
+}
+
+tbody > tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody > tr:nth-of-type(even) {
+    background-color: #f8fafc;
+}
+
+tbody > tr:hover {
+    background-color: #f1f8ff;
+}
+
+td:last-of-type {
+    text-align: left;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+        margin: 1rem 0;
+        font-size: 0.8rem;
+    }
+
+    th, td {
+        padding: 10px;
+        min-width: 120px;
+    }
+
+    caption {
+        font-size: 1.1rem;
+        padding: 0.8rem;
+    }
+
+    #Header {
+        padding: 1rem;
+        font-size: 1.2rem;
+    }
+}
+
+/* Loading state */
+.loading-placeholder td {
+    padding: 2rem;
+    text-align: center;
+    color: #7f8c8d;
+}

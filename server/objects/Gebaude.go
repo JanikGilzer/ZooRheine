@@ -50,3 +50,9 @@ func (g *Gebaude) CountGebaude() (string, []interface{}) {
 	args := []interface{}{}
 	return query, args
 }
+
+func (g *Gebaude) UpdateGebaude(id string) (string, []interface{}) {
+	query := "Update gebaude set name = ?, revier_id = ? where id = ?"
+	args := []interface{}{g.Name, g.Revier.ID, id}
+	return query, args
+}

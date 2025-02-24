@@ -47,21 +47,64 @@ export async function getFooter() {
         .then(footer => {
             document.getElementById('Footer').innerHTML = footer;
         });
-}   
+}
 
 export async function getHeader() {
     const url = '/server/template/header';
     await fetch(url, {
-        credentials: 'include' // Include cookies in the request
+        credentials: 'include'
     })
         .then(response => response.text())
         .then(header => {
-            // Inject the header HTML into the page
             document.getElementById('Header').innerHTML = header;
-
-            // Check if the user is authenticated
+            initializeHeaderFeatures();
             updateHeader();
         });
+}
+
+// Separate initialization logic
+function initializeHeaderFeatures() {
+    // Mobile menu toggle
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    const nav = document.querySelector('.main-nav');
+
+    if (toggle && nav) {
+        toggle.addEventListener('click', function() {
+            nav.classList.toggle('active');
+            toggle.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.header-container')) {
+                nav.classList.remove('active');
+                toggle.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                toggle.classList.remove('active');
+            });
+        });
+    }
+
+    // Desktop hover functionality
+    const desktopNavItems = document.querySelectorAll('.main-nav > ul > li');
+    desktopNavItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            if (window.innerWidth > 768) {
+                item.classList.add('hover-active');
+            }
+        });
+        item.addEventListener('mouseleave', () => {
+            if (window.innerWidth > 768) {
+                item.classList.remove('hover-active');
+            }
+        });
+    });
 }
 
 function updateHeader() {

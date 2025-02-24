@@ -71,20 +71,30 @@
                 <section id="gebaude-section" class="form-container">
                     <h2>Neues Gebaude hinzufügen</h2>
                 </section>
+
+                 <div id="update-gebaude-section">
+                     <h2>Update Gebaude</h2>
+                     <input type="number" id="update-gebaude-id">
+                     <button type="button" id="update-gebaude-btn">Auswählen</button>
+                     <div id="update-gebaude-section-form">
+
+                     </div>
+             </div>
              </div>
 
             <div id="pfleger-section-div">
                 <section id="pfleger-section" class="form-container">
                     <h2>Neuen Pfleger hinzufügen</h2>
-
-
-                    <div id="update-pfleger-section">
-                        <h2>Update Pfleger</h2>
-                        <input type="number" id="update-pfleger-id">
-                        <button type="button" id="update-pfleger-btn">Auswählen</button>
-                        <div id="update-pfleger-section-form">
-                        </div>
                 </section>
+
+                <div id="update-pfleger-section">
+                    <h2>Update Pfleger</h2>
+                    <input type="number" id="update-pfleger-id">
+                    <button type="button" id="update-pfleger-btn">Auswählen</button>
+                    <div id="update-pfleger-section-form">
+
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -101,6 +111,11 @@
     import { setup_create_tier_form, create_and_send_tier } from './../script/template/create/create-tier.js';
     import {setup_create_gebaude_form, create_and_send_gebaude} from "../script/template/create/gebaude.js";
     import {setup_update_tier, update_and_send_tier} from "../script/template/update/tier.js";
+    import {setup_create_pfleger_form} from "../script/template/create/create-pfleger.js";
+    import {create_and_send_pfleger} from "../script/template/create/create-pfleger.js";
+    import {setup_update_pfleger} from "../script/template/update/pfleger.js";
+    import {update_and_send_pfleger} from "../script/template/update/pfleger.js";
+    import {setup_update_gebaude, update_and_send_gebaude} from "../script/template/update/gebaude.js";
 
 
     var count_tier = await countElement("tiere");
@@ -109,6 +124,7 @@
     document.getElementById("tier").querySelector("p").innerText = count_tier;
     document.getElementById("gebaude").querySelector("p").innerText = count_gehege;
 
+    // #region tier
     var response = await fetch("server/template/create/tier")
         .then(response => response.text())
         .then(async data => {
@@ -152,9 +168,10 @@
                 console.error("Error fetching data:", error);
             });
     })
+    // #endregion
 
-
-    var response = await fetch("server/template/create/gebaude")
+    // #region gebaude
+    var response = await fetch("/server/template/create/gebaude")
         .then(response => response.text())
         .then(async data => {
             // Check if the response contains the word "Forbidden"
@@ -173,12 +190,77 @@
             console.error("Error fetching data:", error);
         });
 
+    document.getElementById("update-gebaude-btn").addEventListener('click', async function (event) {
+        event.preventDefault();
+        var gebaudeID = document.getElementById("update-gebaude-id").value
+        console.log(gebaudeID)
+        var response = await fetch("/server/template/update/gebaude?id=" + gebaudeID)
+            .then(response => response.text())
+            .then(async data => {
+                console.log(data)
+                // Check if the response contains the word "Forbidden"
+                const containsForbidden = data.includes("Forbidden");
 
+                if (containsForbidden) {
+                    console.error("Response contains forbidden content.");
+                    return; // Exit the function if forbidden content is found
+                } else {
+                    document.getElementById("update-gebaude-section-form").innerHTML = data;
+                    await setup_update_gebaude()
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    })
+    // #endregion
 
+    // #region Pfleger
 
+    var response = await fetch("/server/template/create/pfleger")
+        .then(response => response.text())
+        .then(async data => {
+            // Check if the response contains the word "Forbidden"
+            const containsForbidden = data.includes("Forbidden");
 
+            if (containsForbidden) {
+                console.error("Response contains forbidden content.");
+                return; // Exit the function if forbidden content is found
+            } else {
+                document.getElementById("pfleger-section").innerHTML += data;
+                await setup_create_pfleger_form()
+                await create_and_send_pfleger()
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
 
+    document.getElementById("update-pfleger-btn").addEventListener('click', async function (event) {
+        event.preventDefault();
+        var pflegerID = document.getElementById("update-pfleger-id").value
+        console.log(pflegerID)
+        var response = await fetch("/server/template/update/pfleger?id=" + pflegerID)
+            .then(response => response.text())
+            .then(async data => {
+                console.log(data)
+                // Check if the response contains the word "Forbidden"
+                const containsForbidden = data.includes("Forbidden");
 
+                if (containsForbidden) {
+                    console.error("Response contains forbidden content.");
+                    return; // Exit the function if forbidden content is found
+                } else {
+                    document.getElementById("update-pfleger-section-form").innerHTML = data;
+                    await setup_update_pfleger()
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    })
+
+    // #endregion
 
 
     await getHeader();
