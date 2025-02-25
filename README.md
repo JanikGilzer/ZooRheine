@@ -28,3 +28,27 @@ sudo make
 Dieser Befehl kompiliert das Projekt und startet die notwendigen Docker-Container, um die Anwendung auszuführen.
 
 ---
+
+## Alternative Installation
+
+Falls du den GO-Lang Compiler und die benötigten Bibliotheken nicht installieren möchtest, kannst du vorkompilierte Binärdateien für den Server herunterladen. Der Vorteil dieser Methode ist, dass du keine zusätzlichen Tools oder Abhängigkeiten benötigst. Allerdings bist du mit dieser Methode weniger flexibel.
+
+### Vorkompilierte Binärdateien herunterladen
+
+Lade die vorkompilierte Binärdatei mit folgendem Befehl herunter:
+
+```bash
+wget https://github.com/JanikGilzer/ZooRheine/releases/download/v1.0.0/go_build_ZooDaBa -O ./build/go_build_ZooDaBa
+```
+
+### Docker-Container bauen und starten
+
+Nachdem du die Binärdatei heruntergeladen hast, kannst du die Docker-Container wie gewohnt bauen und starten:
+
+```bash
+sudo make docker-build
+```
+
+Diese Methode ermöglicht es dir, die Anwendung ohne den GO-Lang Compiler und die benötigten Bibliotheken auszuführen.
+
+---
