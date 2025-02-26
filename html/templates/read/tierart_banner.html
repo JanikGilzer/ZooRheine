@@ -7,15 +7,14 @@
 <link rel="stylesheet" href="../../../css/template/read/tierart-banner.css">
 <body>
 <div class="animal-grid">
+    <div class="animal-card">
+        <img src="../../../html/bilder/tierart/{{.ID}}.jpg" alt="${.ID}">
+        <h3>${.Name}</h3>
+    </div>
 </div>
 
 </body>
 </html>
 
-<script type="module">
-    import {loadAnimals} from "../../../script/template/read/tierart-banner.js";
-    const id = document.head.querySelector('title').textContent;
-    console.log(id);
-    await loadAnimals(id);
-</script>
+
 
