@@ -123,21 +123,29 @@ INSERT INTO lieferant (name, adresse, ort_id) VALUES ('Fleischlieferung Müller'
                                                     ('Exotisches Futterland', 'Exotenweg 8', 6);
 
 -- Insert example data into Revier
-INSERT INTO revier (name, beschreibung) VALUES ('Großtiere', ' '),
-                                               ('Tiefsee Monster', ' ' ),
-                                               ('Reptilien', ''),
-                                               ('Kleintiere', ''),
-                                               ('Schwartzwald', ''),
-                                               ('Amerika', '');
+INSERT INTO revier (name, beschreibung) VALUES (1,'Höhle', ' '),
+                                               (2,'Tiefsee', ' ' ),
+                                               (3,'Fallout', ''),
+                                               (4,'Savanne', ''),
+                                               (5,'Frankfurter-HBF', ''),
+                                               (6,'Jungle', ''),
+                                               (7,'Erde', ''),
+                                               (8,'Strand', ''),
+                                               (9,'Schwartz-Wald', ''),
+                                               (10,'Kleintier', '');
 
 UPDATE revier SET beschreibung =
                       CASE
-                          WHEN name = 'Großtiere' THEN 'Afrikanische Savannentiere wie Löwen, Elefanten und Giraffen'
-                          WHEN name = 'Tiefsee Monster' THEN 'Tiefseebewohner wie Riesenkalmare und Anglerfische'
-                          WHEN name = 'Reptilien' THEN 'Schlangen, Echsen und Schildkröten aus aller Welt'
-                          WHEN name = 'Kleintiere' THEN 'Kleine Säugetiere wie Waschbären und Quokkas'
-                          WHEN name = 'Schwartzwald' THEN 'Tiere aus dem Schwarzwald wie Wölfe und Wildschweine'
-                          WHEN name = 'Amerika' THEN 'Tiere aus Nord- und Südamerika wie Bisons und Faultiere'
+                          WHEN name = 'Höhle' THEN 'Afrikanische Savannentiere wie Löwen, Elefanten und Giraffen'
+                          WHEN name = 'Tiefsee' THEN 'Tiefseebewohner wie Riesenkalmare und Anglerfische'
+                          WHEN name = 'Fallout' THEN 'Schlangen, Echsen und Schildkröten aus aller Welt'
+                          WHEN name = 'Savanne' THEN 'Kleine Säugetiere wie Waschbären und Quokkas'
+                          WHEN name = 'Frankfurter-HBF' THEN 'Tiere aus dem Schwarzwald wie Wölfe und Wildschweine'
+                          WHEN name = 'Jungle' THEN 'Tiere aus Nord- und Südamerika wie Bisons und Faultiere'
+                          WHEN name = 'Erde' THEN 'Tiere aus Nord- und Südamerika wie Bisons und Faultiere'
+                          WHEN name = 'Strand' THEN 'Tiere aus Nord- und Südamerika wie Bisons und Faultiere'
+                          WHEN name = 'Schwartz-Wald' THEN 'Tiere aus Nord- und Südamerika wie Bisons und Faultiere'
+                          WHEN name = 'Kleintier' THEN 'Tiere aus Nord- und Südamerika wie Bisons und Faultiere'
                           ELSE beschreibung
                           END;
 
@@ -152,12 +160,29 @@ INSERT INTO pfleger (name, telefonnummer, adresse, ort_id, revier_id) VALUES
 
 -- Insert example data into Gebaude
 INSERT INTO gebaude (name, revier_id) VALUES
-                                          ('Savannen-Gehege', 1),
-                                          ('Tiefsee-Aquarium', 2),
-                                          ('Reptilienhaus', 3),
-                                          ('Kleintierhaus', 4),
-                                          ('Schwarzwald-Gehege', 5),
-                                          ('Amerika-Pavillon', 6);
+                                          ('Neandertaler', 1),
+                                          ('Kraken', 2),
+                                          ('Rat Rat Rat', 3),
+                                          ('Löwen', 4),
+                                          ('Elefanten', 4),
+                                          ('Giraffen', 4),
+                                          ('Ratten', 5),
+                                          ('Faultiere', 6),
+                                          ('Waschbären', 6),
+                                          ('Delphine', 2),
+                                          ('Dornteufel', 4),
+                                          ('Wal' , 8),
+                                          ('Schnabeltiere', 9),
+                                          ('Mantis Shrimp', 2),
+                                          ('Kalmar', 2),
+                                          ('Nahwal', 8),
+                                          ('Quokka', 6),
+                                          ('Schildkröten', 6),
+                                          ('Wölfe', 7),
+                                          ('Bären', 9),
+                                          ('Hund', 9);
+
+                                          
 
 Insert Into tierart (id, name) VALUES (1, 'Löwe'), (2, 'Elephant'), (3, 'Ratte'), (4, 'Faultier'), (5, 'Wal');
 Insert Into tierart (id, name) VALUES (6, 'Dino'), (7, 'Delphin'), (8, 'Dornteufel'), (9, 'Schnabel tier'), (10, 'Giraffe');

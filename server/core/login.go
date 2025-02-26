@@ -4,11 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/golang-jwt/jwt/v5"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var JwtSecret = []byte(os.Getenv("JWT_SECRET"))
@@ -39,9 +40,6 @@ func Login(username string, password string, db DB_Handler) (User, error) {
 	if err != nil {
 		return User{}, fmt.Errorf("database error: %v", err)
 	}
-	Logger.Info(passwdFromDb)
-	Logger.Info(username)
-	Logger.Info(password)
 
 	if CheckPasswordHash(password, passwdFromDb) {
 		query, args := u.Verify(username)
@@ -98,6 +96,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, db DB_Handler) {
 		SameSite: http.SameSiteStrictMode,
 	})
 
+	Logger.Info(fmt.Sprintf("User %s logged in", creds.Username))
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
 }

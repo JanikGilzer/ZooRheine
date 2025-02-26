@@ -5,13 +5,11 @@ import (
 	"ZooDaBa/server/core"
 	"ZooDaBa/server/objects"
 	"encoding/json"
-	"fmt"
-	"github.com/golang-jwt/jwt/v5"
 	"html/template"
-	"log"
-	"log/slog"
 	"mime"
 	"net/http"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 var db2 core.DB_Handler
@@ -115,9 +113,9 @@ func main() {
 
 	err := http.ListenAndServe(":8090", nil)
 	if err != nil {
-		fmt.Println(err)
+		core.Logger.Error("Server konnte nicht Starten: ", "err", err)
 	}
-	slog.Info("Server successfully started on port 8090")
+	core.Logger.Info("Server successfully started on port 8090")
 }
 
 // #endregion
@@ -127,14 +125,12 @@ func main() {
 func serveLogin(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("token")
 	if err == nil {
-		// Validate token
 		claims := &core.Claims{}
 		token, err := jwt.ParseWithClaims(cookie.Value, claims, func(token *jwt.Token) (interface{}, error) {
 			return core.JwtSecret, nil
 		})
 
 		if err == nil && token.Valid {
-			// Redirect to appropriate page based on role
 			if claims.Role == "Admin" {
 				http.Redirect(w, r, "/", http.StatusFound)
 			} else {
@@ -174,7 +170,7 @@ func serveTierartBanner(w http.ResponseWriter, req *http.Request) {
 	tmpl, _ := template.ParseFiles("./html/templates/read/tierart_banner.html")
 	err := tmpl.Execute(w, tierart)
 	if err != nil {
-
+		core.Logger.Error("template execute tierart_banner.html", "err", err)
 	}
 }
 
@@ -200,11 +196,12 @@ func serveUpdateTier(w http.ResponseWriter, req *http.Request) {
 
 	tmpl, err := template.ParseFiles("./html/templates/update/tier.html")
 	if err != nil {
-		log.Println(err)
+		core.Logger.Error("template tier.html", "err", err)
 	}
+
 	err = tmpl.Execute(w, tier)
 	if err != nil {
-		log.Println(err)
+		core.Logger.Error("template execute tier.html", "err", err)
 	}
 }
 
@@ -229,13 +226,13 @@ func serveRevier(w http.ResponseWriter, req *http.Request) {
 
 	tmpl, err := template.ParseFiles("./html/templates/read/revier.html")
 	if err != nil {
-		fmt.Println(err)
+		core.Logger.Error("template revier.html", "err", err)
 		return
 	}
 
 	err = tmpl.Execute(w, rev)
 	if err != nil {
-		fmt.Println(err)
+		core.Logger.Error("template execute revier.html", "err", err)
 		return
 	}
 }
@@ -287,13 +284,13 @@ func serveRevierTemplate(w http.ResponseWriter, req *http.Request) {
 
 	tmpl, err := template.ParseFiles("./html/templates/read/revier_banner.html")
 	if err != nil {
-		fmt.Println(err)
+		core.Logger.Error("template revier_banner.html", "err", err)
 		return
 	}
 
 	err = tmpl.Execute(w, rev)
 	if err != nil {
-		fmt.Println(err)
+		core.Logger.Error("template execute revier_banner.html", "err", err)
 		return
 	}
 }
@@ -305,13 +302,13 @@ func serveGebaudeBanner(w http.ResponseWriter, req *http.Request) {
 
 	tmpl, err := template.ParseFiles("./html/templates/read/gebaude_banner.html")
 	if err != nil {
-		fmt.Println(err)
+		core.Logger.Error("template gebaude_banner.html", "err", err)
 		return
 	}
 
 	err = tmpl.Execute(w, geb)
 	if err != nil {
-		fmt.Println(err)
+		core.Logger.Error("template execute gebaude_banner.html", "err", err)
 		return
 	}
 }
@@ -344,7 +341,6 @@ func jsonRevier(w http.ResponseWriter, req *http.Request) {
 
 func jsonTier(w http.ResponseWriter, req *http.Request) {
 	tierId := req.URL.Query().Get("id")
-	fmt.Println(tierId)
 	if tierId == "" {
 		tiere := server.GetAllTiere(db2)
 		w.Header().Set("Content-Type", "application/json")
@@ -359,7 +355,6 @@ func jsonTier(w http.ResponseWriter, req *http.Request) {
 
 func jsonTierArt(w http.ResponseWriter, req *http.Request) {
 	tierId := req.URL.Query().Get("id")
-	fmt.Println(tierId)
 	if tierId == "" {
 		tiere := server.GetAllTierArt(db2)
 		w.Header().Set("Content-Type", "application/json")
@@ -394,7 +389,6 @@ func jsonBenoetigtesFutter(w http.ResponseWriter, req *http.Request) {
 		json.NewEncoder(w).Encode(benoetigtesFutter)
 	} else {
 		benoetigtesFutter := server.GetBenoetigtesFutter(db2, benoetigtesFutterId)
-		fmt.Println(benoetigtesFutter)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(benoetigtesFutter)
 	}
@@ -432,7 +426,6 @@ func jsonFutter(w http.ResponseWriter, req *http.Request) {
 	futterId := req.URL.Query().Get("id")
 	if futterId == "" {
 		futter := server.GetAllFutter(db2)
-		fmt.Println(futter)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(futter)
 	} else {
@@ -447,12 +440,10 @@ func jsonPfleger(w http.ResponseWriter, req *http.Request) {
 	pflegerId := req.URL.Query().Get("id")
 	if pflegerId == "" {
 		pfleger := server.GetAllPfleger(db2)
-		fmt.Println(pfleger)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(pfleger)
 	} else {
 		pfleger := server.GetPfleger(db2, pflegerId)
-		fmt.Println(pfleger)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(pfleger)
 	}
@@ -511,13 +502,11 @@ func createTier(w http.ResponseWriter, req *http.Request) {
 	}
 	tier := newTier{}
 	json.NewDecoder(req.Body).Decode(&tier)
-	fmt.Println(tier)
 	tFutter := []objects.Futter{}
 	for _, futter := range tier.Futter {
 		f := server.GetFutterFromName(db2, futter)
 		tFutter = append(tFutter, f)
 	}
-	fmt.Println(tFutter)
 	server.CreateTier(db2, tier.Tier, tFutter)
 }
 
@@ -527,42 +516,36 @@ func createPfleger(w http.ResponseWriter, req *http.Request) {
 	}
 	np := newPfleger{}
 	json.NewDecoder(req.Body).Decode(&np)
-	fmt.Println(np)
 	server.CreatePfleger(db2, np.Pfleger)
 }
 
 func createZeit(w http.ResponseWriter, req *http.Request) {
 	z := objects.Zeit{}
 	json.NewDecoder(req.Body).Decode(&z)
-	fmt.Println(z)
 	server.CreateZeit(db2, z)
 }
 
 func createTierArt(w http.ResponseWriter, req *http.Request) {
 	t := objects.TierArt{}
 	json.NewDecoder(req.Body).Decode(&t)
-	fmt.Println(t)
 	server.CreateTiertArt(db2, t)
 }
 
 func createRevier(w http.ResponseWriter, req *http.Request) {
 	r := objects.Revier{}
 	json.NewDecoder(req.Body).Decode(&r)
-	fmt.Println(r)
 	server.CreateRevier(db2, r)
 }
 
 func createOrt(w http.ResponseWriter, req *http.Request) {
 	o := objects.Ort{}
 	json.NewDecoder(req.Body).Decode(&o)
-	fmt.Println(o)
 	server.CreateOrt(db2, o)
 }
 
 func createLieferant(w http.ResponseWriter, req *http.Request) {
 	l := objects.Lieferant{}
 	json.NewDecoder(req.Body).Decode(&l)
-	fmt.Println(l)
 	server.CreateLieferant(db2, l)
 }
 
@@ -573,23 +556,17 @@ func createGebaude(w http.ResponseWriter, req *http.Request) {
 	}
 	g := newGebaude{}
 	json.NewDecoder(req.Body).Decode(&g)
-	fmt.Println(g)
-	fmt.Println(g.Zeit)
-	fmt.Println(g.Gebaude)
 	gZeit := []objects.Zeit{}
 	for _, zeit := range g.Zeit {
-		fmt.Println(zeit)
 		z := server.GetZeitFromUhrzeit(db2, zeit)
 		gZeit = append(gZeit, z)
 	}
-	fmt.Println(gZeit)
 	server.CreateGebaude(db2, g.Gebaude, gZeit)
 }
 
 func createFutter(w http.ResponseWriter, req *http.Request) {
 	f := objects.Futter{}
 	json.NewDecoder(req.Body).Decode(&f)
-	fmt.Println(f)
 	server.CreateFutter(db2, f)
 }
 
@@ -598,17 +575,13 @@ func createFutter(w http.ResponseWriter, req *http.Request) {
 // #region update
 func updateTier(w http.ResponseWriter, req *http.Request) {
 	var tier objects.Tier
-	fmt.Println(tier)
 	json.NewDecoder(req.Body).Decode(&tier)
-	fmt.Println(tier)
 	server.UpdateTier(db2, tier)
 }
 
 func updatePfleger(w http.ResponseWriter, req *http.Request) {
 	var pfleger objects.Pfleger
-	fmt.Println(pfleger)
 	json.NewDecoder(req.Body).Decode(&pfleger)
-	fmt.Println(pfleger)
 	server.UpdatePfleger(db2, pfleger)
 }
 

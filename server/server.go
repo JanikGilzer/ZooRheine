@@ -14,7 +14,6 @@ func GetTier(db core.DB_Handler, id string) objects.Tier {
 	var t objects.Tier
 
 	query, args := t.GetTierFrom(id)
-	fmt.Println(query)
 	var tRow = db.QueryRow(query, args...)
 
 	err := tRow.Scan(
@@ -75,23 +74,20 @@ func CreateTier(db core.DB_Handler, tier objects.Tier, futter []objects.Futter) 
 	query, args := tier.InsertTier(tier.Name, tier.Geburtsdatum, tier.Tierart.ID, tier.Gebaude.ID)
 	db.Exec(query, args...)
 	count := CountTiere(db)
-	println(count)
+	core.Logger.Info("Neues Tier erstellt", "tier_id", count)
 	t := GetTier(db, strconv.Itoa(count))
-	fmt.Println(t)
 	var bFutter objects.BenoetigtesFutter
 	for _, f := range futter {
-		fmt.Println(f.ID)
-		fmt.Println(t.ID)
 		query, args := bFutter.InsertBenoetigtesFutter(t.ID, f.ID)
-		fmt.Println(query)
-		fmt.Println(args)
 		db.Exec(query, args...)
+		core.Logger.Info("Neues Futter für Tier erstellt", "tier_id", t.ID, "futter_id", f.ID)
 	}
 }
 
 func UpdateTier(db core.DB_Handler, tier objects.Tier) {
 	query, args := tier.UpdateTier(tier.ID, tier.Name, tier.Geburtsdatum, tier.Gebaude.ID)
 	db.Exec(query, args...)
+	core.Logger.Info("Tier aktualisiert", "tier_id", tier.ID)
 }
 
 func CountTiere(db core.DB_Handler) int {
@@ -163,6 +159,7 @@ func CountReviere(db core.DB_Handler) int {
 func CreateRevier(db core.DB_Handler, revier objects.Revier) {
 	query, args := revier.InsertRevier(revier.Name, revier.Beschreibung)
 	db.Exec(query, args...)
+	core.Logger.Info("Neues Revier erstellt", "revier_id", revier.ID)
 }
 
 // #endregion
@@ -209,6 +206,7 @@ func GetAllFutterZeiten(db core.DB_Handler) []objects.FuetterungsZeiten {
 func CreateFutterZeiten(db core.DB_Handler, fz objects.FuetterungsZeiten) {
 	query, args := fz.InsertFuetterungsZeiten(fz.Zeit.ID, fz.Gebaude.ID)
 	db.Exec(query, args...)
+	core.Logger.Info("Neue Fütterungszeit erstellt", "fuetterungszeit_id", fz.ID)
 }
 
 // #endregion
@@ -248,6 +246,7 @@ func GetAllTierArt(db core.DB_Handler) []objects.TierArt {
 func CreateTiertArt(db core.DB_Handler, t objects.TierArt) {
 	query, args := t.InsertTierArt()
 	db.Exec(query, args...)
+	core.Logger.Info("Neue Tierart erstellt", "tierart_id", t.ID)
 }
 
 // #endregion
@@ -356,6 +355,7 @@ func GetZeitFromUhrzeit(db core.DB_Handler, uhrzeit string) objects.Zeit {
 func CreateZeit(db core.DB_Handler, z objects.Zeit) {
 	query, args := z.InsertZeit()
 	db.Exec(query, args...)
+	core.Logger.Info("Neue Zeit erstellt", "zeit_id", z.ID)
 }
 
 func CountZeit(db core.DB_Handler) int {
@@ -409,18 +409,18 @@ func CreateGebaude(db core.DB_Handler, g objects.Gebaude, zeiten []objects.Zeit)
 	query, args := g.InsertGebaeude(g.Name, g.Revier.ID)
 	db.Exec(query, args...)
 	count := CountGebaude(db)
+	core.Logger.Info("Neues Gebäude erstellt", "gebaude_id", count)
 	gebaude := GetGebaeude(db, strconv.Itoa(count))
-	fmt.Println(gebaude)
 	for _, z := range zeiten {
-		fmt.Println(z)
-		fmt.Println(gebaude)
 		CreateFutterZeiten(db, objects.FuetterungsZeiten{Zeit: z, Gebaude: gebaude})
+		core.Logger.Info("Neue Fütterungszeit für Gebäude erstellt", "gebaude_id", gebaude.ID, "zeit_id", z.ID)
 	}
 }
 
 func UpdateGebaude(db core.DB_Handler, g objects.Gebaude) {
 	query, args := g.UpdateGebaude(strconv.Itoa(g.ID))
 	db.Exec(query, args...)
+	core.Logger.Info("Gebäude aktualisiert", "gebaude_id", g.ID)
 }
 
 // #endregion
@@ -495,6 +495,7 @@ func GetAllFutter(db core.DB_Handler) []objects.Futter {
 func CreateFutter(db core.DB_Handler, f objects.Futter) {
 	query, args := f.InsertFutter(f.Name, f.Lieferant.ID)
 	db.Exec(query, args...)
+	core.Logger.Info("Neues Futter erstellt", "futter_id", f.ID)
 }
 
 // #endregion
@@ -533,6 +534,7 @@ func GettAllOrte(db core.DB_Handler) []objects.Ort {
 func CreateOrt(db core.DB_Handler, ort objects.Ort) {
 	query, args := ort.InsertOrt()
 	db.Exec(query, args...)
+	core.Logger.Info("Neuer Ort erstellt", "ort_id", ort.ID)
 }
 
 // #endregion
@@ -585,11 +587,13 @@ func GetAllPfleger(db core.DB_Handler) []objects.Pfleger {
 func CreatePfleger(db core.DB_Handler, pfleger objects.Pfleger) {
 	query, args := pfleger.InsertPfleger(pfleger.Name, pfleger.Telefonnummer, pfleger.Adresse, pfleger.Ort.ID, pfleger.Revier.ID)
 	db.Exec(query, args...)
+	core.Logger.Info("Neuer Pfleger erstellt", "pfleger_id", pfleger.ID)
 }
 
 func UpdatePfleger(db core.DB_Handler, pfleger objects.Pfleger) {
 	query, args := pfleger.UpdatePfleger(pfleger.ID, pfleger.Name, pfleger.Telefonnummer, pfleger.Adresse, pfleger.Ort.ID, pfleger.Revier.ID)
 	db.Exec(query, args...)
+	core.Logger.Info("Pfleger aktualisiert", "pfleger_id", pfleger.ID)
 }
 
 // #endregion
@@ -598,6 +602,7 @@ func UpdatePfleger(db core.DB_Handler, pfleger objects.Pfleger) {
 // #TODO: contact schreiben
 func CreateContact(db core.DB_Handler, contact objects.Contact) {
 	fmt.Println(contact)
+	core.Logger.Info("Neue Nachricht erhalten", "contact", contact)
 }
 
 // #endregion
@@ -627,6 +632,7 @@ func GetAllLieferant(db core.DB_Handler) []objects.Lieferant {
 func CreateLieferant(db core.DB_Handler, lieferant objects.Lieferant) {
 	query, args := lieferant.InsertLieferant()
 	db.Exec(query, args...)
+	core.Logger.Info("Neuer Lieferant erstellt", "lieferant_id", lieferant.ID)
 }
 
 // #endregion
