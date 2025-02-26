@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
 <body>
 <div class="lieferant-input">
   <form id="create-lieferant-form" method="post">
@@ -22,8 +16,6 @@
   </form>
 </div>
 </body>
-</html>
-
 <script type="module">
   import {getElements} from "../../../script/read.js";
 
@@ -41,8 +33,6 @@
     })
   }
   await setup_create_liefrant_form()
-
-
 
   document.getElementById('create-lieferant-form').addEventListener('submit', async function(event) {
     event.preventDefault(); // Prevent the default form submission

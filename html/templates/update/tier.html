@@ -10,7 +10,7 @@
     <p id="tierId">ID: {{.ID}}</p>
     <p id="tierName">Name: {{.Name}}</p>
     <p id="tierGeburtsdatum">Geburtstag: {{.Geburtsdatum}}</p>
-    <p id="tierGehege">Gehege: {{.Gebaude}}</p>
+    <p id="tierGehege">Gehege: {{.Gebaude.Name}}</p>
 
     <h2>Update Tier</h2>
     <form id="updateTierForm" action="/server/update/tier" method="post">

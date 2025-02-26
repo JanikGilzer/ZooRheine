@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <title>Update Pfleger</title>
-</head>
 <body>
 <p id="pfleger_id">ID: {{.ID}}</p>
 <p id="pfleger_name">Name: {{.Name}}</p>
 <p id="pfleger_telefonnummer">Telefonnummer: {{.Telefonnummer}}</p>
 <p id="pfleger_adresse">Adresse: {{.Adresse}}</p>
-<p id="pfleger_ort">Ort: {{.Ort}}</p>
-<p id="pfleger_revier">Revier: {{.Revier}}</p>
+<p id="pfleger_ort">Ort: {{.Ort.Stadt}}</p>
+<p id="pfleger_revier">Revier: {{.Revier.Name}}</p>
 
 <h2>Update Pfleger</h2>
 <form id="updatePflegerForm">
@@ -36,7 +30,6 @@
 </form>
 
 </body>
-</html>
 
 <script type="module">
   import {setup_update_pfleger, update_and_send_pfleger} from "../../../script/template/update/pfleger.js";
