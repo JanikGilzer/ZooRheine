@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.ID}}</title>
+    <style>
+        /* Table container for horizontal scrolling */
+        .table-container {
+            overflow-x: auto;
+            padding: 16px 0;
+        }
+
+        /* Main table styling */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+            background: white;
+        }
+
+        /* Table row styling */
+        .data-table tr {
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.2s ease;
+        }
+
+        .data-table tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Table cell styling with separators */
+        .data-table td {
+            padding: 1rem 1.5rem;
+            font-family: 'Roboto', sans-serif;
+            color: #4a5568;
+            vertical-align: top;
+            position: relative;
+        }
+
+        /* Add separator after each cell except last */
+        .data-table td:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 60%;
+            width: 1px;
+            background: #e2e8f0;
+        }
+
+        /* Header text for mobile */
+        .grid-header {
+            display: none;
+            color: #718096;
+            margin-right: 0.5rem;
+        }
+
+        /* Name column emphasis */
+        .name-cell {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Food list styling */
+        .food-list {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            flex-wrap: wrap;
+            max-width: 300px;
+        }
+
+        .food-list li {
+            background: #f7fafc;
+            padding: 0.25rem 0.7rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Button styling */
+        .update-button {
+            background: none;
+            color: #4299e1;
+            border: 1px solid #cbd5e0;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .update-button:hover {
+            background: #4299e1;
+            color: white;
+            border-color: #4299e1;
+        }
+
+        /* Responsive design adjustments */
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: visible;
+                padding: 0;
+            }
+
+            .data-table,
+            .data-table tbody,
+            .data-table tr,
+            .data-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .data-table tr {
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            }
+
+            .data-table td {
+                padding: 0.5rem 0;
+                border-bottom: none;
+            }
+
+            .data-table td:not(:last-child)::after {
+                display: none;
+            }
+
+            .grid-header {
+                display: inline-block;
+                min-width: 80px;
+            }
+
+            .update-button {
+                width: 100%;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="table-container{{.ID}}">
+    <table class="data-table">
+        <tbody>
+        <tr>
+            <td><span class="grid-header">ID:</span>{{.ID}}</td>
+            <td class="name-cell"><span class="grid-header">Name:</span>{{.Name}}</td>
+            <td><span class="grid-header">Species:</span>{{.Tierart.Name}}</td>
+            <td><span class="grid-header">Birthdate:</span>{{.Geburtsdatum}}</td>
+            <td><span class="grid-header">Building:</span>{{.Gebaude.Name}}</td>
+            <td>
+                <span class="grid-header">Food:</span>
+                <ul id="futter-liste{{.ID}}" class="food-list">
+
+                </ul>
+            </td>
+            <td>
+                <button class="update-button">Update</button>
+            </td>
+        </tr>
+        <!-- Additional rows would go here -->
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+
+<script type="module">
+    import { getElements } from "../../../script/read.js";
+
+    const futter = await getElements('benoetigtesfutter');
+    console.log(futter, document.title);
+
+    futter.forEach(f => {
+        if (f.Tier.ID == document.title) {
+            // Create the list item element
+            const futterItem = document.createElement('li');
+            // Set its text content
+            futterItem.textContent = f.Futter.Name;
+            console.log(futterItem);
+
+            // Find the corresponding food list
+            const futterListe = document.getElementById("futter-liste" + document.title);
+            // Append the created list item
+            futterListe.appendChild(futterItem);
+        }
+    });</script>

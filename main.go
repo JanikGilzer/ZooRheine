@@ -59,7 +59,7 @@ func main() {
 	http.HandleFunc("/server/template/read/gebaude-banner", serveGebaudeBanner)
 	http.HandleFunc("/server/template/read/tierart-banner", serveTierartBanner)
 	http.HandleFunc("/server/template/read/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", servePflegerTemplate)))
-
+	http.HandleFunc("/server/template/read/tier-banner", core.RequireAuth(serveTierBanner))
 	// Header/Footer
 	http.HandleFunc("/server/template/header", serveHeader)
 	http.HandleFunc("/server/template/footer", serveFooter)
@@ -171,6 +171,19 @@ func serveTierartBanner(w http.ResponseWriter, req *http.Request) {
 	err := tmpl.Execute(w, tierart)
 	if err != nil {
 		core.Logger.Error("template execute tierart_banner.html", "err", err)
+	}
+}
+
+func serveTierBanner(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		return
+	}
+	tier := server.GetTier(db2, id)
+	tmpl, _ := template.ParseFiles("./html/templates/read/tier_banner.html")
+	err := tmpl.Execute(w, tier)
+	if err != nil {
+		core.Logger.Error("template execute tier_banner.html", "err", err)
 	}
 }
 
