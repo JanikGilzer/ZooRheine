@@ -439,6 +439,7 @@ input, select, button {
 
 
 button {
+    text-align: center;
 
     background: #1abc9c;
 
@@ -857,5 +858,102 @@ input[type="number"]::-webkit-inner-spin-button {
     #update-pfleger-section::before,
     #update-gebaude-section::before {
         width: 3px;
+    }
+}
+
+.admin-modal-trigger {
+    background: #1abc9c;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.admin-modal-trigger:hover {
+    background: #16a085;
+    transform: translateY(-2px);
+}
+
+.admin-modal-trigger svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* Tier Modal Styles */
+.tier-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2000;
+    backdrop-filter: blur(3px);
+}
+
+.tier-modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 80vh;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.tier-close-modal {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    color: #2c3e50;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.tier-close-modal:hover {
+    color: #1abc9c;
+}
+
+#tierSearchInput {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e0e6eb;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.tier-modal-list {
+    overflow-y: auto;
+    max-height: 60vh;
+    padding-right: 1rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .tier-modal-content {
+        width: 95%;
+        padding: 1.5rem;
+        margin: 2% auto;
+    }
+
+    .tier-modal-list {
+        max-height: 70vh;
     }
 }

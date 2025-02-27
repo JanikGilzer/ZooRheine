@@ -57,13 +57,11 @@
                     <h2>Neues Tier hinzufügen</h2>
                 </section>
 
-                <div id="update-tier-section">
-                    <h2>Update Tier</h2>
-                    <input type="number" id="update-tier-id">
-                    <button type="button" id="update-tier-btn">Auswählen</button>
-                    <div id="update-tier-section-form">
-
-                    </div>
+                <div id="open-tier-modal">
+                    <h2>Tier Liste</h2>
+                    <button type="button" id="open-tier-btn" class="admin-modal-trigger">
+                         Öffnen
+                    </button>
                 </div>
             </div>
 
@@ -116,6 +114,7 @@
     import {setup_update_pfleger} from "../script/template/update/pfleger.js";
     import {update_and_send_pfleger} from "../script/template/update/pfleger.js";
     import {setup_update_gebaude, update_and_send_gebaude} from "../script/template/update/gebaude.js";
+    import {setup_and_create_tier_modal} from "../script/template/read/tier-banner.js";
 
 
     var count_tier = await countElement("tiere");
@@ -145,11 +144,9 @@
         });
 
 
-    document.getElementById("update-tier-btn").addEventListener('click', async function (event) {
+    document.getElementById("open-tier-btn").addEventListener('click', async function (event) {
         event.preventDefault();
-        var tierID = document.getElementById("update-tier-id").value
-        console.log(tierID)
-        var response = await fetch("/server/template/update/tier?id=" + tierID)
+        var response = await fetch("/server/template/read/tier-banner")
             .then(response => response.text())
             .then(async data => {
                 console.log(data)
@@ -160,8 +157,8 @@
                     console.error("Response contains forbidden content.");
                     return; // Exit the function if forbidden content is found
                 } else {
-                    document.getElementById("update-tier-section-form").innerHTML = data;
-                    await setup_update_tier();
+                    document.getElementById("open-tier-modal").innerHTML = data;
+                    await setup_and_create_tier_modal()
                 }
             })
             .catch(error => {
