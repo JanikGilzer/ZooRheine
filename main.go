@@ -178,6 +178,7 @@ func serveTierBanner(w http.ResponseWriter, req *http.Request) {
 	id := req.URL.Query().Get("id")
 	if id == "" {
 		http.ServeFile(w, req, "./html/templates/read/tier.html")
+		return
 	}
 	tier := server.GetTier(db2, id)
 	tmpl, _ := template.ParseFiles("./html/templates/read/tier_banner.html")

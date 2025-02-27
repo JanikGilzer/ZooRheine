@@ -123,7 +123,8 @@ INSERT INTO lieferant (name, adresse, ort_id) VALUES ('Fleischlieferung Müller'
                                                     ('Exotisches Futterland', 'Exotenweg 8', 6);
 
 -- Insert example data into Revier
-INSERT INTO revier (name, beschreibung) VALUES (1,'Höhle', ' '),
+INSERT INTO revier (id, name, beschreibung) VALUES
+                                               (1,'Höhle', ' '),
                                                (2,'Tiefsee', ' ' ),
                                                (3,'Fallout', ''),
                                                (4,'Savanne', ''),
@@ -191,7 +192,23 @@ Insert Into tierart (id, name) VALUES (16, 'Waschbär'), (17, 'Wolf');
 
 
 -- Insert example data into Tier
-INSERT INTO tier (name, geburtstag, gebaude_id, tierart_ID) VALUES ('Leo', '2015-05-01', 1, 1), ('Elefanten', '2010-08-15', 2, 2);
+INSERT INTO tier (name, geburtstag, gebaude_id, tierart_ID) VALUES
+                                                                ('Leo', '2015-05-01', 1, 1),
+                                                                ('Elefanten', '2010-08-15', 2, 2),
+
+                                                                ('Leo', '2015-05-01', 1, 1),
+                                                                ('Elefanten', '2010-08-15', 2, 2),
+
+                                                                ('Leo', '2015-05-01', 1, 1),
+                                                                ('Elefanten', '2010-08-15', 2, 2),
+                                                                ('Leo', '2015-05-01', 1, 1),
+                                                                ('Elefanten', '2010-08-15', 2, 2),
+
+                                                                ('Leo', '2015-05-01', 1, 1),
+                                                                ('Elefanten', '2010-08-15', 2, 2),
+
+                                                                ('Leo', '2015-05-01', 1, 1),
+                                                                ('Elefanten', '2010-08-15', 2, 2);
 
 -- Insert example data into FuetterungsZeit
 INSERT INTO fuetterungszeit (zeit_id, gebaude_id) VALUES (1, 1), (2, 2);
