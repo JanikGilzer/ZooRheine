@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="alleTiere">
+
+    </div>
+</body>
+</html>
+
+<script type="module">
+  import {getElements} from "../../../script/read.js";
+  import {setup_and_create_tier_banner} from "../../../script/template/read/tier-banner.js";
+
+  const tiere = await getElements("tier");
+  console.log(tiere);
+
+  async function fetchTierBanners() {
+    tiere.forEach(async t =>  {
+      const tierDiv = document.getElementById("alleTiere");
+      console.log(t);
+      const response = await fetch('/server/template/read/tier-banner?id=' + t.ID);
+      const tierBanner = await response.text();
+      tierDiv.innerHTML += tierBanner;
+      await setup_and_create_tier_banner(t.ID)
+    });
+  }
+  await fetchTierBanners();
+</script>

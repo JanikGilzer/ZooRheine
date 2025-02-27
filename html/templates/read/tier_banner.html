@@ -10,13 +10,23 @@
             padding: 16px 0;
         }
 
-        /* Main table styling */
+        /* Main table styling with fixed layout */
         .data-table {
             width: 100%;
             border-collapse: collapse;
             min-width: 800px;
             background: white;
+            table-layout: fixed; /* Ensures consistent column widths */
         }
+
+        /* Fixed column widths */
+        .data-table td:nth-child(1) { width: 5%; }
+        .data-table td:nth-child(2) { width: 15%; }
+        .data-table td:nth-child(3) { width: 15%; }
+        .data-table td:nth-child(4) { width: 15%; }
+        .data-table td:nth-child(5) { width: 15%; }
+        .data-table td:nth-child(6) { width: 25%; }
+        .data-table td:nth-child(7) { width: 10%; }
 
         /* Table row styling */
         .data-table tr {
@@ -139,6 +149,9 @@
                 width: 100%;
                 margin-top: 1rem;
             }
+
+            /* Reset widths for mobile */
+            .data-table td:nth-child(n) { width: 100% !important; }
         }
     </style>
 </head>
@@ -170,22 +183,5 @@
 </html>
 
 <script type="module">
-    import { getElements } from "../../../script/read.js";
 
-    const futter = await getElements('benoetigtesfutter');
-    console.log(futter, document.title);
-
-    futter.forEach(f => {
-        if (f.Tier.ID == document.title) {
-            // Create the list item element
-            const futterItem = document.createElement('li');
-            // Set its text content
-            futterItem.textContent = f.Futter.Name;
-            console.log(futterItem);
-
-            // Find the corresponding food list
-            const futterListe = document.getElementById("futter-liste" + document.title);
-            // Append the created list item
-            futterListe.appendChild(futterItem);
-        }
-    });</script>
+</script>
