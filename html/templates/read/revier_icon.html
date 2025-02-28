@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revier</title>
+</head>
+<body>
+    <div id="revier-container" class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 id="revier-name">{{.Name}}</h1>
+        </div>
+
+        <!-- Gebaude Container (Dynamically Inserted) -->
+        <div class="gebaude-container">
+            <!-- Gebaude HTML will be inserted here -->
+        </div>
+
+        <!-- Image Container -->
+        <div class="image-container">
+            <a href="http://linkEinfügen">
+                <img src="./../bilder/revier/{{.ID}}.jpg" alt="Revier Image">
+            </a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { getElements, getElement } from './../../../script/read.js';
+        import { setup_gebaude_icon } from './../../../script/template/gebaude.js';
+        import { setup_revier_icon } from './../../../script/template/revier.js';
+
+        // Fetch data
+        const tiere = await getElements("tier");
+        const gebaude = await getElements("gebaude");
+        const id = new URLSearchParams(window.location.search).get("id");
+
+        // Setup revier banner and insert gebaude content
+        for (const g in gebaude) {
+            if (gebaude[g].Revier.ID == id) {
+                await setup_revier_icon(gebaude[g].ID, tiere);
+            }
+        }
+    </script>
+</body>
+</html>

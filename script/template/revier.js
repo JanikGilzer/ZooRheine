@@ -1,6 +1,6 @@
-import { setup_gebaude_banner } from './gebaude.js';
+import { setup_gebaude_icon } from './gebaude.js';
 
-export async function setup_revier_banner(rev_id, gebaude_id, tiere, fuetterungszeiten) {
+export async function setup_revier_icon(rev_id, gebaude_id, tiere, fuetterungszeiten) {
     
     console.log("fill_tables", rev_id, gebaude_id);
     try {
@@ -13,7 +13,7 @@ export async function setup_revier_banner(rev_id, gebaude_id, tiere, fuetterungs
         const revierContainer = document.querySelector(`#revier-container-${rev_id} .gebaude-container`);
         if (revierContainer) {
             revierContainer.innerHTML += template;
-            setup_gebaude_banner(gebaude_id, tiere, fuetterungszeiten);
+            setup_gebaude_icon(gebaude_id, tiere, fuetterungszeiten);
         }
     } catch (error) {
         console.error('Error fetching gebaude banner:', error);

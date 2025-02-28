@@ -1,4 +1,4 @@
-import { setup_revier_banner } from './template/revier.js';
+import { setup_revier_icon } from './template/revier.js';
 
 export async function setup_index(id, tiere, gebaude, fuetterungszeiten) {
     const revierResponse = await fetch(`/server/template/read/revier?id=${id}`);
@@ -21,7 +21,7 @@ export async function setup_index(id, tiere, gebaude, fuetterungszeiten) {
     // Add animation for each gebaude banner
     for (const g in gebaude) {
         if (gebaude[g].Revier.ID == id) {
-            await setup_revier_banner(id, gebaude[g].ID, tiere, fuetterungszeiten);
+            await setup_revier_icon(id, gebaude[g].ID, tiere, fuetterungszeiten);
         }
     }
 }

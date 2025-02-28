@@ -34,6 +34,7 @@ func (g *Gebaude) GetAllGebaeude() (string, []interface{}) {
 		FROM 
 		    gebaude
 		JOIN revier on gebaude.revier_id = revier.id
+		ORDER BY gebaude.id
 		`
 	args := []interface{}{}
 	return query, args

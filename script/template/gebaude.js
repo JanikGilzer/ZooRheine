@@ -1,4 +1,4 @@
-export async function setup_gebaude_banner(gebaude_id, tiere, fuetterungszeiten) {
+export async function setup_gebaude_icon(gebaude_id, tiere, fuetterungszeiten) {
     document.getElementById("tier-list").id = "tier-list" + gebaude_id;
     for(var t in tiere)
     {

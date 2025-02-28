@@ -50,6 +50,7 @@ func (t *Tier) GetAllTiere() (string, []interface{}) {
 		JOIN tierart ON tier.tierart_id = tierart.id
 		JOIN gebaude ON tier.gebaude_id = gebaude.id
 		JOIN revier ON gebaude.revier_id = revier.id
+		ORDER BY tier.id
 	`
 	args := []interface{}{} // No arguments needed for this query
 	return query, args

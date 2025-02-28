@@ -49,6 +49,7 @@ func (p *Pfleger) GetAllPfleger() (string, []interface{}) {
 		    pfleger 
 		JOIN ort on pfleger.ort_id = ort.id 
 		JOIN revier on pfleger.revier_id = revier.id
+		ORDER BY pfleger.id
 		`
 	args := []interface{}{}
 	return query, args

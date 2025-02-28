@@ -34,12 +34,20 @@
             margin-bottom: 30px;
         }
 
+        #gebaude-container.container {
+            width: 320px !important;
+            height: 230px !important;
+            max-width: none !important;
+            margin: 0 !important; /* Remove auto margin from gebaude-banner.css */
+        }
+
         .gebaude-container > div {
             background-color: #ecf0f1;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            min-width: 320px; /* Prevent grid items from shrinking */
         }
 
         .gebaude-container > div:hover {

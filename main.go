@@ -296,15 +296,15 @@ func serveRevierTemplate(w http.ResponseWriter, req *http.Request) {
 
 	rev := server.GetRevier(db2, revierID)
 
-	tmpl, err := template.ParseFiles("./html/templates/read/revier_banner.html")
+	tmpl, err := template.ParseFiles("./html/templates/read/revier_icon.html")
 	if err != nil {
-		core.Logger.Error("template revier_banner.html", "err", err)
+		core.Logger.Error("template revier_icon.html", "err", err)
 		return
 	}
 
 	err = tmpl.Execute(w, rev)
 	if err != nil {
-		core.Logger.Error("template execute revier_banner.html", "err", err)
+		core.Logger.Error("template execute revier_icon.html", "err", err)
 		return
 	}
 }
@@ -314,15 +314,15 @@ func serveGebaudeBanner(w http.ResponseWriter, req *http.Request) {
 
 	geb := server.GetGebaeude(db2, gebaudeID)
 
-	tmpl, err := template.ParseFiles("./html/templates/read/gebaude_banner.html")
+	tmpl, err := template.ParseFiles("./html/templates/read/gebaude_icon.html")
 	if err != nil {
-		core.Logger.Error("template gebaude_banner.html", "err", err)
+		core.Logger.Error("template gebaude_icon.html", "err", err)
 		return
 	}
 
 	err = tmpl.Execute(w, geb)
 	if err != nil {
-		core.Logger.Error("template execute gebaude_banner.html", "err", err)
+		core.Logger.Error("template execute gebaude_icon.html", "err", err)
 		return
 	}
 }
