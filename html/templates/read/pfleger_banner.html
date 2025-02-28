@@ -1,0 +1,17 @@
+<div class="table-container{{.ID}}">
+  <table class="data-table">
+    <tbody>
+    <tr>
+      <td><span class="grid-header">ID:</span>{{.ID}}</td>
+      <td class="name-cell"><span class="grid-header">Name:</span>{{.Name}}</td>
+      <td class="Telefonnummer-cell"><span class="grid-header">Telefonnummer:</span>{{.Telefonnummer}}</td>
+      <td class="Adresse-cell"><span class="grid-header">Adresse:</span>{{.Adresse}}</td>
+      <td class="Ort-cell"><span class="grid-header">Ort:</span>{{.Ort.Stadt}}</td>
+      <td><span class="grid-header">Revier:</span>{{.Revier.Name}}</td>
+      <td>
+        <button onclick="window.location='/server/template/update/pfleger?id={{.ID}}' ;" class="update-button">Update</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

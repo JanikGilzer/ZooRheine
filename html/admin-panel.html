@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../bilder/favicon-32x32.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/admin-panel.css">
+    <link rel="stylesheet" href="../css/template/read/banner.css">
+
+
     <title>Admin Panel - Zoo School Project</title>
 
 </head>
@@ -70,28 +73,25 @@
                     <h2>Neues Gebaude hinzufügen</h2>
                 </section>
 
-                 <div id="update-gebaude-section">
-                     <h2>Update Gebaude</h2>
-                     <input type="number" id="update-gebaude-id">
-                     <button type="button" id="update-gebaude-btn">Auswählen</button>
-                     <div id="update-gebaude-section-form">
+                 <div id="open-gebaude-modal">
+                     <h2>Gebaude Liste</h2>
+                     <button type="button" id="open-gebaude-btn" class="admin-modal-trigger">
+                         Öffnen
+                     </button>
+                 </div>
+             </div>
 
-                     </div>
-             </div>
-             </div>
 
             <div id="pfleger-section-div">
                 <section id="pfleger-section" class="form-container">
                     <h2>Neuen Pfleger hinzufügen</h2>
                 </section>
 
-                <div id="update-pfleger-section">
-                    <h2>Update Pfleger</h2>
-                    <input type="number" id="update-pfleger-id">
-                    <button type="button" id="update-pfleger-btn">Auswählen</button>
-                    <div id="update-pfleger-section-form">
-
-                    </div>
+                <div id="open-pfleger-modal">
+                    <h2>Gebaude Liste</h2>
+                    <button type="button" id="open-pfleger-btn" class="admin-modal-trigger">
+                        Öffnen
+                    </button>
                 </div>
             </div>
 
@@ -115,6 +115,8 @@
     import {update_and_send_pfleger} from "../script/template/update/pfleger.js";
     import {setup_update_gebaude, update_and_send_gebaude} from "../script/template/update/gebaude.js";
     import {setup_and_create_tier_modal} from "../script/template/read/tier-banner.js";
+    import {setup_gebaude_modal} from "../script/template/read/gebaude-banner.js";
+    import {setup_pfleger_modal} from "../script/template/read/pfleger-banner.js";
 
 
     var count_tier = await countElement("tiere");
@@ -187,11 +189,9 @@
             console.error("Error fetching data:", error);
         });
 
-    document.getElementById("update-gebaude-btn").addEventListener('click', async function (event) {
+    document.getElementById("open-gebaude-btn").addEventListener('click', async function (event) {
         event.preventDefault();
-        var gebaudeID = document.getElementById("update-gebaude-id").value
-        console.log(gebaudeID)
-        var response = await fetch("/server/template/update/gebaude?id=" + gebaudeID)
+        var response = await fetch("/server/template/read/gebaude-banner")
             .then(response => response.text())
             .then(async data => {
                 console.log(data)
@@ -202,8 +202,8 @@
                     console.error("Response contains forbidden content.");
                     return; // Exit the function if forbidden content is found
                 } else {
-                    document.getElementById("update-gebaude-section-form").innerHTML = data;
-                    await setup_update_gebaude()
+                    document.getElementById("open-tier-modal").innerHTML = data;
+                    await setup_gebaude_modal()
                 }
             })
             .catch(error => {
@@ -233,11 +233,9 @@
             console.error("Error fetching data:", error);
         });
 
-    document.getElementById("update-pfleger-btn").addEventListener('click', async function (event) {
+    document.getElementById("open-pfleger-btn").addEventListener('click', async function (event) {
         event.preventDefault();
-        var pflegerID = document.getElementById("update-pfleger-id").value
-        console.log(pflegerID)
-        var response = await fetch("/server/template/update/pfleger?id=" + pflegerID)
+        var response = await fetch("/server/template/read/pfleger-banner")
             .then(response => response.text())
             .then(async data => {
                 console.log(data)
@@ -248,8 +246,8 @@
                     console.error("Response contains forbidden content.");
                     return; // Exit the function if forbidden content is found
                 } else {
-                    document.getElementById("update-pfleger-section-form").innerHTML = data;
-                    await setup_update_pfleger()
+                    document.getElementById("open-pfleger-modal").innerHTML = data;
+                    await setup_pfleger_modal()
                 }
             })
             .catch(error => {

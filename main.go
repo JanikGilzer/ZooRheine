@@ -44,6 +44,7 @@ func main() {
 	http.HandleFunc("/server/template/create/tier", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateTier)))
 	http.HandleFunc("/server/template/update/tier", core.RequireAuth(core.RequireRole("Verwaltung", serveUpdateTier)))
 	http.HandleFunc("/server/template/create/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", serveCreatePfleger)))
+
 	http.HandleFunc("/server/template/update/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", serveUpdatePfleger)))
 	http.HandleFunc("/server/template/create/zeit", core.RequireAuth(serveCreateZeit))
 	http.HandleFunc("/server/template/create/tierart", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateTierArt)))
@@ -56,7 +57,10 @@ func main() {
 
 	// Templates
 	http.HandleFunc("/server/template/read/revier", serveRevierTemplate)
+	http.HandleFunc("/server/template/read/gebaude-icon", serveGebaudeIcon)
 	http.HandleFunc("/server/template/read/gebaude-banner", serveGebaudeBanner)
+	http.HandleFunc("/server/template/read/pfleger-banner", core.RequireAuth(core.RequireRole("Verwaltung", servePflegerBanner)))
+
 	http.HandleFunc("/server/template/read/tierart-banner", serveTierartBanner)
 	http.HandleFunc("/server/template/read/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", servePflegerTemplate)))
 	http.HandleFunc("/server/template/read/tier-banner", core.RequireAuth(serveTierBanner))
@@ -309,7 +313,7 @@ func serveRevierTemplate(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func serveGebaudeBanner(w http.ResponseWriter, req *http.Request) {
+func serveGebaudeIcon(w http.ResponseWriter, req *http.Request) {
 	gebaudeID := req.URL.Query().Get("id")
 
 	geb := server.GetGebaeude(db2, gebaudeID)
@@ -324,6 +328,34 @@ func serveGebaudeBanner(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		core.Logger.Error("template execute gebaude_icon.html", "err", err)
 		return
+	}
+}
+
+func serveGebaudeBanner(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		http.ServeFile(w, req, "./html/templates/read/gebaude.html")
+		return
+	}
+	gebaude := server.GetGebaeude(db2, id)
+	tmpl, _ := template.ParseFiles("./html/templates/read/gebaude_banner.html")
+	err := tmpl.Execute(w, gebaude)
+	if err != nil {
+		core.Logger.Error("template execute gebaude_banner.html", "err", err)
+	}
+}
+
+func servePflegerBanner(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		http.ServeFile(w, req, "./html/templates/read/pfleger.html")
+		return
+	}
+	pfleger := server.GetPfleger(db2, id)
+	tmpl, _ := template.ParseFiles("./html/templates/read/pfleger_banner.html")
+	err := tmpl.Execute(w, pfleger)
+	if err != nil {
+		core.Logger.Error("template execute pfleger_banner.html", "err", err)
 	}
 }
 

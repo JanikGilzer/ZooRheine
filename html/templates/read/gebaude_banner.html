@@ -1,0 +1,14 @@
+<div class="table-container{{.ID}}">
+    <table class="data-table">
+        <tbody>
+        <tr>
+            <td><span class="grid-header">ID:</span>{{.ID}}</td>
+            <td class="name-cell"><span class="grid-header">Name:</span>{{.Name}}</td>
+            <td><span class="grid-header">Revier:</span>{{.Revier.Name}}</td>
+            <td>
+                <button onclick="window.location='/server/template/update/gebaude?id={{.ID}}' ;" class="update-button">Update</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
