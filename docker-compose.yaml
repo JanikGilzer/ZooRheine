@@ -18,6 +18,7 @@ services:
       - DB_NAME=ZooDaba
       - DB_NET=tcp
       - JWT_SECRET=KEY
+      - PEPPER=PrimeTime!
     depends_on:
       mysql:
         condition: service_healthy

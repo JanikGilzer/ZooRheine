@@ -13,21 +13,17 @@ import (
 )
 
 var JwtSecret = []byte(os.Getenv("JWT_SECRET"))
-
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
-}
-
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
+var pepper = os.Getenv("PEPPER")
 
 type Claims struct {
 	Username string `json:"username"`
 	Role     string `json:"role"`
 	jwt.RegisteredClaims
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password+pepper))
+	return err == nil
 }
 
 func Login(username string, password string, db DB_Handler) (User, error) {
@@ -133,25 +129,6 @@ func RequireRole(role string, next http.HandlerFunc) http.HandlerFunc {
 			http.Error(w, "Forbidden", http.StatusForbidden)
 			return
 		}
-		next.ServeHTTP(w, r)
-	}
-}
-
-func AdminTestHandler(w http.ResponseWriter, r *http.Request) {
-	claims := r.Context().Value("claims").(*Claims)
-	w.Write([]byte(fmt.Sprintf("Welcome admin %s!", claims.Username)))
-}
-
-func UserTestHandler(w http.ResponseWriter, r *http.Request) {
-	claims := r.Context().Value("claims").(*Claims)
-	w.Write([]byte(fmt.Sprintf("Welcome user %s!", claims.Username)))
-}
-
-func EnableCORS(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:8090")
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		next.ServeHTTP(w, r)
 	}
 }

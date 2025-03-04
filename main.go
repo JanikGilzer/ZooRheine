@@ -5,6 +5,7 @@ import (
 	"ZooDaBa/server/core"
 	"ZooDaBa/server/objects"
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"mime"
 	"net/http"
@@ -47,6 +48,7 @@ func main() {
 
 	http.HandleFunc("/server/template/update/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", serveUpdatePfleger)))
 	http.HandleFunc("/server/template/create/zeit", core.RequireAuth(serveCreateZeit))
+
 	http.HandleFunc("/server/template/create/tierart", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateTierArt)))
 	http.HandleFunc("/server/template/create/revier", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateRevier)))
 	http.HandleFunc("/server/template/create/ort", core.RequireAuth(core.RequireRole("Verwaltung", serveCreateOrt)))
@@ -60,6 +62,9 @@ func main() {
 	http.HandleFunc("/server/template/read/gebaude-icon", serveGebaudeIcon)
 	http.HandleFunc("/server/template/read/gebaude-banner", serveGebaudeBanner)
 	http.HandleFunc("/server/template/read/pfleger-banner", core.RequireAuth(core.RequireRole("Verwaltung", servePflegerBanner)))
+
+	http.HandleFunc("/server/template/read/futterplan-banner", serveFutterplanBanner)
+	http.HandleFunc("/server/template/update/futterplan", core.RequireAuth(core.RequireRole("Verwaltung", serveUpdateFutterplan)))
 
 	http.HandleFunc("/server/template/read/tierart-banner", serveTierartBanner)
 	http.HandleFunc("/server/template/read/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", servePflegerTemplate)))
@@ -101,6 +106,7 @@ func main() {
 	http.HandleFunc("/server/update/tier", core.RequireAuth(core.RequireRole("Verwaltung", updateTier)))
 	http.HandleFunc("/server/update/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", updatePfleger)))
 	http.HandleFunc("/server/update/gebaude", core.RequireAuth(core.RequireRole("Verwaltung", updateGebaude)))
+	http.HandleFunc("/server/update/futterplan", core.RequireAuth(core.RequireRole("Verwaltung", updateFutterplan)))
 
 	http.HandleFunc("/server/send/contact", sendContact)
 
@@ -162,7 +168,13 @@ func serveContact(w http.ResponseWriter, req *http.Request) {
 }
 
 func serveAnimals(w http.ResponseWriter, req *http.Request) {
-	http.ServeFile(w, req, "./html/animals.html")
+	tierart := server.GetAllTierArt(db2)
+
+	tmpl, _ := template.ParseFiles("./html/animals.html")
+	err := tmpl.Execute(w, tierart)
+	if err != nil {
+		core.Logger.Error("template execute animals.html", "err", err)
+	}
 }
 
 func serveTierartBanner(w http.ResponseWriter, req *http.Request) {
@@ -179,14 +191,29 @@ func serveTierartBanner(w http.ResponseWriter, req *http.Request) {
 }
 
 func serveTierBanner(w http.ResponseWriter, req *http.Request) {
+	type tierBanner struct {
+		Tier   objects.Tier
+		Futter []objects.Futter
+	}
 	id := req.URL.Query().Get("id")
 	if id == "" {
 		http.ServeFile(w, req, "./html/templates/read/tier.html")
 		return
 	}
-	tier := server.GetTier(db2, id)
+
+	tb := tierBanner{}
+	tb.Tier = server.GetTier(db2, id)
+
+	bFutter := server.GetAllBenoetigtesFutter(db2)
+
+	for _, b := range bFutter {
+		if b.Tier.ID == tb.Tier.ID {
+			tb.Futter = append(tb.Futter, b.Futter)
+		}
+	}
+	fmt.Println(tb)
 	tmpl, _ := template.ParseFiles("./html/templates/read/tier_banner.html")
-	err := tmpl.Execute(w, tier)
+	err := tmpl.Execute(w, tb)
 	if err != nil {
 		core.Logger.Error("template execute tier_banner.html", "err", err)
 	}
@@ -209,32 +236,55 @@ func serveFooter(w http.ResponseWriter, req *http.Request) {
 }
 
 func serveUpdateTier(w http.ResponseWriter, req *http.Request) {
+	type updateTier struct {
+		Tier    objects.Tier
+		Gebaude []objects.Gebaude
+		Futter  []objects.Futter
+	}
+	ut := updateTier{}
 	id := req.URL.Query().Get("id")
-	tier := server.GetTier(db2, id)
+
+	ut.Tier = server.GetTier(db2, id)
+	ut.Gebaude = server.GetAllGebaude(db2)
+	ut.Futter = server.GetAllFutter(db2)
 
 	tmpl, err := template.ParseFiles("./html/templates/update/tier.html")
 	if err != nil {
 		core.Logger.Error("template tier.html", "err", err)
 	}
 
-	err = tmpl.Execute(w, tier)
+	err = tmpl.Execute(w, ut)
 	if err != nil {
 		core.Logger.Error("template execute tier.html", "err", err)
 	}
 }
 
 func serveUpdatePfleger(w http.ResponseWriter, req *http.Request) {
+	type updatePfleger struct {
+		Pfleger objects.Pfleger
+		Orte    []objects.Ort
+		Reviere []objects.Revier
+	}
+	up := updatePfleger{}
 	id := req.URL.Query().Get("id")
-	pfleger := server.GetPfleger(db2, id)
+	up.Pfleger = server.GetPfleger(db2, id)
+	up.Reviere = server.GetAllReviere(db2)
+	up.Orte = server.GettAllOrte(db2)
 	tmpl, _ := template.ParseFiles("./html/templates/update/pfleger.html")
-	tmpl.Execute(w, pfleger)
+	tmpl.Execute(w, up)
 }
 
 func serveUpdateGebaude(w http.ResponseWriter, req *http.Request) {
+	type updateGebaude struct {
+		Gebaude objects.Gebaude
+		Reviere []objects.Revier
+	}
 	id := req.URL.Query().Get("id")
-	gebaude := server.GetGebaeude(db2, id)
+	ug := updateGebaude{}
+	ug.Gebaude = server.GetGebaeude(db2, id)
+	ug.Reviere = server.GetAllReviere(db2)
 	tmpl, _ := template.ParseFiles("./html/templates/update/gebaude.html")
-	tmpl.Execute(w, gebaude)
+	tmpl.Execute(w, ug)
 }
 
 func serveRevier(w http.ResponseWriter, req *http.Request) {
@@ -314,9 +364,38 @@ func serveRevierTemplate(w http.ResponseWriter, req *http.Request) {
 }
 
 func serveGebaudeIcon(w http.ResponseWriter, req *http.Request) {
+	type gebaudeIcon struct {
+		Gebaude objects.Gebaude
+		Tierart []objects.TierArt
+		Zeit    []objects.Zeit
+	}
+	gi := gebaudeIcon{}
 	gebaudeID := req.URL.Query().Get("id")
 
-	geb := server.GetGebaeude(db2, gebaudeID)
+	gi.Gebaude = server.GetGebaeude(db2, gebaudeID)
+
+	allTier := server.GetAllTiere(db2)
+	for _, t := range allTier {
+		if t.Gebaude.ID == gi.Gebaude.ID {
+			found := false
+			for _, ta := range gi.Tierart {
+				if t.Tierart == ta {
+					found = true
+					break
+				}
+			}
+			if !found {
+				gi.Tierart = append(gi.Tierart, t.Tierart)
+			}
+		}
+	}
+
+	futterZeiten := server.GetAllFutterZeiten(db2)
+	for _, z := range futterZeiten {
+		if z.Gebaude.ID == gi.Gebaude.ID {
+			gi.Zeit = append(gi.Zeit, z.Zeit)
+		}
+	}
 
 	tmpl, err := template.ParseFiles("./html/templates/read/gebaude_icon.html")
 	if err != nil {
@@ -324,7 +403,7 @@ func serveGebaudeIcon(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = tmpl.Execute(w, geb)
+	err = tmpl.Execute(w, gi)
 	if err != nil {
 		core.Logger.Error("template execute gebaude_icon.html", "err", err)
 		return
@@ -356,6 +435,72 @@ func servePflegerBanner(w http.ResponseWriter, req *http.Request) {
 	err := tmpl.Execute(w, pfleger)
 	if err != nil {
 		core.Logger.Error("template execute pfleger_banner.html", "err", err)
+	}
+}
+
+func serveFutterplanBanner(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		http.ServeFile(w, req, "./html/templates/read/futterplan.html")
+		return
+	}
+	type futterplan struct {
+		Gebaude objects.Gebaude
+		Zeit    []objects.FuetterungsZeiten
+		Futter  []objects.BenoetigtesFutter
+	}
+	fp := futterplan{}
+	fp.Gebaude = server.GetGebaeude(db2, id)
+
+	// fuetterungszeiten hinzufügen
+	zeit := server.GetAllFutterZeiten(db2)
+	for z := range zeit {
+		if zeit[z].Gebaude.ID == fp.Gebaude.ID {
+			fp.Zeit = append(fp.Zeit, zeit[z])
+		}
+	}
+
+	// das futter hinzufügen
+	tier := server.GetAllTiere(db2)
+	var tiereImGebaude = []objects.Tier{}
+	for t := range tier {
+		if tier[t].Gebaude.ID == fp.Gebaude.ID {
+			tiereImGebaude = append(tiereImGebaude, tier[t])
+		}
+	}
+
+	futter := server.GetAllBenoetigtesFutter(db2)
+	for f := range futter {
+		for t := range tiereImGebaude {
+			if tiereImGebaude[t].ID == futter[f].Tier.ID {
+				fp.Futter = append(fp.Futter, futter[f])
+			}
+		}
+	}
+
+	tmpl, _ := template.ParseFiles("./html/templates/read/futterplan_banner.html")
+	err := tmpl.Execute(w, fp)
+	if err != nil {
+		core.Logger.Error("template execute futterplan_banner.html", "err", err)
+	}
+}
+
+func serveUpdateFutterplan(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		return
+	}
+	type futterplan struct {
+		Gebaude objects.Gebaude
+		Zeit    []objects.Zeit
+	}
+	fp := futterplan{}
+	fp.Gebaude = server.GetGebaeude(db2, id)
+	fp.Zeit = server.GetAllZeiten(db2)
+	tmpl, _ := template.ParseFiles("./html/templates/update/futterplan.html")
+	err := tmpl.Execute(w, fp)
+	if err != nil {
+		core.Logger.Error("template execute futterplan.html", "err", err)
 	}
 }
 
@@ -620,9 +765,12 @@ func createFutter(w http.ResponseWriter, req *http.Request) {
 
 // #region update
 func updateTier(w http.ResponseWriter, req *http.Request) {
-	var tier objects.Tier
-	json.NewDecoder(req.Body).Decode(&tier)
-	server.UpdateTier(db2, tier)
+
+	t := objects.Tier{}
+
+	json.NewDecoder(req.Body).Decode(&t)
+	server.UpdateTier(db2, t)
+
 }
 
 func updatePfleger(w http.ResponseWriter, req *http.Request) {
@@ -633,8 +781,21 @@ func updatePfleger(w http.ResponseWriter, req *http.Request) {
 
 func updateGebaude(w http.ResponseWriter, req *http.Request) {
 	var g objects.Gebaude
+	fmt.Println(g)
 	json.NewDecoder(req.Body).Decode(&g)
 	server.UpdateGebaude(db2, g)
+}
+
+func updateFutterplan(w http.ResponseWriter, req *http.Request) {
+	type newFutterplan struct {
+		Gebaude objects.Gebaude
+		Zeit    []string
+	}
+	n := newFutterplan{}
+	fmt.Println(req.Body)
+	json.NewDecoder(req.Body).Decode(&n)
+	fmt.Println(n)
+	server.UpdateFutterplan(db2, n.Gebaude, n.Zeit)
 }
 
 // #endregion

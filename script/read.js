@@ -143,7 +143,7 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function isAuthenticated() {
+export function isAuthenticated() {
     const token = getCookie('token');
     if (!token) return false;
 

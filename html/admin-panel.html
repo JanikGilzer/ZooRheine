@@ -55,44 +55,42 @@
             </section>
 
             <div id="tier-section-div">
+                <div id="open-tier-modal">
+                    <h2>Tier Liste</h2>
+                    <button type="button" id="open-tier-btn" class="admin-modal-trigger">
+                        Öffnen
+                    </button>
+                </div>
                 <!-- Add Animal Form -->
                 <section id="tier-section" class="form-container">
                     <h2>Neues Tier hinzufügen</h2>
                 </section>
-
-                <div id="open-tier-modal">
-                    <h2>Tier Liste</h2>
-                    <button type="button" id="open-tier-btn" class="admin-modal-trigger">
-                         Öffnen
-                    </button>
-                </div>
             </div>
 
-             <div id="gebaude-section-div">
-                <section id="gebaude-section" class="form-container">
-                    <h2>Neues Gebaude hinzufügen</h2>
-                </section>
 
+             <div id="gebaude-section-div">
                  <div id="open-gebaude-modal">
                      <h2>Gebaude Liste</h2>
                      <button type="button" id="open-gebaude-btn" class="admin-modal-trigger">
                          Öffnen
                      </button>
                  </div>
+                <section id="gebaude-section" class="form-container">
+                    <h2>Neues Gebaude hinzufügen</h2>
+                </section>
              </div>
 
 
             <div id="pfleger-section-div">
-                <section id="pfleger-section" class="form-container">
-                    <h2>Neuen Pfleger hinzufügen</h2>
-                </section>
-
                 <div id="open-pfleger-modal">
-                    <h2>Gebaude Liste</h2>
+                    <h2>Pfleger Liste</h2>
                     <button type="button" id="open-pfleger-btn" class="admin-modal-trigger">
                         Öffnen
                     </button>
                 </div>
+                <section id="pfleger-section" class="form-container">
+                    <h2>Neuen Pfleger hinzufügen</h2>
+                </section>
             </div>
 
         </div>
@@ -108,12 +106,10 @@
     import { getHeader, getFooter, countElement } from './../script/read.js';
     import { setup_create_tier_form, create_and_send_tier } from './../script/template/create/create-tier.js';
     import {setup_create_gebaude_form, create_and_send_gebaude} from "../script/template/create/gebaude.js";
-    import {setup_update_tier, update_and_send_tier} from "../script/template/update/tier.js";
+
     import {setup_create_pfleger_form} from "../script/template/create/create-pfleger.js";
     import {create_and_send_pfleger} from "../script/template/create/create-pfleger.js";
-    import {setup_update_pfleger} from "../script/template/update/pfleger.js";
-    import {update_and_send_pfleger} from "../script/template/update/pfleger.js";
-    import {setup_update_gebaude, update_and_send_gebaude} from "../script/template/update/gebaude.js";
+
     import {setup_and_create_tier_modal} from "../script/template/read/tier-banner.js";
     import {setup_gebaude_modal} from "../script/template/read/gebaude-banner.js";
     import {setup_pfleger_modal} from "../script/template/read/pfleger-banner.js";

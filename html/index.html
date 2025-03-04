@@ -15,7 +15,6 @@
         <h1>Welcome to the Zoo School Project</h1>
     </div>
 
-    <!-- Template Container (Dynamic Content Goes Here) -->
     <div id="template-container">
         <!-- Reviere and Gebaude will be dynamically inserted here -->
     </div>
@@ -31,20 +30,13 @@
         getHeader();
         getFooter();
 
-        // Fetch data
-        const tiere = await getElements("tier");
         const gebaude = await getElements("gebaude");
         const reviere = await getElements("revier");
-        const fuetterungszeiten = await getElements("fuetterungszeiten");
 
-        console.log(reviere);
-        console.log(gebaude);
-        console.log(tiere);
-        console.log(fuetterungszeiten);
 
         // Render reviere and gebaude
         for (const r in reviere) {
-            await setup_index(reviere[r].ID, tiere, gebaude, fuetterungszeiten);
+            await setup_index(reviere[r].ID, gebaude);
         }
     </script>
 </body>

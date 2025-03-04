@@ -7,7 +7,7 @@ export async function setup_gebaude_icon(gebaude_id, tiere, fuetterungszeiten) {
         {
             const tierList = document.querySelector('#tier-list' + gebaude_id);
             const listItem = document.createElement('li');
-            listItem.textContent = tiere[t].Name;
+            listItem.textContent = tiere[t].Tierart.Name;
             tierList.appendChild(listItem);
         }
     }

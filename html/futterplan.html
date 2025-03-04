@@ -1,88 +1,130 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Futterplan</title>
-    <link rel="stylesheet" href="../css/futterplan.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/template/read/banner.css" />
 </head>
 <body>
 <div id="Header"></div>
-<table>
-    <caption>
-        Fütterungsplan - 02.2025
-    </caption>
-    <thead>
-    <tr>
-        <th scope="col">Gebaude</th>
-        <th scope="col">Revier</th>
-        <th scope="col">Futter</th>
-        <th scope="col">Zeit</th>
-    </tr>
-    </thead>
-    <tbody id="fuetterungs-list">
-
-    </tbody>
-</table>
-
+<br>
+<div id="futterplan">
+    <div class="scroll-container">
+        <div id="futterplan-content">
+            <!-- Banners will be inserted here -->
+        </div>
+    </div>
+</div>
 <div id="Footer"></div>
+
+
+<script type="module">
+    import { getFooter, getHeader, isAuthenticated } from "../script/read.js";
+    import { setup_fuetterrung_modal } from "../script/template/read/futterplan-banner.js";
+
+    // Helper function to remove first and last <td> cells
+    function removeFirstLastCells() {
+        document.querySelectorAll("#futterplan-content #alleFuetterungszeiten .data-table").forEach((table) => {
+            table.querySelectorAll("tr").forEach((row) => {
+                const cells = row.querySelectorAll("td");
+                if (cells.length > 1) {
+                    cells[0].remove();
+                    cells[cells.length - 1].remove();
+                }
+            });
+        });
+    }
+
+    // Fetch and insert the futter banner content
+    const response = await fetch("/server/template/read/futterplan-banner")
+        .then((response) => response.text())
+        .then(async (data) => {
+            document.getElementById("futterplan-content").innerHTML = data;
+            await setup_fuetterrung_modal();
+
+            // Remove first and last cells only if the user is not authenticated
+            if (!isAuthenticated()) {
+                removeFirstLastCells();
+            }
+        });
+
+    getHeader();
+    getFooter();
+</script>
 </body>
 </html>
 
-<script type="module">
-    import {getElements} from "../script/read.js";
-    import {getHeader, getFooter} from "../script/read.js";
-
-    async function loadData() {
-        try {
-            const gebaude = await getElements("gebaude");
-            const benoetigtesfutter = await getElements("benoetigtesfutter");
-            const fuetterungszeit = await getElements("fuetterungszeiten")
-
-
-            const list = document.getElementById("fuetterungs-list");
-
-            gebaude.forEach(g => {
-                let listRow = document.createElement("tr");
-                listRow.id = "row" + g.ID;
-
-                let maincol = document.createElement("th");
-                maincol.scope = "row";
-                maincol.innerText = g.Name;
-
-                let revierCol = document.createElement("td");
-                revierCol.innerText = g.Revier.Name || "Unbekannt"; // Fallback-Wert
-
-
-                let futterCol = document.createElement("td");
-                benoetigtesfutter.forEach(f => {
-                    if (f.Tier.Gebaude.ID === g.ID)
-                    {
-                        futterCol.innerHTML += f.Futter.Name + "<br>"
-                    }
-                })
-
-
-                let zeitCol = document.createElement("td");
-                fuetterungszeit.forEach(f =>{
-                    if (f.Gebaude.ID === g.ID)
-                    {
-                        zeitCol.innerHTML += f.Zeit.Uhrzeit + "<br>"
-                    }
-                })
-
-                listRow.appendChild(maincol);
-                listRow.appendChild(revierCol);
-                listRow.appendChild(futterCol);
-                listRow.appendChild(zeitCol);
-
-                list.appendChild(listRow);
-            });
-        } catch (error) {
-            console.error("Fehler beim Laden der Daten:", error);
-        }
+<style>
+    /* Flex layout for sticky header/footer */
+    body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
     }
-    getHeader();
-    getFooter();
-    loadData();
-</script>
 
+    #Header,
+    #Footer {
+        flex-shrink: 0;
+    }
+
+    #futterplan {
+        flex: 1;
+        overflow: hidden;
+        padding: 20px;
+        margin: 0 auto;
+        max-width: 1200px;
+        width: 100%;
+    }
+
+    .scroll-container {
+        max-height: calc(100vh - 160px); /* Adjust based on header/footer height */
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    /* Table styling */
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-table td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .data-table td:nth-child(1) {
+        width: 20%;
+    }
+    .data-table td:nth-child(2) {
+        width: 20%;
+    }
+    .data-table td:nth-child(3) {
+        width: 20%;
+    }
+    .data-table td:nth-child(4) {
+        width: 20%;
+    }
+    .data-table td:nth-child(5) {
+        width: 20%;
+    }
+
+    /* Sticky search */
+    #searchInput {
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        padding: 12px;
+        width: 97%;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        background: white;
+    }
+</style>

@@ -1,0 +1,27 @@
+<div class="table-container{{.Gebaude.Name}}">
+  <table class="data-table">
+    <tbody>
+    <tr>
+      <td><span class="grid-header">ID:</span>{{.Gebaude.Name}}</td>
+      <td class="name-cell"><span class="grid-header">Name:</span>{{.Gebaude.Revier.Name}}</td>
+      <td>
+        <span class="grid-header">Futter:</span>
+        {{ range .Futter }}
+        <div>{{ .Futter.Name }}</div>
+        {{ end }}
+      </td>
+      <td>
+        <span class="grid-header">Zeit:</span>
+        {{ range .Zeit }}
+        <div>{{ .Zeit.Uhrzeit }}</div>
+        {{ end }}
+      </td>
+      <td>
+        <button onclick="window.location='/server/template/update/futterplan?id={{.Gebaude.ID}}' ;" class="update-button">Update</button>
+      </td>
+    </tr>
+    <!-- Additional rows would go here -->
+    </tbody>
+  </table>
+</div>
+

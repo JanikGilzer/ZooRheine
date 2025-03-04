@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../bilder/favicon-32x32.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/animals.css">
+
     <title>Alle Tiere - Zoo School Project</title>
 </head>
 <body>
@@ -16,7 +17,12 @@
     <!-- Main Content -->
     <main>
         <div class="animals-grid">
-
+            {{range .}}
+            <div class="animal-card">
+                <img src="../../../html/bilder/tierart/{{.ID}}.jpg" alt="{{.ID}}">
+                <h3>{{.Name}}</h3>
+            </div>
+            {{end}}
         </div>
     </main>
 
@@ -26,20 +32,11 @@
     </footer>
 
     <script type="module">
-        import { getHeader, getFooter, getElements } from './../script/read.js';
-        import { loadAnimals } from './../script/template/read/tierart-banner.js';
-    
-        // Fetch and render header and footer
+        import { getHeader, getFooter } from './../script/read.js';
+
         getHeader();
         getFooter();
-    
-        const tierarten = await getElements("tierart");
-        const animalsGrid = document.querySelector(".animals-grid");
-    
-        for (const t of tierarten) {
-            const animalHTML = await loadAnimals(t.ID); // Get HTML string
-            animalsGrid.innerHTML += animalHTML; // Append directly
-        }
+
     </script>
 </body>
 </html>

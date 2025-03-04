@@ -1,45 +1,319 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Pfleger - Zoo Admin</title>
+  <style>
+    /* Base Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid #1abc9c;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #1abc9c;
+    }
+
+    .pfleger-details {
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      animation: slideIn 0.5s ease;
+    }
+
+    .pfleger-details p {
+      margin: 0.8rem 0;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .pfleger-details p strong {
+      color: #2c3e50;
+    }
+
+    .form-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      animation: slideUp 0.6s ease;
+    }
+
+    form {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    input, select {
+      padding: 12px;
+      border: 1px solid #dbe1e8;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #1abc9c;
+      box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+      outline: none;
+    }
+
+    button {
+      background: #1abc9c;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #16a085;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(26, 188, 156, 0.2);
+    }
+
+    #deleteTierForm {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid #ffe3e3;
+    }
+
+    #deleteTierForm button {
+      background: #e74c3c;
+    }
+
+    #deleteTierForm button:hover {
+      background: #c0392b;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+
+      .form-section {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+    }
+
+    #pfleger-banner-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      margin: 0 -1.5rem;
+      width: 100%;
+    }
+
+    #pfleger-banner-container .table-container {
+      margin: 0;
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 2rem;
+    }
+
+    #pfleger-banner-container .data-table {
+      width: 100%;
+      table-layout: fixed;
+      margin: 0;
+      min-width: auto;
+    }
+
+    #pfleger-banner-container .data-table td {
+      padding: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    }
+
+    #pfleger-banner-container .data-table td:first-child,
+    #pfleger-banner-container .data-table td:last-child {
+      opacity: 0;
+      width: 0;
+      padding: 0;
+      margin: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    /* Adjusted column widths */
+    #pfleger-banner-container .data-table td:nth-child(2) { width: 20%; }
+    #pfleger-banner-container .data-table td:nth-child(3) { width: 15%; }
+    #pfleger-banner-container .data-table td:nth-child(4) { width: 25%; }
+    #pfleger-banner-container .data-table td:nth-child(5) { width: 20%; }
+    #pfleger-banner-container .data-table td:nth-child(6) { width: 20%; }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      #pfleger-banner-container {
+        margin: 0 -1rem;
+        width: calc(100% + 2rem);
+      }
+
+      #pfleger-banner-container .table-container {
+        padding: 0 1rem;
+      }
+
+      #pfleger-banner-container .data-table td {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+
+      #pfleger-banner-container .data-table td:nth-child(n) {
+        width: auto !important;
+        display: table-cell;
+      }
+    }
+
+  </style>
+  <link rel="stylesheet" href="../../../css/template/read/banner.css">
+</head>
 <body>
-<p id="pfleger_id">ID: {{.ID}}</p>
-<p id="pfleger_name">Name: {{.Name}}</p>
-<p id="pfleger_telefonnummer">Telefonnummer: {{.Telefonnummer}}</p>
-<p id="pfleger_adresse">Adresse: {{.Adresse}}</p>
-<p id="pfleger_ort">Ort: {{.Ort.Stadt}}</p>
-<p id="pfleger_revier">Revier: {{.Revier.Name}}</p>
+<div class="container">
+  <h1>Pfleger Management</h1>
 
-<h2>Update Pfleger</h2>
-<form id="updatePflegerForm">
-  <input type="hidden" id="updateId" name="id">
-  <label for="updateName">Name:</label>
-  <input type="text" id="updateName" name="name"><br>
-  <label for="updateTelefonnummer">Telefonnummer:</label>
-  <input type="text" id="updateTelefonnummer" name="telefonnummer"><br>
-  <label for="updateAdresse">Adresse:</label>
-  <input type="text" id="updateAdresse" name="adresse"> <br>
-  <label for="updateOrt">Ort:</label>
-  <select id="updateOrt" name="ort"></select> <br>
-  <label for="updateRevier">Revier:</label>
-  <select id="updateRevier" name="revier"></select> <br>
+  <!-- Pfleger Details Section -->
+  <div id="pfleger-banner-container" class="pfleger-details">
 
-  <button type="submit">Update Pfleger</button>
-</form>
+  </div>
 
-<h2>Delete Pfleger</h2>
-<form id="deleteTierForm" action="/server/delete/tier" method="post">
-  <input type="hidden" id="deleteId" name="id">
-  <button type="submit">Delete Pfleger</button>
-</form>
+  <!-- Update Pfleger Form -->
+  <div class="form-section">
+    <h2>Update Pfleger</h2>
+    <form id="updatePflegerForm">
+      <div class="form-group">
+        <input type="hidden" id="updateId" name="id" value="{{.Pfleger.ID}}">
+        <label for="updateName">Name:</label>
+        <input type="text" id="updateName" name="name" required value="{{.Pfleger.Name}}">
+      </div>
+      <div class="form-group">
+        <label for="updateTelefonnummer">Telefonnummer:</label>
+        <input type="text" id="updateTelefonnummer" name="telefonnummer" required value="{{.Pfleger.Telefonnummer}}">
+      </div>
+      <div class="form-group">
+        <label for="updateAdresse">Adresse:</label>
+        <input type="text" id="updateAdresse" name="adresse" required value="{{.Pfleger.Adresse}}">
+      </div>
+      <div class="form-group">
+        <label for="updateOrt">Ort:</label>
+        <select id="updateOrt" name="ort" required>
+          {{ range .Orte }}
+          <option value="{{.ID}}">{{.Stadt}}</option>
+          {{ end }}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="updateRevier">Revier:</label>
+        <select id="updateRevier" name="revier" required>
+          {{ range .Reviere }}
+          <option value="{{.ID}}">{{.Name}}</option>
+          {{ end }}
+        </select>
+      </div>
+      <button type="submit">Update Pfleger</button>
+    </form>
+  </div>
 
+  <!-- Delete Pfleger Form -->
+  <div class="form-section">
+    <h2>Delete Pfleger</h2>
+    <form id="deleteTierForm" action="/server/delete/tier" method="post">
+      <input type="hidden" id="deleteId" name="id">
+      <button type="submit">Delete Pfleger</button>
+    </form>
+  </div>
+</div>
 </body>
+</html>
 
 <script type="module">
-  import {setup_update_pfleger, update_and_send_pfleger} from "../../../script/template/update/pfleger.js";
+  import {update_and_send_pfleger } from "../../../script/template/update/pfleger.js";
+  async function pfleger_banner()
+  {
+    const response = await fetch('/server/template/read/pfleger-banner?id={{.Pfleger.ID}}')
+            .then(response => response.text())
+            .then(async data => {
+              console.log("test")
+              document.getElementById('pfleger-banner-container').innerHTML = data
+            })
 
+  }
+  await pfleger_banner()
 
-  await setup_update_pfleger()
-
-  document.getElementById('updatePflegerForm').addEventListener('submit', async function(event){
+  document.getElementById('updatePflegerForm').addEventListener('submit', async function (event) {
     event.preventDefault();
-    await update_and_send_pfleger(event.target)
-  })
-
+    await update_and_send_pfleger(event.target);
+    await pfleger_banner()
+  });
 </script>

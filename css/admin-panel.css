@@ -957,3 +957,66 @@ input[type="number"]::-webkit-inner-spin-button {
         max-height: 70vh;
     }
 }
+
+#tier-section-div,
+#gebaude-section-div,
+#pfleger-section-div {
+    position: relative;
+    margin: 3rem 0;
+    padding: 2rem 0 0;
+    border-top: 4px solid #1abc9c;
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05);
+}
+
+#tier-section-div::before,
+#gebaude-section-div::before,
+#pfleger-section-div::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1abc9c 0%, #2c3e50 100%);
+}
+
+#tier-section-div h2,
+#gebaude-section-div h2,
+#pfleger-section-div h2 {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+#tier-section-div h2::before,
+#gebaude-section-div h2::before,
+#pfleger-section-div h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 24px;
+    width: 4px;
+    background: #1abc9c;
+    border-radius: 2px;
+}
+
+/* Add spacing between form sections */
+.form-container {
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Gradient overlay effect */
+.form-container::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #1abc9c 50%, transparent 100%);
+}

@@ -2,43 +2,303 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Update Gebaude</title>
+    <title>Update Gebaude - Zoo Admin</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #1abc9c;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #1abc9c;
+        }
+
+        .gebaude-details {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        .gebaude-details p {
+            margin: 0.8rem 0;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .gebaude-details p strong {
+            color: #2c3e50;
+        }
+
+        .form-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            animation: slideUp 0.6s ease;
+        }
+
+        form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 1px solid #dbe1e8;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #1abc9c;
+            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+            outline: none;
+        }
+
+        button {
+            background: #1abc9c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #16a085;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(26, 188, 156, 0.2);
+        }
+
+        #deleteTierForm {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #ffe3e3;
+        }
+
+        #deleteTierForm button {
+            background: #e74c3c;
+        }
+
+        #deleteTierForm button:hover {
+            background: #c0392b;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .form-section {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        #gebaude-banner-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            margin: 0 -1.5rem;
+            width: 100%;
+        }
+
+        #gebaude-banner-container .table-container {
+            margin: 0;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 2rem;
+        }
+
+        #gebaude-banner-container .data-table {
+            width: 100%;
+            table-layout: fixed;
+            margin: 0;
+            min-width: auto;
+        }
+
+        #gebaude-banner-container .data-table td {
+            padding: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
+        }
+
+        #gebaude-banner-container .data-table td:first-child,
+        #gebaude-banner-container .data-table td:last-child {
+            opacity: 0;
+            width: 0;
+            padding: 0;
+            margin: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        /* Adjusted column widths */
+        #gebaude-banner-container .data-table td:nth-child(2) { width: 20%; }
+        #gebaude-banner-container .data-table td:nth-child(3) { width: 15%; }
+        #gebaude-banner-container .data-table td:nth-child(4) { width: 25%; }
+        #gebaude-banner-container .data-table td:nth-child(5) { width: 20%; }
+        #gebaude-banner-container .data-table td:nth-child(6) { width: 20%; }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            #gebaude-banner-container {
+                margin: 0 -1rem;
+                width: calc(100% + 2rem);
+            }
+
+            #gebaude-banner-container .table-container {
+                padding: 0 1rem;
+            }
+
+            #gebaude-banner-container .data-table td {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            #gebaude-banner-container .data-table td:nth-child(n) {
+                width: auto !important;
+                display: table-cell;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="../../../css/template/read/banner.css">
 </head>
 <body>
-<p id="gebaude_id">ID: {{.ID}}</p>
-<p id="gebaude_name">Name: {{.Name}}</p>
-<p id="gebaude_revier">Revier: {{.Revier.Name}}</p>
+<div class="container">
+    <h1>Gebaude Management</h1>
 
-<h2>Update Gebaude</h2>
-<form id="updateGebaudeForm">
-    <input type="hidden" id="updateId" name="id">
-    <label for="updateName">Name:</label>
-    <input type="text" id="updateName" name="name"><br>
-    <label for="updateRevier">Revier:</label>
-    <select id="updateRevier" name="revier"></select> <br>
+    <!-- Gebaude Details Section -->
+    <div id="gebaude-banner-container" class="gebaude-details">
 
-    <button type="submit">Update Gebaude</button>
-</form>
+    </div>
 
-<h2>Delete Gebaude</h2>
-<form id="deleteTierForm" action="/server/delete/tier" method="post">
-    <input type="hidden" id="deleteId" name="id">
-    <button type="submit">Delete Gebaude</button>
-</form>
+    <!-- Update Gebaude Form -->
+    <div class="form-section">
+        <h2>Update Gebaude</h2>
+        <form id="updateGebaudeForm">
+            <div class="form-group">
+                <input type="hidden" id="updateId" name="ID" value="{{.Gebaude.ID}}">
+                <label for="updateName">Name:</label>
+                <input type="text" id="updateName" name="Name" value="{{.Gebaude.Name}}" required>
+            </div>
+            <div class="form-group">
+                <label for="updateRevier">Revier:</label>
+                <select id="updateRevier" name="Revier" required>
+                    {{ range .Reviere }}
+                    <option value="{{.ID}}">{{.Name}}</option>
+                    {{ end }}
+                </select>
+            </div>
+            <button type="submit">Update Gebaude</button>
+        </form>
+    </div>
 
-</body>
-</html>
+    <!-- Delete Gebaude Form -->
+    <div class="form-section">
+        <h2>Delete Gebaude</h2>
+        <form id="deleteTierForm" action="/server/delete/tier" method="post">
+            <input type="hidden" id="deleteId" name="id">
+            <button type="submit">Delete Gebaude</button>
+        </form>
+    </div>
+</div>
 
 <script type="module">
-    import {setup_update_gebaude} from "../../../script/template/update/gebaude.js";
-    import {update_and_send_gebaude} from "../../../script/template/update/gebaude.js";
+    import { update_and_send_gebaude } from "../../../script/template/update/gebaude.js";
+    async function gebaude_banner()
+    {
+        const response = await fetch('/server/template/read/gebaude-banner?id={{.Gebaude.ID}}')
+            .then(response => response.text())
+            .then(async data => {
+                document.getElementById('gebaude-banner-container').innerHTML = data
+            })
+    }
+    await gebaude_banner()
 
 
-    await setup_update_gebaude()
 
-    document.getElementById('updateGebaudeForm').addEventListener('submit', async function(event){
+    document.getElementById('updateGebaudeForm').addEventListener('submit', async function (event) {
         event.preventDefault();
-        await update_and_send_gebaude(event.target)
-    })
+        await update_and_send_gebaude();
+        await gebaude_banner()
+    });
 
 </script>
+</body>
+</html>

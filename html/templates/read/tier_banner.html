@@ -1,23 +1,24 @@
-<div class="table-container{{.ID}}">
+<div class="table-container{{.Tier.ID}}">
     <table class="data-table">
         <tbody>
         <tr>
-            <td><span class="grid-header">ID:</span>{{.ID}}</td>
-            <td class="name-cell"><span class="grid-header">Name:</span>{{.Name}}</td>
-            <td><span class="grid-header">Species:</span>{{.Tierart.Name}}</td>
-            <td><span class="grid-header">Birthdate:</span>{{.Geburtsdatum}}</td>
-            <td><span class="grid-header">Building:</span>{{.Gebaude.Name}}</td>
+            <td><span class="grid-header">ID:</span>{{.Tier.ID}}</td>
+            <td class="name-cell"><span class="grid-header">Name:</span>{{.Tier.Name}}</td>
+            <td><span class="grid-header">Art:</span>{{.Tier.Tierart.Name}}</td>
+            <td><span class="grid-header">Geburtstag:</span>{{.Tier.Geburtsdatum}}</td>
+            <td><span class="grid-header">Gebaude:</span>{{.Tier.Gebaude.Name}}</td>
             <td>
                 <span class="grid-header">Food:</span>
-                <ul id="futter-liste{{.ID}}" class="food-list">
-
+                <ul id="futter-liste{{.Tier.ID}}" class="food-list">
+                    {{ range .Futter }}
+                    <li value="{{.ID}}">{{.Name}}</li>
+                    {{ end }}
                 </ul>
             </td>
             <td>
-                <button onclick="window.location='/server/template/update/tier?id={{.ID}}' ;" class="update-button">Update</button>
+                <button onclick="window.location='/server/template/update/tier?id={{.Tier.ID}}' ;" class="update-button">Update</button>
             </td>
         </tr>
-        <!-- Additional rows would go here -->
         </tbody>
     </table>
 </div>

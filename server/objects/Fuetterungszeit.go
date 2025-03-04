@@ -55,3 +55,9 @@ func (f *FuetterungsZeiten) InsertFuetterungsZeiten(zeit_id int, gebaude_id int)
 	args := []interface{}{zeit_id, gebaude_id}
 	return query, args
 }
+
+func (f *FuetterungsZeiten) DeleteFuetterungsZeiten(gebaude_id int) (string, []interface{}) {
+	query := `DELETE FROM fuetterungszeit WHERE gebaude_id = ?;`
+	args := []interface{}{gebaude_id}
+	return query, args
+}

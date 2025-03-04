@@ -1,25 +1,27 @@
-    <title>{{.ID}}</title>
-</head>
 <body>
     <div id="gebaude-container" class="container">
         <!-- Gebäude Name at the Top -->
-        <h1 id="gehege-name">{{.Name}}</h1>
+        <h1 id="gehege-name">{{.Gebaude.Name}}</h1>
 
         <!-- Tiere and Fütterungszeiten Side by Side -->
         <div class="content-container">
             <div>
                 <h2>Tiere</h2>
                 <ul id="tier-list">
-                    <!-- Tier list items will be dynamically added here -->
+                    {{ range .Tierart }}
+                    <li>{{ .Name }}</li>
+                    {{ end }}
                 </ul>
             </div>
             <div>
-                <h2>Fütterungszeiten</h2>
+                <h2>Fütterungs <br>
+                    -   Zeiten</h2>
                 <ul id="fuetterungszeit-list">
-                    <!-- Fütterungszeiten list items will be dynamically added here -->
+                    {{ range .Zeit }}
+                    <li>{{ .Uhrzeit }}</li>
+                    {{ end }}
                 </ul>
             </div>
         </div>
     </div>
 </body>
-</html>

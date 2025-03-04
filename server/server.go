@@ -17,14 +17,14 @@ func GetTier(db core.DB_Handler, id string) objects.Tier {
 	var tRow = db.QueryRow(query, args...)
 
 	err := tRow.Scan(
-		&t.ID,                          // tier_id
-		&t.Name,                        // tier_name
-		&t.Geburtsdatum,                // tier_geburtstag
-		&t.Gebaude.ID,                  // tier_gebaude_id
-		&t.Gebaude.Name,                // gebaude_name
-		&t.Gebaude.Revier.ID,           // gebaude_revier_id
-		&t.Gebaude.Revier.Name,         // revier_name
-		&t.Gebaude.Revier.Beschreibung, // revier_beschreibung
+		&t.ID,
+		&t.Name,
+		&t.Geburtsdatum,
+		&t.Gebaude.ID,
+		&t.Gebaude.Name,
+		&t.Gebaude.Revier.ID,
+		&t.Gebaude.Revier.Name,
+		&t.Gebaude.Revier.Beschreibung,
 		&t.Tierart.ID,
 		&t.Tierart.Name,
 	)
@@ -303,6 +303,14 @@ func GetAllBenoetigtesFutter(db core.DB_Handler) []objects.BenoetigtesFutter {
 		benoetigtesFutter = append(benoetigtesFutter, b)
 	}
 	return benoetigtesFutter
+}
+
+func CreateBenoetigtesFutter(db core.DB_Handler, t objects.Tier, futter []objects.Futter) {
+	var b objects.BenoetigtesFutter
+	for _, f := range futter {
+		query, args := b.InsertBenoetigtesFutter(t.ID, f.ID)
+		db.Exec(query, args...)
+	}
 }
 
 // #endregion
@@ -636,3 +644,14 @@ func CreateLieferant(db core.DB_Handler, lieferant objects.Lieferant) {
 }
 
 // #endregion
+
+func UpdateFutterplan(db core.DB_Handler, gebaude objects.Gebaude, futterZeiten []string) {
+	var f = objects.FuetterungsZeiten{}
+	query, args := f.DeleteFuetterungsZeiten(gebaude.ID)
+	db.Exec(query, args...)
+	for _, fu := range futterZeiten {
+		id, _ := strconv.Atoi(fu)
+		query, args := f.InsertFuetterungsZeiten(id, gebaude.ID)
+		db.Exec(query, args...)
+	}
+}
