@@ -73,3 +73,9 @@ func (t *Tier) UpdateTier(id int, name string, geburtstag string, gebaude int) (
 	args := []interface{}{name, geburtstag, gebaude, id}
 	return query, args
 }
+
+func (t *Tier) DeleteTier(id int) (string, []interface{}) {
+	query := "DELETE FROM tier WHERE id = ?"
+	args := []interface{}{id}
+	return query, args
+}

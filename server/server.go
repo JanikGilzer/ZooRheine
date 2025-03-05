@@ -169,7 +169,6 @@ func CreateRevier(db core.DB_Handler, revier objects.Revier) {
 func GetFutterZeit(db core.DB_Handler, id string) objects.FuetterungsZeiten {
 	var fz objects.FuetterungsZeiten
 	query, args := fz.GetFutterZeitFrom(id)
-	fmt.Println(query)
 	var fRow = db.QueryRow(query, args...)
 	fRow.Scan(
 		&fz.ID,
@@ -258,7 +257,6 @@ func GetBenoetigtesFutter(db core.DB_Handler, id string) objects.BenoetigtesFutt
 
 	// Build the query and arguments
 	query, args := b.GetBenoetigtesFutterFrom(id)
-	fmt.Println(query)
 
 	// Execute the query
 	var bRow = db.QueryRow(query, args...)
@@ -356,7 +354,6 @@ func GetZeitFromUhrzeit(db core.DB_Handler, uhrzeit string) objects.Zeit {
 	if err != nil {
 		log.Fatal("Error scanning row:", err)
 	}
-	fmt.Println(z)
 	return z
 }
 
@@ -429,6 +426,21 @@ func UpdateGebaude(db core.DB_Handler, g objects.Gebaude) {
 	query, args := g.UpdateGebaude(strconv.Itoa(g.ID))
 	db.Exec(query, args...)
 	core.Logger.Info("Gebäude aktualisiert", "gebaude_id", g.ID)
+}
+
+func DeleteGebaude(db core.DB_Handler, id string) {
+	int_id, _ := strconv.Atoi(id)
+
+	var f objects.FuetterungsZeiten
+	query, args := f.DeleteFuetterungsZeiten(int_id)
+	db.Exec(query, args...)
+	core.Logger.Info("Fütterungszeiten gelöscht für das Gebäude", "gebaude_id", id)
+
+	var g objects.Gebaude
+	query, args = g.DeleteGebaude(int_id)
+	db.Exec(query, args...)
+	core.Logger.Info("Gebäude gelöscht", "gebaude_id", id)
+
 }
 
 // #endregion
@@ -602,6 +614,14 @@ func UpdatePfleger(db core.DB_Handler, pfleger objects.Pfleger) {
 	query, args := pfleger.UpdatePfleger(pfleger.ID, pfleger.Name, pfleger.Telefonnummer, pfleger.Adresse, pfleger.Ort.ID, pfleger.Revier.ID)
 	db.Exec(query, args...)
 	core.Logger.Info("Pfleger aktualisiert", "pfleger_id", pfleger.ID)
+}
+
+func DeletePfleger(db core.DB_Handler, id string) {
+	var p objects.Pfleger
+	int_id, _ := strconv.Atoi(id)
+	query, args := p.DeletePfleger(int_id)
+	db.Exec(query, args...)
+	core.Logger.Info("Pfleger gelöscht", "pfleger_id", id)
 }
 
 // #endregion

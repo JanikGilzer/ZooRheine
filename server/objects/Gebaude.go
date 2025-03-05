@@ -57,3 +57,9 @@ func (g *Gebaude) UpdateGebaude(id string) (string, []interface{}) {
 	args := []interface{}{g.Name, g.Revier.ID, id}
 	return query, args
 }
+
+func (g *Gebaude) DeleteGebaude(id int) (string, []interface{}) {
+	query := "Delete from gebaude where id = ?"
+	args := []interface{}{id}
+	return query, args
+}

@@ -108,6 +108,9 @@ func main() {
 	http.HandleFunc("/server/update/gebaude", core.RequireAuth(core.RequireRole("Verwaltung", updateGebaude)))
 	http.HandleFunc("/server/update/futterplan", core.RequireAuth(core.RequireRole("Verwaltung", updateFutterplan)))
 
+	http.HandleFunc("/server/delete/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", deletePfleger)))
+	http.HandleFunc("/server/delete/gebaude", core.RequireAuth(core.RequireRole("Verwaltung", deleteGebaude)))
+
 	http.HandleFunc("/server/send/contact", sendContact)
 
 	http.Handle("/bilder/", http.StripPrefix("/bilder/", http.FileServer(http.Dir("./html/bilder"))))
@@ -211,7 +214,6 @@ func serveTierBanner(w http.ResponseWriter, req *http.Request) {
 			tb.Futter = append(tb.Futter, b.Futter)
 		}
 	}
-	fmt.Println(tb)
 	tmpl, _ := template.ParseFiles("./html/templates/read/tier_banner.html")
 	err := tmpl.Execute(w, tb)
 	if err != nil {
@@ -796,6 +798,26 @@ func updateFutterplan(w http.ResponseWriter, req *http.Request) {
 	json.NewDecoder(req.Body).Decode(&n)
 	fmt.Println(n)
 	server.UpdateFutterplan(db2, n.Gebaude, n.Zeit)
+}
+
+// #endregion
+
+// #region delete
+
+func deletePfleger(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		return
+	}
+	server.DeletePfleger(db2, id)
+}
+
+func deleteGebaude(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		return
+	}
+	server.DeleteGebaude(db2, id)
 }
 
 // #endregion

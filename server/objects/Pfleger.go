@@ -66,3 +66,9 @@ func (p *Pfleger) UpdatePfleger(id int, name string, telefonnummer string, adres
 	args := []interface{}{name, telefonnummer, adresse, ort_id, revier_id, id}
 	return query, args
 }
+
+func (p *Pfleger) DeletePfleger(id int) (string, []interface{}) {
+	query := "DELETE FROM pfleger WHERE id = ?"
+	args := []interface{}{id}
+	return query, args
+}

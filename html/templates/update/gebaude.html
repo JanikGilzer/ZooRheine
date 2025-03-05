@@ -272,7 +272,7 @@
     <!-- Delete Gebaude Form -->
     <div class="form-section">
         <h2>Delete Gebaude</h2>
-        <form id="deleteTierForm" action="/server/delete/tier" method="post">
+        <form id="deleteTierForm" action="/server/delete/gebaude?id={{.Gebaude.ID}}" method="post">
             <input type="hidden" id="deleteId" name="id">
             <button type="submit">Delete Gebaude</button>
         </form>
