@@ -54,34 +54,6 @@
         // Fetch and render header and footer
         getHeader();
         getFooter();
-
-        // Fetch feeding times and enclosures
-        async function loadData() {
-            const fuetterungszeiten = await getElements('fuetterungszeiten');
-            const gebaude = await getElements('gebaude');
-            const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id');
-
-            const gebaudeList = document.querySelector('#gbaude_liste ul');
-            gebaudeList.innerHTML = ''; // Clear existing content
-
-            for (let g in gebaude) {
-                if (gebaude[g].Revier.ID == id) {
-                    const gebaudeItem = document.createElement('li');
-                    gebaudeItem.innerHTML = `
-                        <strong>${gebaude[g].Name}</strong> -> Fütterungszeiten: 
-                    `;
-                    for (let f in fuetterungszeiten) {
-                        console.log(fuetterungszeiten[f]);
-                        if (fuetterungszeiten[f].Gebaude.ID == gebaude[g].ID) {
-                            gebaudeItem.innerHTML += `${fuetterungszeiten[f].Zeit.Uhrzeit}, `;
-                        }
-                    }
-                    gebaudeList.appendChild(gebaudeItem);
-                }
-            }
-        }
-
         </script>
 </body>
 </html>
