@@ -79,3 +79,9 @@ func (t *Tier) DeleteTier(id int) (string, []interface{}) {
 	args := []interface{}{id}
 	return query, args
 }
+
+func (t *Tier) DeleteTierWhereGebaude(id int) (string, []interface{}) {
+	query := "DELETE FROM tier WHERE gebaude_id = ?"
+	args := []interface{}{id}
+	return query, args
+}

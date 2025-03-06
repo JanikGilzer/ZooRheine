@@ -54,3 +54,9 @@ func (b *BenoetigtesFutter) InsertBenoetigtesFutter(tier_id int, futter_id int) 
 	args := []interface{}{tier_id, futter_id}
 	return query, args
 }
+
+func (b *BenoetigtesFutter) DeleteBenoetigtesFutterWhereTier(id int) (string, []interface{}) {
+	query := "DELETE FROM benoetigtesfutter WHERE id = ?"
+	args := []interface{}{id}
+	return query, args
+}

@@ -275,7 +275,7 @@
     <!-- Delete Tier Form -->
     <div class="form-section">
         <h2>Delete Tier</h2>
-        <form id="deleteTierForm" action="/server/delete/tier" method="post">
+        <form id="deleteTierForm" action="/server/delete/tier?id={{.Tier.ID}}" method="post">
             <input type="hidden" id="deleteId" name="id">
             <button type="submit">Delete Tier</button>
         </form>

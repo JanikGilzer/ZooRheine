@@ -248,6 +248,20 @@ func CreateTiertArt(db core.DB_Handler, t objects.TierArt) {
 	core.Logger.Info("Neue Tierart erstellt", "tierart_id", t.ID)
 }
 
+func DeleteTier(db core.DB_Handler, id string) {
+	int_id, _ := strconv.Atoi(id)
+
+	var b objects.BenoetigtesFutter
+	query, args := b.DeleteBenoetigtesFutterWhereTier(int_id)
+	db.Exec(query, args...)
+	core.Logger.Info("Benoetigtes Futter gelöscht", "tier_id", id)
+
+	var t objects.Tier
+	query, args = t.DeleteTier(int_id)
+	db.Exec(query, args...)
+	core.Logger.Info("Tier gelöscht", "tier_id", id)
+}
+
 // #endregion
 
 // #region BenoetigtesFutter
@@ -436,11 +450,24 @@ func DeleteGebaude(db core.DB_Handler, id string) {
 	db.Exec(query, args...)
 	core.Logger.Info("Fütterungszeiten gelöscht für das Gebäude", "gebaude_id", id)
 
+	tiere := GetAllTiere(db)
+	var b objects.BenoetigtesFutter
+	for _, t := range tiere {
+		if t.Gebaude.ID == int_id {
+			query, args := b.DeleteBenoetigtesFutterWhereTier(t.ID)
+			db.Exec(query, args...)
+			core.Logger.Info("Benoetigtes Futter gelöscht für das Tier", "tier_id", t.ID)
+		}
+	}
+	var t objects.Tier
+	query, args = t.DeleteTierWhereGebaude(int_id)
+	db.Exec(query, args...)
+	core.Logger.Info("Tiere gelöscht für das Gebäude", "gebaude_id", id)
+
 	var g objects.Gebaude
 	query, args = g.DeleteGebaude(int_id)
 	db.Exec(query, args...)
 	core.Logger.Info("Gebäude gelöscht", "gebaude_id", id)
-
 }
 
 // #endregion

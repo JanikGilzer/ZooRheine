@@ -9,6 +9,7 @@ import (
 	"html/template"
 	"mime"
 	"net/http"
+	"strconv"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -110,6 +111,7 @@ func main() {
 
 	http.HandleFunc("/server/delete/pfleger", core.RequireAuth(core.RequireRole("Verwaltung", deletePfleger)))
 	http.HandleFunc("/server/delete/gebaude", core.RequireAuth(core.RequireRole("Verwaltung", deleteGebaude)))
+	http.HandleFunc("/server/delete/tier", core.RequireAuth(core.RequireRole("Verwaltung", deleteTier)))
 
 	http.HandleFunc("/server/send/contact", sendContact)
 
@@ -291,8 +293,30 @@ func serveUpdateGebaude(w http.ResponseWriter, req *http.Request) {
 
 func serveRevier(w http.ResponseWriter, req *http.Request) {
 	revierID := req.URL.Query().Get("id")
+	revierIDInt, _ := strconv.Atoi(revierID)
+	type revier struct {
+		Revier  objects.Revier
+		Gebaude []objects.Gebaude
+		Zeiten  []objects.FuetterungsZeiten
+	}
+	rev := revier{}
 
-	rev := server.GetRevier(db2, revierID)
+	alleGebaude := server.GetAllGebaude(db2)
+	for _, g := range alleGebaude {
+		if g.Revier.ID == revierIDInt {
+			rev.Gebaude = append(rev.Gebaude, g)
+		}
+	}
+
+	rev.Revier = server.GetRevier(db2, revierID)
+	allZeiten := server.GetAllFutterZeiten(db2)
+	for _, z := range allZeiten {
+		for _, g := range rev.Gebaude {
+			if z.Gebaude.ID == g.ID {
+				rev.Zeiten = append(rev.Zeiten, z)
+			}
+		}
+	}
 
 	tmpl, err := template.ParseFiles("./html/templates/read/revier.html")
 	if err != nil {
@@ -818,6 +842,14 @@ func deleteGebaude(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	server.DeleteGebaude(db2, id)
+}
+
+func deleteTier(w http.ResponseWriter, req *http.Request) {
+	id := req.URL.Query().Get("id")
+	if id == "" {
+		return
+	}
+	server.DeleteTier(db2, id)
 }
 
 // #endregion

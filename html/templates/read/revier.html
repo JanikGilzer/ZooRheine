@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./../../css/template/read/revier.css">
-    <title>{{.Name}} Territory</title>
+    <title>{{.Revier.Name}} Territory</title>
 </head>
 <body>
     <header id="Header">
@@ -14,16 +14,29 @@
     <main>
         <!-- Welcome Section with Description -->
         <div>
-            <h1>Welcome to {{.Name}}</h1>
+            <h1>Welcome to {{.Revier.Name}}</h1>
             <div class="description">
-                <p>{{.Beschreibung}}</p>
+                <p>{{.Revier.Beschreibung}}</p>
             </div>
         </div>
 
         <!-- Gehege List -->
         <div id="gbaude_liste">
             <h2>Gehege:</h2>
-            <ul></ul>
+            {{ range .Gebaude }}
+                {{ $gebaude := . }} <!-- Capture current Gebaude -->
+                <div class="gebaude-item">
+                    <h3>{{.Name}}</h3>
+                    <p>Fütterungszeiten:</p>
+                    <ul>
+                        {{ range $.Zeiten }}
+                            {{ if eq .Gebaude.ID $gebaude.ID }} <!-- Correct comparison -->
+                                <li>{{.Zeit.Uhrzeit}}</li>
+                            {{ end }}
+                        {{ end }}
+                    </ul>
+                </div>
+            {{ end }}
         </div>
 
         <!-- Image Container -->
@@ -69,7 +82,6 @@
             }
         }
 
-        loadData();
-    </script>
+        </script>
 </body>
 </html>
