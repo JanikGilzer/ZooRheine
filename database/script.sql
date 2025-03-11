@@ -231,8 +231,6 @@ INSERT INTO tier (name, geburtstag, gebaude_id, tierart_ID) VALUES
                                                                 ('Ella', '2010-01-12', 4, 2),
                                                                 ('Rocky', '2012-11-20', 4, 24),
                                                                 ('Hyani', '2015-08-18', 4, 25),
-                                                                ('Gemma', '2014-04-04', 4, 10),
-                                                                ('Quokki', '2017-02-14', 4, 14),
 
                                                                 -- Polargebäude (Polarrevier) – Tierarten: Wal (5), Eisbär (26), Pinguin (27) und Narwal (13)
                                                                 ('Wally', '2008-12-12', 5, 5),
@@ -256,16 +254,14 @@ INSERT INTO tier (name, geburtstag, gebaude_id, tierart_ID) VALUES
                                                                 ('Jaws', '2009-02-02', 8, 32),
                                                                 ('Seppi', '2011-03-03', 8, 33),
                                                                 ('Kalle', '2012-04-04', 8, 12),
-                                                                ('Mantis', '2013-05-05', 8, 11),
-                                                                ('Shelly', '2014-06-06', 8, 15),
+
 
                                                                 -- Schwarzwaldhaus (Schwarzwald) – Tierarten: Ratte (3), Wolf (17), Fuchs (34), Reh (35), Wildschwein (36) und Waschbär (16)
                                                                 ('Ratti', '2018-07-07', 9, 3),
                                                                 ('Luna', '2017-08-08', 9, 17),
                                                                 ('Foxy', '2016-09-09', 9, 34),
                                                                 ('Bambi', '2015-10-10', 9, 35),
-                                                                ('Oink', '2014-11-11', 9, 36),
-                                                                ('Waschi', '2013-12-12', 9, 16),
+
 
                                                                 -- Voliere (Vogelrevier) – Tierarten: Schnabel tier (9), Papagei (37), Adler (38) und Eule (39)
                                                                 ('Beaky', '2012-01-01', 10, 9),
@@ -296,6 +292,33 @@ INSERT INTO futter (name, lieferant_id) VALUES   ('Obstmischung', 1),
                                                  ('Samenmischung', 8),
                                                  ('Blattgemüse', 9),
                                                  ('Spezialfutter', 10);
+
+
+INSERT INTO tierart (id, name) VALUES
+                                   (40, 'Gämse'),
+                                   (41, 'Murmeltiere'),
+                                   (42, 'Bär');
+
+-- 2. Insert two new buildings in the Bergrevier (Alpenrevier).
+--    Assuming revier_id = 1 corresponds to the alpine area.
+INSERT INTO gebaude (name, revier_id) VALUES
+                                          ('Panorama-Haus', 1),
+                                          ('AlpenOase', 1);
+
+-- 3. Insert four animals for each new building.
+--    For "Alpenpanorama-Haus":
+--      - "Alpensteinbock" (using existing tierart id 18: Steinbock)
+--      - "Gämse" (newly added, id 40)
+--      - "Murmeltiere" (newly added, id 41)
+--      - "Adler" (using existing tierart id 38: Adler)
+INSERT INTO tier (name, geburtstag, gebaude_id, tierart_ID) VALUES
+                                                                ('Alpensteinbock_APH', '2018-04-01', (SELECT id FROM gebaude WHERE name = 'Panorama-Haus'), 18),
+                                                                ('Gämse_APH', '2019-05-05', (SELECT id FROM gebaude WHERE name = 'Panorama-Haus'), 40),
+                                                                ('Murmeltiere_APH', '2020-06-06', (SELECT id FROM gebaude WHERE name = 'Panorama-Haus'), 41),
+                                                                ('Adler_APH', '2017-07-07', (SELECT id FROM gebaude WHERE name = 'Panorama-Haus'), 38);
+
+
+
 
 -- Insert example data into BenoetigtesFutter
 INSERT INTO benoetigtesfutter (tier_id, futter_id) VALUES    (1, 4),   -- Billy (Steinbock) erhält Gemüse-Mix
@@ -331,9 +354,7 @@ INSERT INTO benoetigtesfutter (tier_id, futter_id) VALUES    (1, 4),   -- Billy 
                                                              (31, 2),  -- Luna (Wolf) erhält Fleischstücke
                                                              (32, 2),  -- Foxy (Fuchs) erhält Fleischstücke
                                                              (33, 4),  -- Bambi (Reh) erhält Gemüse-Mix
-                                                             (34, 4),  -- Oink (Wildschwein) erhält Gemüse-Mix
-                                                             (35, 1),  -- Waschi (Waschbär) erhält Obstmischung
-                                                             (36, 8),  -- Beaky (Schnabel tier) erhält Samenmischung
-                                                             (37, 1),  -- Polly (Papagei) erhält Obstmischung
-                                                             (38, 2),  -- Sky (Adler) erhält Fleischstücke
-                                                             (39, 7);  -- Hooty (Eule) erhält Nagerfutter
+                                                             (34, 4); -- Oink (Wildschwein) erhält Gemüse-Mix
+
+
+
